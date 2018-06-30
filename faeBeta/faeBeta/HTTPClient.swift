@@ -62,12 +62,13 @@ func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int
     })
 }
 
-func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @escaping (Int, Any?) -> Void) {
+@discardableResult
+func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @escaping (Int, Any?) -> Void) -> DataRequest {
     
     let fullURL = Key.shared.baseURL + "/" + method.rawValue
     let headers = Key.shared.header(auth: true, type: .json)
     
-    alamoFireManager.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
+    let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
         .responseJSON { response in
             guard response.response != nil else {
                 completion(-500, "Internet error")
@@ -85,6 +86,8 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
                 completion(response.response!.statusCode, "no Json body")
             }
     }
+    
+    return request
 }
 
 @discardableResult

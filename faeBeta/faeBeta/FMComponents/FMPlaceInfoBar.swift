@@ -701,7 +701,17 @@ class FMLocationInfoBar: UIView {
         updateLocationBar(name: "", address: "")
         imgType.alpha = 0
         activityIndicator.startAnimating()
-        General.shared.getAddress(location: location, original: true) { (original) in
+        General.shared.getAddress(location: location, original: true) { [weak self] (status, original) in
+            guard let `self` = self else { return }
+            guard status != 400 else {
+                DispatchQueue.main.async {
+                    self.lblName.text = "Querying for location too fast!"
+                    self.lblAddr.text = "please try again later"
+                    self.activityIndicator.stopAnimating()
+                }
+                return
+            }
+            
             guard let first = original as? CLPlacemark else {
                 completion("Invalid Address", "")
                 return

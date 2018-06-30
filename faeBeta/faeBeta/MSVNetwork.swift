@@ -82,7 +82,14 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     // Geobytes City Search AutocompleteFilter
     func placeAutocomplete(_ searchText: String) {
         activityIndicatorLocationSearch.startAnimating()
-        Key.shared.selectedSearchedCity = nil
+        switch previousVC {
+        case .map:
+            Key.shared.selectedSearchedCity_map = nil
+        case .board:
+            Key.shared.selectedSearchedCity_board = nil
+        case .chat:
+            Key.shared.selectedSearchedCity_chat = nil
+        }
         CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
             self?.activityIndicatorLocationSearch.stopAnimating()
             guard let `self` = self else { return }
@@ -197,11 +204,17 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
         FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                       "longitude": locationToSearch.longitude])
-        FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
+        placeRequest = FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
             joshprint("places fetched")
             guard let `self` = self else { return }
-            //self.flagPlaceFetched = true
-            if status / 100 != 2 || message == nil {
+            self.flagPlaceFetched = true
+            guard status / 100 == 2 else {
+                self.isCategorySearching = false
+                self.searchedPlaces.removeAll(keepingCapacity: true)
+                self.showOrHideViews(searchText: content)
+                return
+            }
+            guard message != nil else {
                 self.isCategorySearching = false
                 self.searchedPlaces.removeAll(keepingCapacity: true)
                 self.showOrHideViews(searchText: content)

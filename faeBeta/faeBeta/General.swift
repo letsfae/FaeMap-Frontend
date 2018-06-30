@@ -97,17 +97,34 @@ class General: NSObject {
         }
     }
     
-    public func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (AnyObject) -> Void) {
+    public func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (Int, Any) -> Void) {
+        
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             
             DispatchQueue.global(qos: .userInitiated).async {
-                guard error == nil else { joshprint("[CLGeocoder] error != nil", error?.localizedDescription ?? ""); return }
-                guard let results = placemarks else { joshprint("[CLGeocoder] results = placemarks"); return }
-                guard results.count > 0 else { joshprint("[CLGeocoder] results.count <= 0"); return }
-                guard let first = results.first else { joshprint("[CLGeocoder] first != results.first"); return }
+                guard error == nil else {
+                    joshprint("[CLGeocoder] error != nil", error?.localizedDescription ?? "")
+                    completion(400, "too fast")
+                    return
+                }
+                guard let results = placemarks else {
+                    joshprint("[CLGeocoder] results = placemarks")
+                    completion(404, "no result")
+                    return
+                }
+                guard results.count > 0 else {
+                    joshprint("[CLGeocoder] results.count <= 0")
+                    completion(404, "no result")
+                    return
+                }
+                guard let first = results.first else {
+                    joshprint("[CLGeocoder] first != results.first")
+                    completion(404, "no result")
+                    return
+                }
                 if original {
-                    completion(first as AnyObject)
+                    completion(200, first)
                     return
                 }
                 var name = ""
@@ -150,9 +167,9 @@ class General: NSObject {
                     address = (subLocality == "" ? "" : subLocality + ", ") + (locality == "" ? "" : locality + ", ") + (administrativeArea == "" ? "" : administrativeArea + ", ") + country
                     if detach {
                         address = (subLocality == "" ? "" : subLocality + ", ") + locality + "@" + (administrativeArea == "" ? "" : administrativeArea + ", ") + country
-                        completion(address as AnyObject)
+                        completion(200, address)
                     } else {
-                        completion(address as AnyObject)
+                        completion(200, address)
                     }
                     return
                 }
@@ -163,7 +180,7 @@ class General: NSObject {
                     address = name + ", " + subThoroughfare + " " + thoroughfare + ", " + locality + ", " + administrativeArea + postalCode + ", " + country
                 }
                 
-                completion(address as AnyObject)
+                completion(200, address)
             }
         })
     }

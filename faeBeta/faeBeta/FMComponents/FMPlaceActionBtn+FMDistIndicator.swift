@@ -52,6 +52,18 @@ class FMDistIndicator: UIImageView {
         activityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
     }
     
+    public func indicatorStartAnimating(isOn: Bool) {
+        DispatchQueue.main.async {
+            if isOn {
+                self.activityIndicator.startAnimating()
+                self.lblDistance.isHidden = true
+            } else {
+                self.activityIndicator.stopAnimating()
+                self.lblDistance.isHidden = false
+            }
+        }
+    }
+    
     public func updateDistance(distance: CLLocationDistance) {
         lblDistance.isHidden = false
         var unit = " km"

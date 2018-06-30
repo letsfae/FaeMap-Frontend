@@ -87,6 +87,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var LOC_INSTANT_SHOWUP = false
     private var LOC_INSTANT_REMOVE = false
     private var boolCanUpdatePlaces = true
+    private var isGeoCoding: Bool = false
     
     public var strShownLoc: String = ""
     private var strRawLoc_board: String = ""
@@ -146,6 +147,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     // MapView Offset Control
     private var prevMapCenter = CLLocationCoordinate2D(latitude: 0, longitude: 0)
     private var prevAltitude: CLLocationDistance = 0
+    
+    private var isLoadingMapCenterCityInfoDisabled: Bool = false
     
     // MARK: - Life Cycles
     
@@ -281,8 +284,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnLocat = FMLocateSelf()
         btnLocat.removeTarget(nil, action: nil, for: .touchUpInside)
         btnLocat.addTarget(self, action: #selector(self.actionSelfPosition(_:)), for: .touchUpInside)
+        btnLocat.frame.size = CGSize(width: 60, height: 60)
         view.addSubview(btnLocat)
-        if !boolFromExplore {
+        if previousVC != .explore {
             view.addConstraintsWithFormat("H:|-21-[v0(60)]", options: [], views: btnLocat)
         } else {
             view.addConstraintsWithFormat("H:[v0(60)]-21-|", options: [], views: btnLocat)
@@ -302,7 +306,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnZoom.frame.origin.y = screenHeight - 60 - device_offset_bot - 13
         btnZoom.mapView = faeMapView
         view.addSubview(btnZoom)
-        btnZoom.isHidden = boolFromExplore
+        btnZoom.isHidden = previousVC == .explore
+        btnZoom.disableMapViewDidChange = { [weak self] (disabled) in
+            guard let `self` = self else { return }
+            self.isLoadingMapCenterCityInfoDisabled = disabled
+            if !disabled {
+                self.mapView(self.faeMapView, regionDidChangeAnimated: true)
+            }
+        }
         
         faeMapView.compassOffset = 73 + device_offset_bot - device_offset_bot_main //134
         faeMapView.layoutSubviews()
@@ -463,22 +474,62 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
         switch mode {
         case .full:
-            General.shared.getAddress(location: location) { [weak self] address in
-                guard let `self` = self else { return }
-                guard let addr = address as? String else { return }
-                DispatchQueue.main.async {
-                    //self.lblSearchContent.text = addr
-                    self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+            break
+            /*
+            guard !isGeoCoding else { return }
+            guard !isLoadingMapCenterCityInfoDisabled else { return }
+            guard previousVC == .chat else { return }
+            isGeoCoding = true
+            btnSelect.indicatorStartAnimating(isOn: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                General.shared.getAddress(location: location) { [weak self] (status, address) in
+                    guard let `self` = self else { return }
+                    guard status != 400 else {
+                        DispatchQueue.main.async {
+                            self.lblSearchContent.text = "Querying for location too fast!"
+                        }
+                        self.btnSelect.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                        return
+                    }
+                    guard let addr = address as? String else { return }
+                    DispatchQueue.main.async {
+                        //self.lblSearchContent.text = addr
+                        self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
+                    }
                 }
             }
+             */
         case .part:
             // .chat or .explore
+            guard !isGeoCoding else { return }
+            guard !isLoadingMapCenterCityInfoDisabled else { return }
             guard previousVC == .board || previousVC == .explore else { return }
-            General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self]  (address) in
-                guard let `self` = self else { return }
-                if let addr = address as? String {
+            joshprint("[General.shared.getAddress]")
+            isGeoCoding = true
+            btnSelect.indicatorStartAnimating(isOn: true)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                General.shared.getAddress(location: location, original: false, full: false, detach: true) { [weak self] (status, address) in
+                    guard let `self` = self else { return }
+                    guard status != 400 else {
+                        DispatchQueue.main.async {
+                            self.lblSearchContent.text = "Querying for location too fast!"
+                        }
+                        self.btnSelect.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                        return
+                    }
+                    guard let addr = address as? String else {
+                        self.btnSelect.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                        return
+                    }
                     let new = addr.split(separator: "@")
-                    guard new.count > 0 else { return }
+                    guard new.count > 0 else {
+                        self.btnSelect.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
+                        return
+                    }
                     if new.count == 2 {
                         self.strRawLoc_board = String(new[0]) + "@" + String(new[1])
                         self.strRawLoc_explore = String(new[0]) + "," + String(new[1])
@@ -491,6 +542,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                     DispatchQueue.main.async {
                         self.btnSelect.lblDistance.textColor = UIColor._2499090()
                         self.btnSelect.isUserInteractionEnabled = true
+                        self.btnSelect.indicatorStartAnimating(isOn: false)
+                        self.isGeoCoding = false
                     }
                 }
             }
@@ -916,6 +969,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             }
             btnZoom.isHidden = true
             btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+            showOrHideBottomButtons(show: false)
         } else {
             sender.tag = 0
             tblPlaceResult.shrink {
@@ -923,7 +977,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             }
             btnZoom.isHidden = false
             btnTapToShowResultTbl.transform = CGAffineTransform.identity
+            showOrHideBottomButtons(show: true)
         }
+    }
+    
+    private func showOrHideBottomButtons(show: Bool) {
+        guard previousVC == .chat else { return }
+        self.btnLocat.isHidden = !show
+        self.btnZoom.isHidden = !show
+        self.btnSelect.isHidden = !show
     }
     
     // MARK: - PlaceViewDelegate
@@ -1318,7 +1380,11 @@ extension SelectLocationViewController: MapAction {
     }
     
     func singleElsewhereTapExceptInfobar() {
-        tblPlaceResult.hide()
+        if searchState != .multipleSearch {
+            tblPlaceResult.hide()
+            showOrHideTableResultsExpandingIndicator()
+        }
+        uiviewLocationBar.hide()
         deselectAllPlaceAnnos()
     }
 }

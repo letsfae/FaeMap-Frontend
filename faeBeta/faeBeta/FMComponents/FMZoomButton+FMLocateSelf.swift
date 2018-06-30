@@ -22,6 +22,8 @@ class FMZoomButton: UIButton {
     private var gesPan: UIPanGestureRecognizer!
     private var prevRotation: CLLocationDirection!
     
+    var disableMapViewDidChange: ((Bool) -> ())?
+    
     override init(frame: CGRect = .zero) {
         super.init(frame: CGRect(x: screenWidth - 82, y: screenHeight - 153 - device_offset_bot_main, width: 60, height: 60))
         loadContent()
@@ -39,6 +41,7 @@ class FMZoomButton: UIButton {
     
     @objc private func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
+            disableMapViewDidChange?(true)
             largeMode()
             prevRegion = mapView.region
             prevRotation = mapView.camera.heading
@@ -47,6 +50,7 @@ class FMZoomButton: UIButton {
             Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
+            disableMapViewDidChange?(false)
             smallMode()
             if Key.shared.autoCycle {
                 Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
@@ -71,6 +75,7 @@ class FMZoomButton: UIButton {
     
     @objc private func handlePan(_ sender: UIPanGestureRecognizer) {
         if sender.state == .began {
+            disableMapViewDidChange?(true)
             prevRegion = mapView.region
             prevRotation = mapView.camera.heading
             guard prevRegion != nil else { return }
@@ -83,6 +88,7 @@ class FMZoomButton: UIButton {
 //            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
 //            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
 //            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
+            disableMapViewDidChange?(false)
             if Key.shared.autoCycle {
                 Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
                 Key.shared.FMVCtrler?.userClusterManager.canUpdate = true

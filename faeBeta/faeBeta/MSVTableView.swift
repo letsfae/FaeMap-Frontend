@@ -81,8 +81,8 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             default:
                 // address
                 let address = searchedAddresses[indexPath.row]
-                let coder = CLGeocoder()
-                coder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
+                clgeocoder.cancelGeocode()
+                clgeocoder.geocodeAddressString(address.title+", "+address.subtitle, in: nil) { [weak self] (results, error) in
                     guard let `self` = self else { return }
                     guard error == nil else {
                         showAlert(title: "Unexpected Error", message: "please try again later", viewCtrler: self)
@@ -99,7 +99,14 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             if tableView == tblLocationRes {
                 // search location
                 schLocationBar.txtSchField.attributedText = geobytesCityData[indexPath.row].faeSearchBarAttributedText()
-                Key.shared.selectedSearchedCity = geobytesCityData[indexPath.row]
+                switch previousVC {
+                case .map:
+                    Key.shared.selectedSearchedCity_map = geobytesCityData[indexPath.row]
+                case .board:
+                    Key.shared.selectedSearchedCity_board = geobytesCityData[indexPath.row]
+                case .chat:
+                    Key.shared.selectedSearchedCity_chat = geobytesCityData[indexPath.row]
+                }
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
@@ -108,7 +115,14 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
                 schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
-                Key.shared.selectedSearchedCity = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                switch previousVC {
+                case .map:
+                    Key.shared.selectedSearchedCity_map = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                case .board:
+                    Key.shared.selectedSearchedCity_board = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                case .chat:
+                    Key.shared.selectedSearchedCity_chat = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                }
                 strPreviousFixedOptionSelection = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 schLocationBar.txtSchField.resignFirstResponder()
                 schLocationBar.btnClose.isHidden = true

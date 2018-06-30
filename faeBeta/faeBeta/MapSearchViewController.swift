@@ -7,6 +7,7 @@
 //
 import SwiftyJSON
 import MapKit
+import Alamofire
 
 @objc protocol MapSearchDelegate: class {
     @objc optional func jumpToCategory(category: String)
@@ -53,6 +54,9 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var lblNoResult: UILabel!
     var activityIndicatorNoResult: UIActivityIndicatorView!
     
+    // Requests
+    var placeRequest: DataRequest?
+    
     // Data
     var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
     var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
@@ -68,6 +72,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var searchedAddresses = [MKLocalSearchCompletion]() // Apple Place Data
     var addressCompleter = MKLocalSearchCompleter()     // Apple Place Data Getter
     var geobytesCityData = [String]()                   // Geobytes City Data
+    var cityToSearch: String = ""
+    
+    // iOS Geocoder
+    let clgeocoder = CLGeocoder()
     
     // Throttle
     var placeThrottler = Throttler(name: "[Place]", seconds: 0.5)
@@ -97,6 +105,9 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     // MARK: - Load UI's
     private func preloadSearchLocation() {
+        if cityToSearch != "" {
+            lookUpForCoordinate(cityData: cityToSearch)
+        }
         guard previousVC == .board else { return }
         guard strSearchedLocation != "" else { return }
         joshprint("[preloadSearchLocation]", strSearchedLocation)
@@ -157,11 +168,25 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
 
-        if Key.shared.selectedSearchedCity != nil {
-            schLocationBar.txtSchField.attributedText = Key.shared.selectedSearchedCity?.faeSearchBarAttributedText()
-        } else {
-            schLocationBar.txtSchField.text = "Current Location"
+        schLocationBar.txtSchField.text = "Current Location"
+        switch previousVC {
+        case .map:
+            if let selectedCity = Key.shared.selectedSearchedCity_map {
+                schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
+                cityToSearch = selectedCity
+            }
+        case .board:
+            if let selectedCity = Key.shared.selectedSearchedCity_board {
+                schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
+                cityToSearch = selectedCity
+            }
+        case .chat:
+            if let selectedCity = Key.shared.selectedSearchedCity_chat {
+                schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
+                cityToSearch = selectedCity
+            }
         }
+        
         schLocationBar.txtSchField.returnKeyType = .next
         uiviewSearch.addSubview(schLocationBar)
         
@@ -265,6 +290,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     // MARK: - Actions
     @objc private func backToMap(_ sender: UIButton) {
+        placeRequest?.cancel()
         navigationController?.popViewController(animated: false)
     }
     

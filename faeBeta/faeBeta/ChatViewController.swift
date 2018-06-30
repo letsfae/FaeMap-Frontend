@@ -56,6 +56,9 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     var boolIsDisappearing: Bool = false
     
+    // iOS Geocoder
+    let clgeocoder = CLGeocoder()
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -363,7 +366,8 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
     // MARK: SelectLocationDelegate
     func sendLocationBack(address: RouteAddress) {
         let location = CLLocation(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {
+        clgeocoder.cancelGeocode()
+        clgeocoder.reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) -> Void in
             guard let response = placemarks?[0] else { return }
             AddPinToCollectionView().mapScreenShot(coordinate: CLLocationCoordinate2D(latitude: address.coordinate.latitude, longitude: address.coordinate.longitude)) { [weak self] (snapShotImage) in
