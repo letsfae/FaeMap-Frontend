@@ -50,12 +50,18 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         for index in 0..<arrURLs.count {
             let subView = UIImageView(frame: frame)
             subView.contentMode = .scaleAspectFill
-            subView.image = #imageLiteral(resourceName: "default_place")
             subView.clipsToBounds = true
             viewObjects.append(subView)
             let photo = SKPhoto(url: arrURLs[index])
             arrSKPhoto.append(photo)
-            General.shared.downloadImageForView(url: arrURLs[index], imgPic: subView) {
+            subView.sd_setShowActivityIndicatorView(true)
+            subView.backgroundColor = ._210210210()
+            subView.image = nil
+            subView.sd_setImage(with: URL(string: arrURLs[index]), placeholderImage: nil, options: [.retryFailed]) { (img, err, _, _) in
+                if img == nil || err != nil {
+                    subView.image = Key.shared.defaultPlace
+                }
+                subView.sd_setShowActivityIndicatorView(false)
             }
         }
     }

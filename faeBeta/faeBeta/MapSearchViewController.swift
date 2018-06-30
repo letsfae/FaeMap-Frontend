@@ -207,8 +207,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         view.addSubview(uiviewPics)
         uiviewPics.layer.cornerRadius = 2
         addShadow(uiviewPics)
+        var origin_x_offset: CGFloat = 0
+        if screenWidth == 320 {
+            origin_x_offset = 20
+        }
         for _ in 0..<6 {
-            btnCategories.append(UIButton(frame: CGRect(x: 52, y: 20, width: 58, height: 58)))
+            btnCategories.append(UIButton(frame: CGRect(x: 52 - origin_x_offset, y: 20, width: 58, height: 58)))
             lblCategories.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
         }
         
@@ -219,7 +223,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             if i == 1 || i == 4 {
                 btnCategories[i].frame.origin.x = (screenWidth - 16 - 58) / 2
             } else if i == 2 || i == 5 {
-                btnCategories[i].frame.origin.x = screenWidth - 126
+                btnCategories[i].frame.origin.x = screenWidth - 126 + origin_x_offset
             }
             
             lblCategories[i].center = CGPoint(x: btnCategories[i].center.x, y: btnCategories[i].center.y + 43)
