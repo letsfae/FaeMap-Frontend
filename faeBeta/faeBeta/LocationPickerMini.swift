@@ -79,7 +79,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         faeMapView.showsCompass = true
         faeMapView.tintColor = UIColor._2499090()
         faeMapView.mapAction = self
-        faeMapView.isSingleTapToShowFourIconsEnabled = false
+        faeMapView.isShowFourIconsEnabled = false
         faeMapView.longPress.isEnabled = false
         faeMapView.isRotateEnabled = false
         addSubview(faeMapView)
@@ -299,7 +299,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
                 return
             }
             self.placeAdderQueue.cancelAllOperations()
-            let adder = PlacesAdder(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+            let adder = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
             adder.completionBlock = {
                 DispatchQueue.main.async {
                     if adder.isCancelled {
