@@ -99,15 +99,28 @@ class FaeMessageMaker {
     }
     
     private static func videoJSQMessage(_ realmMessage: RealmMessage, faePHAsset: FaePHAsset? = nil, complete: (() -> Void)? = nil) -> FaeMessage {
-        
-        
         let fileManager = FileManager.default
         var snapImage = UIImage()
         let duration = realmMessage.text
         let mediaItem = JSQVideoMediaItemCustom(fileURL: URL(string: ""), snapImage: snapImage, duration: Int32(Double(duration)!), isReadyToPlay: false)
         mediaItem?.appliesMediaViewMaskAsOutgoing = isOutgoingMessage(senderId)
         if faePHAsset != nil {
-            mediaItem?.snapImage = faePHAsset?.thumbnailImage ?? UIImage()
+            if faePHAsset?.phAsset == nil, let url = faePHAsset?.localURL {
+                let generator = AVAssetImageGenerator(asset: AVURLAsset(url: url))
+                generator.appliesPreferredTrackTransform = true
+                var cgImage: CGImage?
+                do {
+                    cgImage = try generator.copyCGImage(at: CMTimeMake(0, 1), actualTime: nil)
+                } catch let error as NSError {
+                    // Handle the error
+                    print(error)
+                }
+                mediaItem?.snapImage = cgImage != nil ? UIImage(cgImage: cgImage!) : UIImage()
+                mediaItem?.fileURL = url
+                mediaItem?.isReadyToPlay = true
+            } else {
+                mediaItem?.snapImage = faePHAsset?.thumbnailImage ?? UIImage()
+            }
             return FaeMessage(senderId: senderId, senderDisplayName: senderName, date: createdAt, messageId: messageId, messageType: messageType, media: mediaItem)
         }
         var writeURL: URL? = nil

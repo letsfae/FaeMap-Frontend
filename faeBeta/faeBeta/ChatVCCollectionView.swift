@@ -142,6 +142,7 @@ extension ChatViewController {
     
     /// Called when user tap the bubble, including image, location, place, collection
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapMessageBubbleAt indexPath: IndexPath!) {
+        faeInputBar.inputTextView.resignFirstResponder()
         let faeMessage = arrFaeMessages[indexPath.row]
         let realm = try! Realm()
         guard let realmMessage = realm.filterMessage(faeMessage.messageId) else {
@@ -169,6 +170,7 @@ extension ChatViewController {
             let index = allMessage.index(where: { $0.index == realmMessage.index })
             let browser = SKPhotoBrowser(photos: images)
             browser.initializePageIndex(index ?? 0)
+            boolIsDisappearing = true
             present(browser, animated: true, completion: nil)
         case "[Video]":
             if let mediaItem = faeMessage.media as? JSQVideoMediaItemCustom {
@@ -177,6 +179,7 @@ extension ChatViewController {
                     let playerController = AVPlayerViewController()
                     playerController.player = player
                     //boolGoToFullContent = true
+                    boolIsDisappearing = true
                     present(playerController, animated: true) {
                         player.play()
                     }
@@ -201,6 +204,7 @@ extension ChatViewController {
             //let vcLocDetail = LocDetailViewController()
             let coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
             mapDelegate?.jumpToViewLocation(coordinate: coordinate, created: false)
+            boolIsDisappearing = true
             navigationController?.setViewControllers(arrControllers!, animated: true)
             
             // TODO: capital first letter
@@ -222,6 +226,7 @@ extension ChatViewController {
                     let jsonPlace = JSON(placeInfo)
                     let vcPlaceDetail = PlaceDetailViewController()
                     vcPlaceDetail.place = PlacePin(json: jsonPlace)
+                    self?.boolIsDisappearing = true
                     self?.navigationController?.pushViewController(vcPlaceDetail, animated: true)
                 }
             }
@@ -238,6 +243,7 @@ extension ChatViewController {
             vcCollection.enterMode = .place
             vcCollection.boolFromChat = true
             vcCollection.colId = jsonCollection["id"].intValue
+            boolIsDisappearing = true
             navigationController?.pushViewController(vcCollection, animated: true)
             
             //            FaeCollection().getOneCollection(jsonCollection["id"].stringValue, completion: { (status: Int, message: Any?) in
@@ -307,8 +313,9 @@ extension ChatViewController {
 
     /// Called when avatar tapped
     override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
-        view.endEditing(true)
+        //view.endEditing(true)
         //resetToolbarButtonIcon()
+        faeInputBar.inputTextView.resignFirstResponder()
         let faeMessage = arrFaeMessages[indexPath.row]
         uiviewNameCard.userId = Int(faeMessage.senderId)!
         uiviewNameCard.boolSmallSize = true

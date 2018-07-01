@@ -100,7 +100,7 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewBackground.backgroundColor = UIColor._107105105_a50()
         
-        uiviewDeleteConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewDeleteConfirm = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 208))
         uiviewDeleteConfirm.center.x = screenWidth / 2
         uiviewDeleteConfirm.backgroundColor = .white
         uiviewDeleteConfirm.layer.cornerRadius = 21 * screenWidthFactor

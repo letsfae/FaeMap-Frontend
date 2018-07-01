@@ -180,7 +180,7 @@ class FMUserInfo: UIViewController {
         view.addSubview(lblUserName)
         view.addSubview(lblShortIntro)
         
-        uiviewCardPrivacy = FaeGenderView(frame: CGRect(x: 15, y: 200, w: 46, h: 18))
+        uiviewCardPrivacy = FaeGenderView(frame: CGRect(x: 15, y: alert_offset_top, w: 46, h: 18))
         view.addSubview(uiviewCardPrivacy)
         
         uiviewCardPrivacy.loadGenderAge(id: self.userId) { (nickName, userName, shortIntro) in

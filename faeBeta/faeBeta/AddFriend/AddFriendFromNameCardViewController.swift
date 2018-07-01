@@ -83,7 +83,7 @@ class AddFriendFromNameCardViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
         uiviewBackground.addGestureRecognizer(tapGesture)
         
-        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 237))
+        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 237))
         uiviewChooseAction.center.x = screenWidth / 2
         uiviewChooseAction.backgroundColor = .white
         uiviewChooseAction.layer.cornerRadius = 20
@@ -130,7 +130,7 @@ class AddFriendFromNameCardViewController: UIViewController {
     }
     
     fileprivate func loadSendActRequest() {
-        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 161))
+        uiviewMsgSent = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 161))
         uiviewMsgSent.backgroundColor = .white
         uiviewMsgSent.center.x = screenWidth / 2
         uiviewMsgSent.layer.cornerRadius = 20 * screenWidthFactor

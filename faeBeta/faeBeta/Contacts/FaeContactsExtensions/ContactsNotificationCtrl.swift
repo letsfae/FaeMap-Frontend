@@ -24,7 +24,7 @@ extension ContactsViewController {
     }
     
     func setupNoti() {
-        uiviewNotification = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewNotification = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 208))
         uiviewNotification.center.x = screenWidth / 2
         uiviewNotification.backgroundColor = .white
         uiviewNotification.layer.cornerRadius = 19
@@ -67,7 +67,7 @@ extension ContactsViewController {
     }
     
     func setupChooseAnActionAlert() {
-        uiviewChooseAction = UIView(frame: CGRect(x: 62, y: 200, w: 290, h: 302))
+        uiviewChooseAction = UIView(frame: CGRect(x: 62, y: alert_offset_top, w: 290, h: 302))
         uiviewChooseAction.backgroundColor = .white
         uiviewChooseAction.layer.cornerRadius = 20
         uiviewChooseAction.alpha = 0

@@ -41,7 +41,7 @@ class FaeInputBar: UIView {
     /// The separator line between InputTextView and bottomStackView
     private let separatorLineMiddle: SeparatorLine = {
         let line = SeparatorLine()
-        line.height = 1.5
+        line.height = 1.0
         line.backgroundColor = UIColor._200199204()
         return line
     }()
@@ -157,7 +157,8 @@ class FaeInputBar: UIView {
     var faePhotoPicker: FaePhotoPicker!
     var btnQuickSendImage: UIButton!
     var viewAudioRecorder: AudioRecorderView!
-    var viewMiniLoc = LocationPickerMini()
+    //var viewMiniLoc: LocationPickerMini!
+    var viewMiniLoc: LocationMiniPicker!
     
     var prevInputView: UIView?
     
@@ -167,8 +168,9 @@ class FaeInputBar: UIView {
     /// Current inputView type
     var currentInputViewType: InputViewType = .keyboard {
         didSet {
-            defer {
-                inputTextView.currentInputView = currentInputViewType
+            inputTextView.boolPreventMenu = oldValue != .keyboard
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.inputTextView.boolPreventMenu = false
             }
         }
     }
@@ -451,6 +453,11 @@ class FaeInputBar: UIView {
         topStackViewLayoutSet?.deactivate()
     }
     
+    private func toggleSendButton() {
+        let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        sendButton.isEnabled = !trimmedText.isEmpty || boolHasPin
+    }
+    
     // MARK: - Button within bottomStackView configuration & actions
     private func makeButton(named: String, tag: Int, highlight: String? = "") -> ChatInputBarButton {
         return ChatInputBarButton()
@@ -466,7 +473,7 @@ class FaeInputBar: UIView {
                     let trimmedText = self.inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
                     if self.boolHasPin, let pinView = self.topStackView.arrangedSubviews[0] as? InputBarTopPinView {
                         self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: pinView)
-                        
+                        self.closeTopStackView()
                     } else {
                         self.delegate?.faeInputBar(self, didPressSendButtonWith: trimmedText, with: nil)
                     }
@@ -484,16 +491,16 @@ class FaeInputBar: UIView {
                     }
                     if button.tag == InputViewType.keyboard.rawValue {
                         self.inputTextView.inputView = nil
+                        self.currentInputViewType = InputViewType(rawValue: button.tag)!
                         self.inputTextView.reloadInputViews()
                         self.inputTextView.becomeFirstResponder()
                         self.prevInputView = nil
-                        self.currentInputViewType = InputViewType(rawValue: button.tag)!
                     } else {
                         if let inputView = self.setupInputView(button.tag) {
                             self.inputTextView.inputView = inputView
+                            self.currentInputViewType = InputViewType(rawValue: button.tag)!
                             self.inputTextView.reloadInputViews()
                             self.inputTextView.becomeFirstResponder()
-                            self.currentInputViewType = InputViewType(rawValue: button.tag)!
                         } else {
                             //self.inputTextView.inputView = self.prevInputView
                             //self.inputTextView.reloadInputViews()
@@ -518,7 +525,8 @@ class FaeInputBar: UIView {
     func textViewDidChange() {
         let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        sendButton.isEnabled = !trimmedText.isEmpty
+        /*sendButton.isEnabled = !trimmedText.isEmpty || boolHasPin*/
+        toggleSendButton()
         inputTextView.placeholderLabel.isHidden = !inputTextView.text.isEmpty
         
         delegate?.faeInputBar(self, textViewTextDidChangeTo: trimmedText)
@@ -551,9 +559,9 @@ class FaeInputBar: UIView {
         } else {
             if currentInputViewType == .keyboard {
                 bottomStackViewItems[0].isSelected = true
-                boolIsFirstShown = false
             }
         }
+        boolIsFirstShown = false
     }
     
     @objc
@@ -562,12 +570,14 @@ class FaeInputBar: UIView {
             if $0.tag != InputViewType.send.rawValue {
                 $0.isSelected = false
             } else {
-                let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-                $0.isEnabled = !trimmedText.isEmpty
+                /*let trimmedText = inputTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+                $0.isEnabled = !trimmedText.isEmpty || boolHasPin*/
+                toggleSendButton()
             }
         }
         inputTextView.inputView = nil
         currentInputViewType = .keyboard
+        boolIsFirstShown = true
     }
 }
 
@@ -603,6 +613,7 @@ extension FaeInputBar {
             self.topStackView.sizeToFit()
             self.topStackView.layoutIfNeeded()
             self.invalidateIntrinsicContentSize()
+            self.toggleSendButton()
         }
     }
     
@@ -610,13 +621,15 @@ extension FaeInputBar {
         topStackView.arrangedSubviews.first?.removeFromSuperview()
         topStackViewPadding = .zero
         invalidateIntrinsicContentSize()
+        toggleSendButton()
         superview?.setNeedsLayout()
         superview?.layoutIfNeeded()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "InputBarTopPinViewClose"), object: nil)
     }
 }
 
 // MARK: - InputView delegates
-extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRecorderViewDelegate {
+extension FaeInputBar: SendStickerDelegate, LocationMiniPickerDelegate, AudioRecorderViewDelegate {
     
     func setupInputView(_ tag: Int) -> UIView? {
         let floatInputViewHeight: CGFloat = 271 + device_offset_bot
@@ -641,9 +654,12 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
                 btnMoreImage.addTarget(self, action: #selector(showFullAlbum), for: .touchUpInside)
                 faePhotoPicker.addSubview(btnMoreImage)
                 
-                btnQuickSendImage = UIButton(frame: CGRect(x: floatInputViewHeight - 52, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
+                btnQuickSendImage = UIButton(frame: CGRect(x: screenWidth - 52, y: floatInputViewHeight - 52 - device_offset_bot, width: 42, height: 42))
                 btnQuickSendImage.addTarget(self, action: #selector(sendImageFromQuickPicker), for: .touchUpInside)
                 btnQuickSendImage.setImage(UIImage(named: "imageQuickSend"), for: UIControlState())
+                faePhotoPicker.addSubview(btnQuickSendImage)
+                btnQuickSendImage.isHidden = true
+                
                 return faePhotoPicker
             }
             
@@ -680,6 +696,9 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
             viewAudioRecorder.delegate = self
             return viewAudioRecorder
         case .map?:
+            //viewMiniLoc = LocationPickerMini()
+            //viewMiniLoc.delegate = self
+            viewMiniLoc = LocationMiniPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight))
             viewMiniLoc.delegate = self
             return viewMiniLoc
         default: break
@@ -704,7 +723,7 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
     
     // MARK: Quick photo picker button actions
     @objc func showFullAlbum() {
-        delegate?.faeInputBar(self, showFullView: "photo", with: nil)
+        delegate?.faeInputBar(self, showFullView: "photo", with: faePhotoPicker)
     }
 
     @objc func sendImageFromQuickPicker() {
@@ -716,6 +735,28 @@ extension FaeInputBar: SendStickerDelegate, LocationPickerMiniDelegate, AudioRec
     
     private func observeOnSelectedCount(_ count: Int) {
         btnQuickSendImage.isHidden = (count == 0)
+    }
+    
+    // MARK: LocationMiniPickerDelegate
+    func showFullLocationView(_ locationMiniPicker: LocationMiniPicker) {
+        delegate?.faeInputBar(self, showFullView: "map", with: nil)
+    }
+    
+    func selectLocation(_ locationMiniPicker: LocationMiniPicker, location: CLLocation) {
+        UIGraphicsBeginImageContext(locationMiniPicker.frame.size)
+        locationMiniPicker.layer.render(in: UIGraphicsGetCurrentContext()!)
+        if let thunbmnail = UIGraphicsGetImageFromCurrentImageContext() {
+            CLGeocoder().reverseGeocodeLocation(location) { (placemarks, error) in
+                guard let response = placemarks?[0] else {
+                    return // TODO
+                }
+                self.setupTopStackView(placemark: response, thumbnail: thunbmnail)
+            }
+        }
+    }
+    
+    func selectPlacePin(_ locationMiniPicker: LocationMiniPicker, placePin: PlacePin) {
+        setupTopStackView(place: placePin)
     }
     
     // MARK: LocationPickerMiniDelegate

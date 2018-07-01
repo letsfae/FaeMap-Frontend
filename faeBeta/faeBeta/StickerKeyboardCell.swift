@@ -19,6 +19,14 @@ class StickerCell: UICollectionViewCell {
         imgSticker = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         imgSticker.contentMode = .center
         addSubview(imgSticker)
+        //addLongPress()
+    }
+    
+    func addDeleteButton() {
+        let btnDelete = UIButton(frame: CGRect(x: 0, y: 0, width: 15, height: 15))
+        btnDelete.setImage(UIImage(named: "btn_close"), for: .normal)
+        addSubview(btnDelete)
+        btnDelete.addTarget(self, action: #selector(deleteAction), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -30,11 +38,18 @@ class StickerCell: UICollectionViewCell {
         imgSticker.image = nil
     }
     
+    @objc
+    func deleteAction() {
+        let collectionView = self.superview as! UICollectionView
+        let delegate = collectionView.delegate
+        delegate?.collectionView!(collectionView, performAction: NSSelectorFromString("deleteFavorite"), forItemAt: collectionView.indexPath(for: self)!, withSender: self)
+    }
+    
     /*override func responds(to aSelector: Selector!) -> Bool {
         return true
     }*/
     
-    override var canBecomeFirstResponder: Bool { return true }
+    /*override var canBecomeFirstResponder: Bool { return true }
 
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action.description == "deleteFavorite" { return true }
@@ -47,7 +62,7 @@ class StickerCell: UICollectionViewCell {
         let collectionView = self.superview as! UICollectionView
         let delegate = collectionView.delegate
         delegate?.collectionView!(collectionView, performAction: NSSelectorFromString("deleteFavorite"), forItemAt: collectionView.indexPath(for: self)!, withSender: self)
-    }
+    }*/
 }
 
 // MARK: - StickerTabCell
