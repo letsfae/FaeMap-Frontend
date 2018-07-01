@@ -64,7 +64,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(uiviewBackground)
         uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)
-        uiviewBackground.isHidden = true
+        //uiviewBackground.isHidden = true
+        uiviewBackground.alpha = 0
     }
     
     private func setupTableView() {
@@ -159,7 +160,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc private func showMainView(_ sender: UIButton) {
-        uiviewBackground.isHidden = true
+        //uiviewBackground.isHidden = true
+        uiviewBackground.alpha = 1
+        UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+            self.uiviewBackground.alpha = 0
+        })
     }
     
     // MARK: - UITableViewDelegate
@@ -184,7 +189,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         case 7:
             navigationController?.pushViewController(SetSpreadViewController(), animated: true)
         case 8:
-            uiviewBackground.isHidden = false
+            uiviewBackground.alpha = 0
+            UIView.animate(withDuration: 0.25, delay: 0, options: .curveEaseOut, animations: {
+                self.uiviewBackground.alpha = 1
+            })
         default: break
         }
     }

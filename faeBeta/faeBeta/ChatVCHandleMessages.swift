@@ -163,12 +163,19 @@ extension ChatViewController {
             showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
         } else {
             showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
-            guard let phAsset = faePHAsset else { return }
-            fetchOriginData(phAsset) { [weak self] (data, url) in
-                guard let `self` = self else { return }
-                newMessage.media = data! as NSData
-                self.completeStoring(newMessage)
-                self.updateFaeMessageMedia(newMessage, media: data, url: url)
+            if faePHAsset?.phAsset == nil {
+                if let url = faePHAsset?.localURL, let data = try? Data(contentsOf: url) {
+                    newMessage.media = data as NSData
+                }
+                completeStoring(newMessage)
+            } else {
+                guard let phAsset = faePHAsset else { return }
+                fetchOriginData(phAsset) { [weak self] (data, url) in
+                    guard let `self` = self else { return }
+                    newMessage.media = data! as NSData
+                    self.completeStoring(newMessage)
+                    self.updateFaeMessageMedia(newMessage, media: data, url: url)
+                }
             }
         }
     }
