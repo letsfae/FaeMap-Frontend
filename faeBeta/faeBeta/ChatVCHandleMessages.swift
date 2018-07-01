@@ -83,6 +83,7 @@ extension ChatViewController {
                     for item in modifications {
                         let message = self.resultRealmMessages[item]
                         let faeMessage = self.arrFaeMessages.filter({ $0.messageId == message.primary_key })
+                        guard faeMessage.count == 1 else { return }
                         if let index = self.arrFaeMessages.index(of: faeMessage[0]) {
                             self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
                         }
@@ -162,12 +163,19 @@ extension ChatViewController {
             showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
         } else {
             showOutgoingMessageInView(newMessage, faePHAsset: faePHAsset)
-            guard let phAsset = faePHAsset else { return }
-            fetchOriginData(phAsset) { [weak self] (data, url) in
-                guard let `self` = self else { return }
-                newMessage.media = data! as NSData
-                self.completeStoring(newMessage)
-                self.updateFaeMessageMedia(newMessage, media: data, url: url)
+            if faePHAsset?.phAsset == nil {
+                if let url = faePHAsset?.localURL, let data = try? Data(contentsOf: url) {
+                    newMessage.media = data as NSData
+                }
+                completeStoring(newMessage)
+            } else {
+                guard let phAsset = faePHAsset else { return }
+                fetchOriginData(phAsset) { [weak self] (data, url) in
+                    guard let `self` = self else { return }
+                    newMessage.media = data! as NSData
+                    self.completeStoring(newMessage)
+                    self.updateFaeMessageMedia(newMessage, media: data, url: url)
+                }
             }
         }
     }
@@ -217,7 +225,8 @@ extension ChatViewController {
         let faeMessage = FaeMessageMaker.create(from: message, faePHAsset: faePHAsset)
         arrFaeMessages.append(faeMessage)
         finishSendingMessage()
-        scrollToBottom(animated: true)
+        //scrollToBottom(animated: true)
+        scrollDialogToBottom(animated: true)
         /*if !["[Picture]", "[Video]", "[Sticker]", "[Gif]", "[Heart]"].contains(message.type) {
         } else {
             finishSendingMessage(animated: true, cleanTextView: false)

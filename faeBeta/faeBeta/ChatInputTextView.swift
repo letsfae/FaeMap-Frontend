@@ -45,7 +45,7 @@ class ChatInputTextView: UITextView {
     }
     
     /// The UIEdgeInsets the placeholderLabel has within the InputTextView
-    var placeholderLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 7, bottom: 4, right: 7) {
+    var placeholderLabelInsets: UIEdgeInsets = UIEdgeInsets(top: 4, left: 9, bottom: 4, right: 7) {
         didSet {
             updateConstraintsForPlaceholderLabel()
         }
@@ -82,6 +82,7 @@ class ChatInputTextView: UITextView {
     
     /// Current inputView, including keyboard, sticker, photo, recorder, map
     var currentInputView: FaeInputBar.InputViewType = .keyboard
+    var boolPreventMenu: Bool = false
     
     /// The constraints of the placeholderLabel
     private var placeholderLabelConstraintSet: NSLayoutConstraintSet?
@@ -109,6 +110,7 @@ class ChatInputTextView: UITextView {
         tintColor = UIColor._2499090()
         //font = UIFont.preferredFont(forTextStyle: .body)
         font = UIFont(name: "AvenirNext-Regular", size: 18)
+        textColor = UIColor._107105105()
         textContainerInset = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
         scrollIndicatorInsets = UIEdgeInsets(top: .leastNonzeroMagnitude,
                                              left: .leastNonzeroMagnitude,
@@ -167,7 +169,7 @@ class ChatInputTextView: UITextView {
     
     /// Prevent showing menu when current inputView is not the keyboard
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
-        if currentInputView != .keyboard {
+        if boolPreventMenu {
             return false
         }
         return super.canPerformAction(action, withSender: sender)

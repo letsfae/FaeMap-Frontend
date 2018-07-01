@@ -65,6 +65,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         
         setupCollectionView()
         setUserInfo()
+        setupNameCard()
         loadLatestMessagesFromRealm()
         navigationBarSet()
         collectionView.becomeFirstResponder()
@@ -86,17 +87,18 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        collectionViewBottomInset = 86 // TODO: bug topStackView
+        //collectionViewBottomInset = 86 // TODO: bug topStackView
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         boolIsDisappearing = true
+        playingAudio?.finishPlaying()
     }
     
     override func viewDidLayoutSubviews() {
         if isFirstLayout {
-            defer { isFirstLayout = false }
+            isFirstLayout = false
             addKeyboardObservers()
             collectionViewBottomInset = 86
             let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
@@ -151,6 +153,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         }
     }
     
+    private func setupNameCard() {
+        uiviewNameCard = FMNameCardView()
+        uiviewNameCard.delegate = self
+        let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!
+        rootViewController.view.addSubview(uiviewNameCard)
+    }
+    
     private func navigationBarSet() {
         uiviewNavBar = FaeNavBar(frame: CGRect.zero)
         view.addSubview(uiviewNavBar)
@@ -185,16 +194,16 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
         let animationCurve: UIViewAnimationOptions = UIViewAnimationOptions(rawValue: animationCurveRaw)
         
-        /*let newBottomInset = view.frame.height - keyboardEndFrame.minY - iPhoneXBottomInset
+        let newBottomInset = view.frame.height - keyboardEndFrame.minY - iPhoneXBottomInset
         let differenceOfBottomInset = newBottomInset - collectionViewBottomInset
         if differenceOfBottomInset != 0 {
             let contentOffset = CGPoint(x: collectionView.contentOffset.x, y: collectionView.contentOffset.y + differenceOfBottomInset)
             collectionView.setContentOffset(contentOffset, animated: false)
         }
         
-        collectionViewBottomInset = newBottomInset*/
+        collectionViewBottomInset = newBottomInset
         
-        if (keyboardEndFrame.origin.y + keyboardEndFrame.size.height) > UIScreen.main.bounds.height {
+        /*if (keyboardEndFrame.origin.y + keyboardEndFrame.size.height) > UIScreen.main.bounds.height {
             collectionViewBottomInset = view.frame.size.height - keyboardEndFrame.origin.y - iPhoneXBottomInset
         } else {
             let afterBottomInset = keyboardEndFrame.height > keyboardOffsetFrame.height ? (keyboardEndFrame.height - iPhoneXBottomInset) : keyboardOffsetFrame.height
@@ -209,7 +218,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
                 self.collectionViewBottomInset = afterBottomInset
                 self.collectionView.layoutIfNeeded()
             }, completion: nil)
-        }
+        }*/
     }
     
     @objc
@@ -280,7 +289,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
                 let locDetail = "{\"latitude\":\"\(location.coordinate.latitude)\", \"longitude\":\"\(location.coordinate.longitude)\", \"address1\":\"\(pinView.lblLine1.text!)\", \"address2\":\"\(pinView.lblLine2.text!)\", \"address3\":\"\(pinView.lblLine3.text!)\", \"comment\":\"\(text)\"}"
                 storeChatMessageToRealm(type: "[Location]", text: locDetail, media: pinView.getImageData())
             } else if let place = pinView.placeData {
-                let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(inputToolbar.contentView.textView.text ?? "")\"}"
+                let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(text)\"}"
                 storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: pinView.getImageData())
             }
         } else {
@@ -317,14 +326,17 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
     }
     
     func faeInputBar(_ inputBar: FaeInputBar, showFullView type: String, with object: Any?) {
+        faeInputBar.inputTextView.resignFirstResponder()
         switch type {
         case "photo":
             let vcFullAlbum = FullAlbumViewController()
             vcFullAlbum.prePhotoPicker = object as? FaePhotoPicker
             vcFullAlbum.delegate = self
+            boolIsDisappearing = true
             navigationController?.pushViewController(vcFullAlbum, animated: true)
         case "camera":
             let camera = Camera(delegate_: self)
+            boolIsDisappearing = true
             camera.presentPhotoCamera(self, canEdit: false)
         case "map":
             let vc = SelectLocationViewController()
@@ -333,6 +345,7 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
             vc.previousVC = .chat
             vc.delegate = self
             Key.shared.selectedLoc = LocManager.shared.curtLoc.coordinate
+            boolIsDisappearing = true
             navigationController?.pushViewController(vc, animated: false)
         default: break
         }
@@ -423,10 +436,12 @@ extension ChatViewController: UIImagePickerControllerDelegate {
              let factor = min(5000000.0 / CGFloat(imageData!.count), 1.0)
              imageData = UIImageJPEGRepresentation(snapImage, factor)*/
             
-            let path = movieURL.path
-            let data = FileManager.default.contents(atPath: path)
+            //let path = movieURL.path
+            //let data = FileManager.default.contents(atPath: path)
             //sendMessage(video: data, videoDuration: seconds, snapImage: imageData, date: Date())
-            storeChatMessageToRealm(type: "[Video]", text: "\(seconds)", media: data)
+            var faePHAsset = FaePHAsset(asset: nil)
+            faePHAsset.localURL = movieURL
+            storeChatMessageToRealm(type: "[Video]", text: "\(seconds)", faePHAsset: faePHAsset)
         default: break
         }
         

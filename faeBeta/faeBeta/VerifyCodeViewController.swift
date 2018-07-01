@@ -156,7 +156,7 @@ class VerifyCodeViewController: UIViewController, FAENumberKeyboardDelegate {
         uiviewAlert.backgroundColor  = UIColor._107105105_a50()
         uiviewAlert.layer.zPosition = 1
         
-        let uiviewLater = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        let uiviewLater = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 208))
         uiviewLater.center.x = screenWidth / 2
         uiviewLater.backgroundColor = .white
         uiviewLater.layer.cornerRadius = 21 * screenWidthFactor

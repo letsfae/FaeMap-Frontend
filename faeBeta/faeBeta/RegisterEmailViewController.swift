@@ -94,7 +94,7 @@ class RegisterEmailViewController: RegisterBaseViewController {
         uiviewBackground = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))
         uiviewBackground.backgroundColor = UIColor._107105105_a50()
         
-        let uiviewBackConfirm = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        let uiviewBackConfirm = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 208))
         uiviewBackConfirm.center.x = screenWidth / 2
         uiviewBackConfirm.backgroundColor = .white
         uiviewBackConfirm.layer.cornerRadius = 21 * screenWidthFactor

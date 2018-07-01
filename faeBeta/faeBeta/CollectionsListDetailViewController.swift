@@ -681,7 +681,7 @@ extension CollectionsListDetailViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionCancel(_:)))
         uiviewShadowBG.addGestureRecognizer(tapGesture)
         
-        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 302))
+        uiviewChooseAction = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 302))
         uiviewChooseAction.center.x = screenWidth / 2
         uiviewChooseAction.backgroundColor = .white
         uiviewChooseAction.layer.cornerRadius = 20
@@ -733,7 +733,7 @@ extension CollectionsListDetailViewController {
     }
     
     fileprivate func loadDeleteConfirm() {
-        uiviewMsgHint = UIView(frame: CGRect(x: 0, y: 200, w: 290, h: 208))
+        uiviewMsgHint = UIView(frame: CGRect(x: 0, y: alert_offset_top, w: 290, h: 208))
         uiviewMsgHint.backgroundColor = .white
         uiviewMsgHint.center.x = screenWidth / 2
         uiviewMsgHint.layer.cornerRadius = 20 * screenWidthFactor
