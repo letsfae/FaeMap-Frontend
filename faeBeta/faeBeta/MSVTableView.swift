@@ -59,6 +59,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 switch indexPath.section {
                 case 0:
                     // category
+                    
                     break
                 case 1:
                     // place

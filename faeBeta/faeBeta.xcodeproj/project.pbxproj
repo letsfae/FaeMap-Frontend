@@ -277,6 +277,7 @@
 		B3A3F63920DD64140056EE50 /* BoardSearchPlaceLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */; };
 		B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */; };
 		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
+		B3BDA19C20E6FE2400369E2F /* RealmCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BDA19B20E6FE2400369E2F /* RealmCategory.swift */; };
 		B3D106DE1F8891AC00A1725A /* UpdateAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */; };
 		B3D347FB1F67452A00E575AE /* SignInEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */; };
 		B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManager.swift */; };
@@ -672,6 +673,7 @@
 		B3A3F63820DD64140056EE50 /* BoardSearchPlaceLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardSearchPlaceLocation.swift; sourceTree = "<group>"; };
 		B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUsrnameEmailVC.swift; sourceTree = "<group>"; };
 		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
+		B3BDA19B20E6FE2400369E2F /* RealmCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCategory.swift; sourceTree = "<group>"; };
 		B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAccountVC.swift; sourceTree = "<group>"; };
 		B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailViewController.swift; sourceTree = "<group>"; };
 		B3F422251F52382C00257E8C /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
@@ -1700,6 +1702,7 @@
 				9F4736CC1FB811440058770C /* SetAvatar.swift */,
 				504D36A120D5AB2700A5C829 /* Throttler.swift */,
 				508768691F47AC6A009922BA /* UserPin.swift */,
+				B3BDA19B20E6FE2400369E2F /* RealmCategory.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -1968,6 +1971,7 @@
 				504EA82020DCD356005BBFCC /* BoardPlaceTabView.swift in Sources */,
 				50A9FBB220BDD3D900171ADB /* MapPinCollections.swift in Sources */,
 				50A9FBB320BDD3D900171ADB /* MapPin.swift in Sources */,
+				B3BDA19C20E6FE2400369E2F /* RealmCategory.swift in Sources */,
 				B33FB23F1F267CA600EC6655 /* ContactsViewController.swift in Sources */,
 				50188F421FC36C390038CAFF /* CCHMapViewDelegateProxy.m in Sources */,
 				B33FB2401F267CA600EC6655 /* AddFriendViewController.swift in Sources */,

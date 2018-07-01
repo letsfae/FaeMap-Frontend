@@ -62,6 +62,7 @@ class RealmCollection: Object {
         }
 
         try! realm.write{
+            col.last_updated_at = added_at.localToUTC()
             col.pins.append(pin)
             col.count += 1
         }
@@ -69,6 +70,11 @@ class RealmCollection: Object {
     }
     
     static func unsavePin(collection_id: Int, type: String, pin_id: Int) {
+        let curtDate = Date()
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        let updated_at = dateformatter.string(from: curtDate)
+        
         let realm  = try! Realm()
         guard let col = realm.filterCollection(id: collection_id) else {
             return
@@ -89,6 +95,7 @@ class RealmCollection: Object {
         }
         
         try! realm.write {
+            col.last_updated_at = updated_at.localToUTC()
             col.pins.remove(at: idx)
             col.count -= 1
             realm.delete(pin)

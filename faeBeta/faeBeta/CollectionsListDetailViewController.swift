@@ -434,58 +434,44 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     
     func getSavedItems(colId: Int) {
         desiredCount = realmColDetails.count
-        if desiredCount == realmColDetails.pins.count {
-//            print("self.realmColDetails \(self.realmColDetails)")
-            
-            if btnMapView != nil {
-                btnMapView.isEnabled = true
-            }
-            for collectedPin in self.realmColDetails.pins {
-                FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: String(collectedPin.pin_id)) { [weak self] (status, message) in
-                    guard status / 100 == 2 else { return }
-                    guard message != nil else { return }
-                    let resultJson = JSON(message!)
-                    let placeInfo = PlacePin(json: resultJson)
-                    faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin.pin_id as AnyObject)
-                    self?.fetchedCount += 1
-                }
-            }
-            return
-        }
-        
-        if self.realmColDetails.pins.count != 0 {
-            try! self.realm.write {
-                self.realmColDetails.pins.removeAll()
-            }
-        }
 
         FaeCollection.shared.getOneCollection(String(colId), completion: { [weak self] (status, message) in
             guard status / 100 == 2 else { return }
             guard message != nil else { return }
-            let resultJson = JSON(message!)
-            let arrLocPinId = resultJson["pins"].arrayValue//.reversed()
-//            print(arrLocPinId)
+            let col = JSON(message!)
             
             guard let `self` = self else { return }
+            // Get last_update_time, if not updated since last time, return
+            if self.realmColDetails.last_updated_at == col["last_updated_at"].stringValue {
+                return
+            }
+            
             self.loadFromServer = true
             
             if self.btnMapView != nil {
                 self.btnMapView.isEnabled = self.desiredCount != 0
             }
             
-            //let col = RealmCollection.filterCollectedPin(collection_id: colId)
             let realm = try! Realm()
-            let col = realm.filterCollection(id: colId)
-            for pin in arrLocPinId {
+            let realmCol = realm.filterCollection(id: colId)
+            let arrPinId = col["pins"].arrayValue
+            
+            try! realm.write {
+                // Update last_update_time
+                realmCol?.last_updated_at = col["last_updated_at"].stringValue
+                realmCol?.pins.removeAll()
+            }
+            
+            for pin in arrPinId {
                 let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
-        
-                try! self.realm.write {
+                
+                try! realm.write {
                     realm.add(collectedPin, update: true)
-                    col?.pins.append(collectedPin)
+                    realmCol?.pins.append(collectedPin)
                 }
             }
             
-            for collectedPin in arrLocPinId {
+            for collectedPin in arrPinId {
                 FaeMap.shared.getPin(type: self.enterMode.rawValue, pinId: collectedPin["pin_id"].stringValue) { [weak self] (status, message) in
                     guard status / 100 == 2 else { return }
                     guard message != nil else { return }
@@ -591,10 +577,8 @@ class ColListDetailHeader: UITableViewCell {
         
         FaeGenderView.shared.loadGenderAge(id: colInfo.user_id) { [weak self] (nickName, _, _) in
             let nameStr = NSMutableAttributedString(string: nickName, attributes: nameAttr)
-            let updateTime = colInfo.last_updated_at
-            let updateDate = updateTime.split(separator: " ")[0].split(separator: "-")
-            let lastUpdate = updateDate[1] + "/" + updateDate[0]
-            let updateStr = NSMutableAttributedString(string: " ::: Updated \(lastUpdate)", attributes: attribute)
+            let updateTime = colInfo.last_updated_at.UTCToLocal()
+            let updateStr = NSMutableAttributedString(string: " ::: Updated \(updateTime)", attributes: attribute)
             curtStr.append(nameStr)
             curtStr.append(updateStr)
             

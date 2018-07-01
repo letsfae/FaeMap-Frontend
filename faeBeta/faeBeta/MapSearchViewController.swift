@@ -302,12 +302,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             getPlaceInfo(content: content, source: "categories")
         }
 
-        if catDict[content] == nil {
-            catDict[content] = 0
-        } else {
-            catDict[content] = catDict[content]! + 1;
-        }
-        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
+//        if catDict[content] == nil {
+//            catDict[content] = 0
+//        } else {
+//            catDict[content] = catDict[content]! + 1;
+//        }
+//        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
     func activityStatus(isOn: Bool) {

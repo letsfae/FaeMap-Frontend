@@ -602,6 +602,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
+    // MARK: - RealmCollection Data Fetch
     private func storeRealmCollectionFromServer() {
         let realm = try! Realm()
         var setDeletedCollection = Set(realm.filterMyCollections().map { $0.collection_id })
@@ -662,6 +663,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         })
     }
     
+    // MARK: -
     private func cancelAllPinLoading() {
         placeAdderQueue.cancelAllOperations()
     }
