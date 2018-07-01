@@ -64,8 +64,8 @@ class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionVi
         lblTitle.text = viewModelPlaces.title
 
         self.viewModelPlaces = viewModelPlaces
-        colInfo.reloadData()
         colInfo.scrollToTop(animated: false)
+        colInfo.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -133,10 +133,6 @@ class PlacesCollectionCell: UICollectionViewCell {
         imgPic.image = nil
         lblName.text = place.name
         lblAddress.text = place.address
-//        lblName.text = place.name
-//        var addr = place.address1 == "" ? "" : place.address1 + ", "
-//        addr += place.address2
-//        lblAddress.text = addr
         
         imgPic.backgroundColor = ._210210210()
         imgPic.image = nil

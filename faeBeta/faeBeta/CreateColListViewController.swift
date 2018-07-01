@@ -188,7 +188,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
         let dateformatter = DateFormatter()
         dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         let time = dateformatter.string(from: curtDate)
-        
+        let utcTime = time.localToUTC()
         if sender.tag == 0 {  // create
             faeCollection.whereKey("type", value: enterMode.rawValue)
             faeCollection.whereKey("name", value: strListName)
@@ -207,7 +207,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                     print("[Create Collection] Create Successfully \(status) \(message!)")
                     
                     // store to realm
-                    let realmCol = RealmCollection(value: [colId, self.strListName, Key.shared.user_id, self.strListDesp, self.enterMode.rawValue, false, time, 0, time])
+                    let realmCol = RealmCollection(value: [colId, self.strListName, Key.shared.user_id, self.strListDesp, self.enterMode.rawValue, false, utcTime, 0, utcTime])
                     let realm = try! Realm()
                     try! realm.write {
                         realm.add(realmCol, update: false)
@@ -231,7 +231,7 @@ class CreateColListViewController: UIViewController, UITextViewDelegate {
                     try! realm.write {
                         realmCol?.name = self.strListName
                         realmCol?.descrip = self.strListDesp
-                        realmCol?.last_updated_at = time
+                        realmCol?.last_updated_at = utcTime
                     }
                     self.textviewListName.resignFirstResponder()
                     self.textviewDesp.resignFirstResponder()

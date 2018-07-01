@@ -75,7 +75,7 @@ class PlaceDetailCell: UITableViewCell {
             var openStatus = place.openOrClose
             let todayHours = place.hoursToday
             var hour = ""
-            if todayHours.count == 1 && todayHours[0] == "N/A" && openStatus == "N/A" {
+            if todayHours.count == 1 && (todayHours[0] == "N/A" || todayHours[0] == "None") && openStatus == "N/A" {
                 openStatus = ""
                 hour = "N/A"
             } else {
@@ -229,7 +229,7 @@ class PlaceOpeningHourCell: UITableViewCell {
     
     func setValueForOpeningHourCell(_ day: String, _ hour: [String], bold: Bool) {
         lblDay.text = day
-        var openingHour = hour[0]
+        var openingHour = hour[0] == "None" ? "N/A" : hour[0]
         if hour.count > 1 {
             for idx in 1..<hour.count {
                 openingHour += "\n" + hour[idx]

@@ -145,6 +145,31 @@ extension String {
         return formatter.string(from: myDate!)
     }
     
+    func localToUTC() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone.current
+        
+        let time = dateFormatter.date(from: self)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        
+        return dateFormatter.string(from: time!)
+    }
+    
+    func UTCToLocal() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        
+        let time = dateFormatter.date(from: self)
+        dateFormatter.timeZone = TimeZone.current
+//        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = "MM/YYYY"
+        
+        return dateFormatter.string(from: time!)
+    }
+    
     func isNewPin() -> Bool {
         // convert to NSDate
         let dateFormatter = DateFormatter()
