@@ -88,15 +88,54 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         initPlaceRelatedData()
         
-        let content = place.category
-        if catDict[content] == nil {
-            catDict[content] = 0
-        } else {
-            catDict[content] = catDict[content]! + 1;
-        }
-        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
-        
         print("placeId \(place.id)")
+        
+        updateCategoryDictionary()
+    }
+    
+    private func updateCategoryDictionary() {
+        let base: Double = 1.0
+        let factor: Double = 0.5
+        var level1 = "", level2 = "", level3 = "", level4 = ""
+        switch place.category {
+        case place.class_4:
+            level1 = place.class_4
+            level2 = place.class_3
+            level3 = place.class_2
+            level4 = place.class_1
+            break
+        case place.class_3:
+            level1 = place.class_3
+            level2 = place.class_2
+            level3 = place.class_1
+            break
+        case place.class_2:
+            level1 = place.class_2
+            level2 = place.class_1
+            break
+        case place.class_1:
+            level1 = place.class_1
+            break
+        default:
+            break
+        }
+        
+        if level1 != "" {
+            Key.shared.writeInRealmCategory(category: level1, weight: base)
+        }
+        if level2 != "" {
+            Key.shared.writeInRealmCategory(category: level2, weight: base * factor)
+        }
+        if level3 != "" {
+            Key.shared.writeInRealmCategory(category: level3, weight: base * factor * factor)
+        }
+        if level4 != "" {
+            Key.shared.writeInRealmCategory(category: level4, weight: base * factor * factor * factor)
+        }
+        
+//        let realm = try! Realm()
+//        let realmCategory = realm.filterMyCatDict()
+//        vickyprint(realmCategory)
     }
     
     deinit {
@@ -271,6 +310,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             
             if FaeSearch.shared.searchContent.isEmpty {
                 self.intSimilar = 0
+                completion()
                 return
             }
             
@@ -303,31 +343,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                 completion()
             }
-            
-//            FaeSearch.shared.whereKey("content", value: place.class_2 == "" ? place.class_1 : place.class_2)
-//            FaeSearch.shared.whereKey("source", value: "categories")
-//            FaeSearch.shared.whereKey("type", value: "place")
-//            FaeSearch.shared.whereKey("size", value: "20")
-//            FaeSearch.shared.whereKey("radius", value: "20000")
-//            FaeSearch.shared.whereKey("offset", value: "0")
-//            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-//            FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-//                                                          "longitude": long])
-//            FaeSearch.shared.search { [weak self] (status, message) in
-//                guard let `self` = self else { return }
-//                guard status / 100 == 2 && message != nil else {
-//                    //print("Get Related Places Fail \(status) \(message!)")
-//                    self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
-//                    completion()
-//                    return
-//                }
-//                let json = JSON(message!)
-//                guard let placeJson = json.array else { return }
-//                self.arrSimilarPlaces = placeJson.map({ PlacePin(json: $0) })
-//                self.arrSimilarPlaces = self.arrSimilarPlaces.filter({ $0.id != self.place.id })
-//                self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
-//                completion()
-//            }
         } else { // Near this Location
             arrNearbyPlaces.removeAll()
             FaeMap.shared.whereKey("geo_latitude", value: lat)
@@ -623,8 +638,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         vc.viewModelPlaces = places
         vc.strTitle = places.title
         AllPlacesMapController.isBackToLastPlaceDetailVCEnabled = true
-//        vc.recommendedPlaces = places
-//        vc.strTit le = places.title
         navigationController?.pushViewController(vc, animated: true)
     }
     
