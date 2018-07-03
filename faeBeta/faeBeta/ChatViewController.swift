@@ -78,6 +78,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if !isFirstLayout {
             //scrollToBottom(animated: false)
         }
+        //collectionView.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -98,9 +99,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidLayoutSubviews() {
         if isFirstLayout {
-            isFirstLayout = false
+            defer { isFirstLayout = false }
             addKeyboardObservers()
-            collectionViewBottomInset = 86
+            //collectionViewBottomInset = 86
+            collectionViewBottomInset = keyboardOffsetFrame.height
             let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
             collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: collectionViewContentHeight), animated: false)
         }

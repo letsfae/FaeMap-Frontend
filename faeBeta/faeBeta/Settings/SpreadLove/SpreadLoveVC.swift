@@ -14,7 +14,8 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     // MARK: - Properties
     var uiviewNavBar: FaeNavBar!
     var tblSpLove: UITableView!
-    var arrStr: [String: String] = ["00": "Invite Friends!", "01": "From Contacts", "02": "From Facebook", "10": "Share Fae Map!", "11": "Send Message", "12": "Send Email", "13": "Share on Facebook", "14": "Share on Twitter", "15": "Other Options"]
+    //var arrStr: [String: String] = ["00": "Invite Friends!", "01": "From Contacts", "02": "From Facebook", "10": "Share Fae Map!", "11": "Send Message", "12": "Send Email", "13": "Share on Facebook", "14": "Share on Twitter", "15": "Other Options"]
+    var arrStr: [String: String] = ["00": "Invite Friends!", "01": "From Contacts", "10": "Share Fae Map!", "11": "Send Message", "12": "Send Email", "13": "Share on Twitter", "14": "Other Options"]
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -49,7 +50,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 3 : 6
+        return section == 0 ? 2 : 5
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -128,7 +129,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 composeVC.setSubject("Awesome Place Discovery App to Check Out!")
                 composeVC.setMessageBody("Just a quick note to tell you about a cool app I’ve been using. Fae Map is a free place discovery and sharing app that I thought you might like. Check it out here: <a>faemaps.com</a>.\n\nDownload it <a href='https://www.faemaps.com/'>here</a> and let’s discover and go to amazing places together.", isHTML: true)
                 present(composeVC, animated: true, completion: nil)
-            case 3:
+            //case 3:
                 /*if !SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook) {
                     felixprint("facebook not available")
                     return
@@ -136,10 +137,10 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 let fbVC = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
                 fbVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
                 present(fbVC!, animated: true, completion: nil)*/
-                break
-            case 4:
+               // break
+            case 3:
                 if UIApplication.shared.canOpenURL(URL(string: "twitter://")!) {
-                    UIApplication.shared.openURL(URL(string: "twitter://post?message=hello%20world")!)
+                    UIApplication.shared.openURL(URL(string: "twitter://post?message=Discover+amazing+places+with+me+on+Fae+Maps!+Check+it+out+here!%5bhttps%3a%2f%2fwww.faemaps.com%2f%5d")!)
                 }
                 /*if !SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter) {
                     felixprint("twitter not available")
@@ -148,7 +149,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 let twitterVC = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
                 twitterVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
                 present(twitterVC!, animated: true, completion: nil)*/
-            case 5:
+            case 4:
                 let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
                 present(activityVC, animated: true, completion: nil)
