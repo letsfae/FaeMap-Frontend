@@ -106,6 +106,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var activityIndicatorLocPin: UIActivityIndicatorView!
     private var locationPinClusterManager: CCHMapClusterController!
     
+    private var chosenLocation: CLLocationCoordinate2D?
+    
     private var modeLocation: FaeMode = .off {
         didSet {
             guard fullyLoaded else { return }
@@ -160,6 +162,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadLocationView()
         loadPlaceDetailTable()
         loadPinIcon()
+        let edgeView = LeftMarginToEnableNavGestureView()
+        view.addSubview(edgeView)
         fullyLoaded = true
         mapView(faeMapView, regionDidChangeAnimated: true)
     }
@@ -299,7 +303,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.lblDistance.textColor = UIColor._255160160()
         btnSelect.isUserInteractionEnabled = false
         view.addSubview(btnSelect)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionSelect(_:)))
         btnSelect.addGestureRecognizer(tapGesture)
         
         btnZoom = FMZoomButton()
@@ -452,14 +456,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         guard fullyLoaded else { return }
         
-        switch previousVC {
-        case .board:
-            LocManager.shared.locToSearch_board = mapView.centerCoordinate
-        case .explore:
-            LocManager.shared.locToSearch_explore = mapView.centerCoordinate
-        case .chat:
-            LocManager.shared.locToSearch_chat = mapView.centerCoordinate
-        }
+        chosenLocation = mapView.centerCoordinate
+//        switch previousVC {
+//        case .board:
+//            LocManager.shared.locToSearch_board = mapView.centerCoordinate
+//        case .explore:
+//            LocManager.shared.locToSearch_explore = mapView.centerCoordinate
+//        case .chat:
+//            LocManager.shared.locToSearch_chat = mapView.centerCoordinate
+//        }
         
         calculateDistanceOffset()
         
@@ -913,9 +918,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Actions in Controller
     
-    @objc private func handleTap(_ tap: UITapGestureRecognizer) {
+    @objc private func actionSelect(_ tap: UITapGestureRecognizer) {
         switch previousVC {
         case .board:
+            LocManager.shared.locToSearch_board = faeMapView.centerCoordinate
             let location = CLLocation(latitude: faeMapView.centerCoordinate.latitude,
                                       longitude: faeMapView.centerCoordinate.longitude)
             delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "place_location"), searchText: strRawLoc_board, location: location)
@@ -932,6 +938,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 delegate?.sendPlaceBack?(placeData: placeData)
             }
         case .explore:
+            LocManager.shared.locToSearch_explore = faeMapView.centerCoordinate
             let address = RouteAddress(name: strRawLoc_explore, coordinate: faeMapView.centerCoordinate)
             delegate?.sendLocationBack?(address: address)
             navigationController?.popViewController(animated: false)

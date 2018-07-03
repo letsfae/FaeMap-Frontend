@@ -57,7 +57,7 @@ func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int
             }
         case .failure(let encodingError):
             completion(-400, "failure")
-            print(encodingError)
+            networkErrorHandling(error: encodingError, method: "[postImage]", subUrl: method.rawValue)
         }
     })
 }
@@ -70,6 +70,24 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
     
     let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
         .responseJSON { response in
+            if case let .success(value) = response.result {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-401, "success, but status code not found")
+                    return
+                }
+                completion(statusCode, value)
+            }
+            else
+            if case let .failure(error) = response.result {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-402, "failure, and status code not found")
+                    networkErrorHandling(error: error, method: "[searchToURL]", subUrl: method.rawValue)
+                    return
+                }
+                completion(statusCode, "failure")
+                networkErrorHandling(error: error, method: "[searchToURL]", subUrl: method.rawValue)
+            }
+            /*
             guard response.response != nil else {
                 completion(-500, "Internet error")
                 return
@@ -85,6 +103,7 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
             } else {
                 completion(response.response!.statusCode, "no Json body")
             }
+             */
     }
     
     return request
@@ -98,6 +117,26 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
     
     let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter, headers: headers)
         .responseJSON { response in
+            
+            if case let .success(value) = response.result {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-401, "success, but status code not found")
+                    return
+                }
+                completion(statusCode, value)
+            }
+            else
+                if case let .failure(error) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-402, "failure, and status code not found")
+                        networkErrorHandling(error: error, method: "[postToURL]", subUrl: className)
+                        return
+                    }
+                    completion(statusCode, "failure")
+                    networkErrorHandling(error: error, method: "[postToURL]", subUrl: className)
+            }
+            
+            /*
             guard response.response != nil else {
                 print("POST NO RESPONSE")
                 print(response.debugDescription)
@@ -118,6 +157,7 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
             } else {
                 completion(response.response!.statusCode, "no Json body")
             }
+             */
     }
     
     return request
@@ -134,20 +174,61 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     if parameter == nil {
         request = alamoFireManager.request(fullURL, method: .get, headers: headers)
             .responseJSON { response in
+                
+                if case let .success(value) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-401, "success, but status code not found")
+                        return
+                    }
+                    completion(statusCode, value)
+                }
+                else
+                    if case let .failure(error) = response.result {
+                        guard let statusCode = response.response?.statusCode else {
+                            completion(-402, "failure, and status code not found")
+                            networkErrorHandling(error: error, method: "[getFromURL w/o para]", subUrl: className)
+                            return
+                        }
+                        completion(statusCode, "failure")
+                        networkErrorHandling(error: error, method: "[getFromURL w/0 para]", subUrl: className)
+                }
+                
+                /*
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
                 } else {
                     completion(-500, "Internet error")
                 }
+                 */
             }
     } else {
         request = alamoFireManager.request(fullURL, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
+                
+                if case let .success(value) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-401, "success, but status code not found")
+                        return
+                    }
+                    completion(statusCode, value)
+                }
+                else
+                    if case let .failure(error) = response.result {
+                        guard let statusCode = response.response?.statusCode else {
+                            completion(-402, "failure, and status code not found")
+                            networkErrorHandling(error: error, method: "[getFromURL w/ para]", subUrl: className)
+                            return
+                        }
+                        completion(statusCode, "failure")
+                        networkErrorHandling(error: error, method: "[getFromURL w/ para]", subUrl: className)
+                }
+                /*
                 if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
                 } else {
                     completion(-500, "Internet error")
                 }
+                 */
             }
     }
     
@@ -161,11 +242,31 @@ func deleteFromURL(_ className: String, parameter: [String: Any], completion: @e
     
     alamoFireManager.request(fullURL, method: .delete, headers: headers)
         .responseJSON { response in
+            
+            if case let .success(value) = response.result {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-401, "success, but status code not found")
+                    return
+                }
+                completion(statusCode, value)
+            }
+            else
+                if case let .failure(error) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-402, "failure, and status code not found")
+                        networkErrorHandling(error: error, method: "[deleteFromURL]", subUrl: className)
+                        return
+                    }
+                    completion(statusCode, "failure")
+                    networkErrorHandling(error: error, method: "[deleteFromURL]", subUrl: className)
+            }
+            /*
             if response.response != nil {
                 completion(response.response!.statusCode, "nothing here")
             } else {
                 completion(-500, "Internet error")
             }
+             */
         }
 }
 
@@ -492,4 +593,43 @@ func utf8Decode(_ inputString: String) -> String {
     let decodeString = inputString.removingPercentEncoding!
     // let decodeString = inputString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
     return decodeString
+}
+
+func networkErrorHandling(error: Error, method: String, subUrl: String) {
+    let urlWithSpaces = " " + subUrl + " "
+    if let error = error as? AFError {
+        switch error {
+        case .invalidURL(let url):
+            print(method + urlWithSpaces + "Invalid URL: \(url) - \(error.localizedDescription)")
+        case .parameterEncodingFailed(let reason):
+            print(method + urlWithSpaces + "Parameter encoding failed: \(error.localizedDescription)")
+            print(method + urlWithSpaces + "Failure Reason: \(reason)")
+        case .multipartEncodingFailed(let reason):
+            print(method + urlWithSpaces + "Multipart encoding failed: \(error.localizedDescription)")
+            print(method + urlWithSpaces + "Failure Reason: \(reason)")
+        case .responseValidationFailed(let reason):
+            print(method + urlWithSpaces + "Response validation failed: \(error.localizedDescription)")
+            print(method + urlWithSpaces + "Failure Reason: \(reason)")
+            
+            switch reason {
+            case .dataFileNil, .dataFileReadFailed:
+                print(method + urlWithSpaces + "Downloaded file could not be read")
+            case .missingContentType(let acceptableContentTypes):
+                print(method + urlWithSpaces + "Content Type Missing: \(acceptableContentTypes)")
+            case .unacceptableContentType(let acceptableContentTypes, let responseContentType):
+                print(method + urlWithSpaces + "Response content type: \(responseContentType) was unacceptable: \(acceptableContentTypes)")
+            case .unacceptableStatusCode(let code):
+                print(method + urlWithSpaces + "Response status code was unacceptable: \(code)")
+            }
+        case .responseSerializationFailed(let reason):
+            print(method + urlWithSpaces + "Response serialization failed: \(error.localizedDescription)")
+            print(method + urlWithSpaces + "Failure Reason: \(reason)")
+        }
+        
+        print(method + urlWithSpaces + "Underlying error: \(error.underlyingError)")
+    } else if let error = error as? URLError {
+        print(method + urlWithSpaces + "URLError occurred: \(error)")
+    } else {
+        print(method + urlWithSpaces + "Unknown error: \(error)")
+    }
 }

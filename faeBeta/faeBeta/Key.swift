@@ -120,8 +120,8 @@ class Key: NSObject { //  singleton class
     var initialCtrler: InitialPageController?
     var FMVCtrler: FaeMapViewController?
     var mapHeadTitle: String = ""
-    var selectedTypeIdx: IndexPath = IndexPath(row: 0, section: 0) // Explore
-    var lastCategory: String = "Random" // Explore
+    var selectedTypeIdx_explore: IndexPath = IndexPath(row: 0, section: 0) // Explore
+    var lastCategory_explore: String = "Random" // Explore
     var lastChosenLoc: CLLocationCoordinate2D?
     
     func getUserInfo() {
