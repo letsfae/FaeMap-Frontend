@@ -35,6 +35,7 @@
 		5028597F209A1F3400F98B00 /* ExploreMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5028597E209A1F3400F98B00 /* ExploreMapController.swift */; };
 		502E422A20C094A800995881 /* PlacePinImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E422920C094A800995881 /* PlacePinImagesView.swift */; };
 		502F145520CDA6FE00572FD7 /* AfterAddedToListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502F145420CDA6FE00572FD7 /* AfterAddedToListView.swift */; };
+		5032AD0F20EBFFEA001DEDC0 /* HttpClient(Currently Deprecated).swift in Sources */ = {isa = PBXBuildFile; fileRef = 5032AD0E20EBFFEA001DEDC0 /* HttpClient(Currently Deprecated).swift */; };
 		503A4FFC1F5A33A000CFC60C /* FaeLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */; };
 		503BF9D7208517AA00635E65 /* RoutingMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 503BF9D6208517AA00635E65 /* RoutingMapController.swift */; };
 		50414F5B1F43D54100FF1B76 /* FaeMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50414F5A1F43D54100FF1B76 /* FaeMapView.swift */; };
@@ -408,6 +409,7 @@
 		5028597E209A1F3400F98B00 /* ExploreMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreMapController.swift; sourceTree = "<group>"; };
 		502E422920C094A800995881 /* PlacePinImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlacePinImagesView.swift; sourceTree = "<group>"; };
 		502F145420CDA6FE00572FD7 /* AfterAddedToListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AfterAddedToListView.swift; sourceTree = "<group>"; };
+		5032AD0E20EBFFEA001DEDC0 /* HttpClient(Currently Deprecated).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HttpClient(Currently Deprecated).swift"; sourceTree = "<group>"; };
 		503A4FFB1F5A33A000CFC60C /* FaeLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeLabel.swift; sourceTree = "<group>"; };
 		503BF9D6208517AA00635E65 /* RoutingMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingMapController.swift; sourceTree = "<group>"; };
 		50414F5A1F43D54100FF1B76 /* FaeMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaeMapView.swift; sourceTree = "<group>"; };
@@ -1387,6 +1389,7 @@
 				1873C4C71F214261007669DD /* FaeContact.swift */,
 				B3273E661F8C220700CFEC8E /* FaeCollection.swift */,
 				50909F8020D9825C00FB1887 /* Defaults.swift */,
+				5032AD0E20EBFFEA001DEDC0 /* HttpClient(Currently Deprecated).swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -2222,6 +2225,7 @@
 				CE7D2C581E451AF1003C0577 /* Welcomer.swift in Sources */,
 				1873C4C81F214261007669DD /* FaeContact.swift in Sources */,
 				B33F89FC1F3E83A10033610D /* AllPlacesViewController.swift in Sources */,
+				5032AD0F20EBFFEA001DEDC0 /* HttpClient(Currently Deprecated).swift in Sources */,
 				B85FFE981EA84CEB0079D1A7 /* PinsTableViewCell(General).swift in Sources */,
 				B8A3BF5A1DD0682F00288C3B /* ScrollViewExtension.swift in Sources */,
 				50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */,

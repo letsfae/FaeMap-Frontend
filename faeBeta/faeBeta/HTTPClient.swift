@@ -64,7 +64,7 @@ func postImage(_ method: PostMethod, imageData: Data, completion: @escaping (Int
 
 @discardableResult
 func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @escaping (Int, Any?) -> Void) -> DataRequest {
-    
+
     let fullURL = Key.shared.baseURL + "/" + method.rawValue
     let headers = Key.shared.header(auth: true, type: .json)
     
@@ -72,7 +72,7 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
         .responseJSON { response in
             if case let .success(value) = response.result {
                 guard let statusCode = response.response?.statusCode else {
-                    completion(-401, "success, but status code not found")
+                    completion(-401, "[searchToURL] success, but status code not found")
                     return
                 }
                 completion(statusCode, value)
@@ -80,12 +80,14 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
             else
             if case let .failure(error) = response.result {
                 guard let statusCode = response.response?.statusCode else {
-                    completion(-402, "failure, and status code not found")
+                    completion(-402, "[searchToURL] failure, and status code not found")
                     networkErrorHandling(error: error, method: "[searchToURL]", subUrl: method.rawValue)
                     return
                 }
-                completion(statusCode, "failure")
+                completion(statusCode, "[searchToURL] failure")
                 networkErrorHandling(error: error, method: "[searchToURL]", subUrl: method.rawValue)
+            } else {
+                completion(-500, "[searchToURL] unknown error")
             }
             /*
             guard response.response != nil else {
@@ -120,20 +122,26 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
             
             if case let .success(value) = response.result {
                 guard let statusCode = response.response?.statusCode else {
-                    completion(-401, "success, but status code not found")
+                    completion(-401, "[postToURL] success, but status code not found")
                     return
                 }
                 completion(statusCode, value)
             }
             else
-                if case let .failure(error) = response.result {
-                    guard let statusCode = response.response?.statusCode else {
-                        completion(-402, "failure, and status code not found")
-                        networkErrorHandling(error: error, method: "[postToURL]", subUrl: className)
-                        return
-                    }
-                    completion(statusCode, "failure")
+            if case let .failure(error) = response.result {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-402, "[postToURL] failure, and status code not found")
                     networkErrorHandling(error: error, method: "[postToURL]", subUrl: className)
+                    return
+                }
+                if statusCode / 100 == 2 {
+                    completion(statusCode, "[postToURL] success, but not message data")
+                } else {
+                    completion(statusCode, "[postToURL] failure")
+                    networkErrorHandling(error: error, method: "[postToURL]", subUrl: className)
+                }
+            } else {
+                completion(-500, "[postToURL] unknown error")
             }
             
             /*
@@ -174,23 +182,28 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     if parameter == nil {
         request = alamoFireManager.request(fullURL, method: .get, headers: headers)
             .responseJSON { response in
-                
                 if case let .success(value) = response.result {
                     guard let statusCode = response.response?.statusCode else {
-                        completion(-401, "success, but status code not found")
+                        completion(-401, "[getFromURL w/0 para]success, but status code not found")
                         return
                     }
                     completion(statusCode, value)
                 }
                 else
-                    if case let .failure(error) = response.result {
-                        guard let statusCode = response.response?.statusCode else {
-                            completion(-402, "failure, and status code not found")
-                            networkErrorHandling(error: error, method: "[getFromURL w/o para]", subUrl: className)
-                            return
-                        }
-                        completion(statusCode, "failure")
-                        networkErrorHandling(error: error, method: "[getFromURL w/0 para]", subUrl: className)
+                if case let .failure(error) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-402, "[getFromURL w/o para]failure, and status code not found")
+                        networkErrorHandling(error: error, method: "[getFromURL w/o para]", subUrl: className)
+                        return
+                    }
+                    if statusCode / 100 == 2 {
+                        completion(statusCode, "[getFromURL w/o para] success, but not message data")
+                    } else {
+                        completion(statusCode, "[getFromURL w/o para] failure")
+                        networkErrorHandling(error: error, method: "[getFromURL w/ para] ", subUrl: className)
+                    }
+                } else {
+                    completion(-500, "[getFromURL w/o para]unknown error")
                 }
                 
                 /*
@@ -204,23 +217,28 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     } else {
         request = alamoFireManager.request(fullURL, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
-                
                 if case let .success(value) = response.result {
                     guard let statusCode = response.response?.statusCode else {
-                        completion(-401, "success, but status code not found")
+                        completion(-401, "[getFromURL w/ para] success, but status code not found")
                         return
                     }
                     completion(statusCode, value)
                 }
                 else
-                    if case let .failure(error) = response.result {
-                        guard let statusCode = response.response?.statusCode else {
-                            completion(-402, "failure, and status code not found")
-                            networkErrorHandling(error: error, method: "[getFromURL w/ para]", subUrl: className)
-                            return
-                        }
-                        completion(statusCode, "failure")
+                if case let .failure(error) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-402, "[getFromURL w/ para] failure, and status code not found")
                         networkErrorHandling(error: error, method: "[getFromURL w/ para]", subUrl: className)
+                        return
+                    }
+                    if statusCode / 100 == 2 {
+                        completion(statusCode, "[getFromURL w/ para] success, but not message data")
+                    } else {
+                        completion(statusCode, "[getFromURL w/ para] failure")
+                        networkErrorHandling(error: error, method: "[getFromURL w/ para] ", subUrl: className)
+                    }
+                } else {
+                    completion(-500, "[getFromURL w/ para] unknown error")
                 }
                 /*
                 if response.response != nil {
@@ -242,23 +260,28 @@ func deleteFromURL(_ className: String, parameter: [String: Any], completion: @e
     
     alamoFireManager.request(fullURL, method: .delete, headers: headers)
         .responseJSON { response in
-            
             if case let .success(value) = response.result {
                 guard let statusCode = response.response?.statusCode else {
-                    completion(-401, "success, but status code not found")
+                    completion(-401, "[deleteFromURL] success, but status code not found")
                     return
                 }
                 completion(statusCode, value)
             }
             else
-                if case let .failure(error) = response.result {
-                    guard let statusCode = response.response?.statusCode else {
-                        completion(-402, "failure, and status code not found")
-                        networkErrorHandling(error: error, method: "[deleteFromURL]", subUrl: className)
-                        return
-                    }
-                    completion(statusCode, "failure")
+            if case let .failure(error) = response.result {
+                guard let statusCode = response.response?.statusCode else {
+                    completion(-402, "[deleteFromURL] failure, and status code not found")
                     networkErrorHandling(error: error, method: "[deleteFromURL]", subUrl: className)
+                    return
+                }
+                if statusCode / 100 == 2 {
+                    completion(statusCode, "[deleteFromURL] success, but not message data")
+                } else {
+                    completion(statusCode, "[deleteFromURL] failure")
+                    networkErrorHandling(error: error, method: "[deleteFromURL]", subUrl: className)
+                }
+            } else {
+                completion(-500, "[deleteFromURL] unknown error")
             }
             /*
             if response.response != nil {
@@ -297,16 +320,16 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
     alamoFireManager.request(urlRequest)
         .responseJSON { response in
             guard response.response != nil else {
-                completion(-500, "", nil)
+                completion(-403, "[getAvatar] response is nil", nil)
                 return
             }
             guard let statusCode = response.response?.statusCode else {
-                completion(-500, "", nil)
+                completion(-402, "[getAvatar] status code not found", nil)
                 return
             }
             if let JSON = response.response?.allHeaderFields {
                 guard var etag = JSON["Etag"] as? String else {
-                    completion(statusCode, "", nil)
+                    completion(statusCode, "[getAvatar] etag not found", nil)
                     return
                 }
                 //joshprint("[getAvatar - \(userID)] before", etag)
@@ -345,9 +368,21 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
                     }
                 }
             } else {
-                completion(statusCode, "", nil)
+                if case let .failure(error) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-402, "[getAvatar] failure, and status code not found", nil)
+                        networkErrorHandling(error: error, method: "[getAvatar]", subUrl: "userid: \(userID), type: \(type)")
+                        return
+                    }
+                    completion(statusCode, "[getAvatar] failure", nil)
+                    networkErrorHandling(error: error, method: "[getAvatar]", subUrl: "userid: \(userID), type: \(type)")
+                } else {
+                    completion(-500, "[getAvatar] unknown error", nil)
+                }
             }
+             
         }
+ 
 }
 
 func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = Key.shared.headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
@@ -377,11 +412,11 @@ func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = 
     alamoFireManager.request(urlRequest)
         .responseJSON { response in
             guard response.response != nil else {
-                completion(-500, "", nil)
+                completion(-403, "[getCoverPhoto] response is nil", nil)
                 return
             }
             guard let statusCode = response.response?.statusCode else {
-                completion(-500, "", nil)
+                completion(-402, "[getCoverPhoto] status code not found", nil)
                 return
             }
             if let JSON = response.response?.allHeaderFields {
@@ -398,7 +433,7 @@ func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = 
                     return
                 }
                 if statusCode == 404 {
-                    completion(404, "", nil)
+                    completion(404, "[getCoverPhoto] not found", nil)
                 }
                 //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
                 if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
@@ -418,48 +453,22 @@ func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = 
                     }
                 }
             } else {
-                completion(statusCode, "", nil)
-            }
-    }
-}
-
-func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [String: String] = Key.shared.headerAuthentication(), completion: @escaping (Int, String, Data?) -> Void) {
-    
-    let URL = isChatRoom ? "\(Key.shared.baseURL)/files/chat_rooms/\(fileID)/cover_image" : "\(Key.shared.baseURL)/files/\(fileID)/data"
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        "Accept": Key.shared.headerAccept,
-    ]
-    for (key, value) in authentication {
-        headers[key] = value
-    }
-    
-    alamoFireManager.request(URL, headers: headers)
-        .responseJSON { response in
-            if response.response != nil {
-                guard let statusCode = response.response?.statusCode else {
-                    completion(-500, "", nil)
-                    return
-                }
-                if let JSON = response.response?.allHeaderFields {
-                    guard var etag = JSON["Etag"] as? String else {
-                        completion(statusCode, "", nil)
+                if case let .failure(error) = response.result {
+                    guard let statusCode = response.response?.statusCode else {
+                        completion(-402, "[getCoverPhoto] failure, and status code not found", nil)
+                        networkErrorHandling(error: error, method: "[getAvatar]", subUrl: "userid: \(userID), type: \(type)")
                         return
                     }
-                    etag = etag.removeSpecialChars()
-                    completion(statusCode, etag, response.data)
+                    completion(statusCode, "[getCoverPhoto] failure", nil)
+                    networkErrorHandling(error: error, method: "[getAvatar]", subUrl: "userid: \(userID), type: \(type)")
                 } else {
-                    completion(statusCode, "", nil)
+                    completion(-500, "[getCoverPhoto] unknown error", nil)
                 }
-            } else {
-                completion(-500, "", nil)
             }
-        }
+    }
 }
 
 func downloadImage(URL: String, completion: @escaping (Data?) -> Void) {
-    
     alamoFireManager.request(URL).responseJSON { response in
         if response.response != nil {
             guard (response.response?.statusCode) != nil else {
@@ -505,73 +514,49 @@ func postFileToURL(_ className: String, parameter: [String: Any]?, authenticatio
                 case .success(let upload, _, _):
                     upload.responseJSON { response in
                         //print(response.response.debugDescription)
+                        if case let .success(value) = response.result {
+                            guard let statusCode = response.response?.statusCode else {
+                                completion(-401, "[postFileToURL] success, but status code not found")
+                                return
+                            }
+                            completion(statusCode, value)
+                        }
+                        else
+                            if case let .failure(error) = response.result {
+                                guard let statusCode = response.response?.statusCode else {
+                                    completion(-402, "[postFileToURL] failure, and status code not found")
+                                    networkErrorHandling(error: error, method: "[searchToURL]", subUrl: className)
+                                    return
+                                }
+                                if statusCode / 100 == 2 {
+                                    completion(statusCode, "[postFileToURL] success, but not message data")
+                                } else {
+                                    completion(statusCode, "[postFileToURL] failure")
+                                    networkErrorHandling(error: error, method: "[postFileToURL]", subUrl: className)
+                                }
+                            } else {
+                                completion(-500, "[postFileToURL] unknown error")
+                        }
+                        /*
                         if response.response != nil {
                             if let resMess = response.result.value {
                                 completion(response.response!.statusCode, resMess)
                             } else {
-                                completion(response.response!.statusCode, "no Json body")
+                                completion(response.response!.statusCode, "[postFileToURL] no Json body")
                             }
                         } else {
-                            completion(-500, "Internet error")
+                            completion(-500, "[postFileToURL] Internet error")
                         }
+                         */
                     }
                     upload.uploadProgress { progress in
-                        print("[upload progress ", progress.fractionCompleted, "]")
+                        print("[postFileToURL] [upload progress ", progress.fractionCompleted, "]")
                     }
                 case .failure(let encodingError):
-                    completion(-400, "failure")
-                    print(encodingError)
+                    completion(-400, "[postFileToURL] failure")
+                    networkErrorHandling(error: encodingError, method: "[postFileToURL]", subUrl: className)
                 }
     }) }
-}
-
-func postChatRoomCoverImageToURL(_ className: String, parameter: [String: Any]?, authentication: [String: String]?, completion: @escaping (Int, Any?) -> Void) {
-    let URL = Key.shared.baseURL + "/" + className
-    var headers = [
-        "User-Agent": Key.shared.headerUserAgent,
-        "Fae-Client-Version": Key.shared.headerClientVersion,
-        //        "Device-ID" : headerDeviceID,
-        "Accept": Key.shared.headerAccept,
-        //        "Content-Type" : "application/form-data"
-    ]
-    if authentication != nil {
-        for (key, value) in authentication! {
-            headers[key] = value
-        }
-    }
-    
-    if parameter != nil {
-        let imageData = parameter!["cover_image"] as! Data
-        let chatRoomId = parameter!["chat_room_id"] as! NSNumber
-        alamoFireManager.upload(multipartFormData: {
-            MultipartFormData in
-            MultipartFormData.append(imageData, withName: "cover_image", fileName: "cover_image.jpg", mimeType: "image/jpeg")
-            MultipartFormData.append(NSKeyedArchiver.archivedData(withRootObject: chatRoomId), withName: "chat_room_id")
-        }, usingThreshold: 100, to: URL, method: .post, headers: headers, encodingCompletion: { encodingResult in
-            switch encodingResult {
-            case .success(let upload, _, _):
-                upload.responseJSON { response in
-                    print(response.response.debugDescription)
-                    if response.response != nil {
-                        if let resMess = response.result.value {
-                            completion(response.response!.statusCode, resMess)
-                        } else {
-                            // Bug here
-                            completion(response.response!.statusCode, "no Json body")
-                        }
-                    } else {
-                        completion(-500, "Internet error")
-                    }
-                    
-                }
-            case .failure(let encodingError):
-                completion(-400, "failure")
-                print(encodingError)
-            }
-        })
-        
-    }
-    
 }
 
 func showTimeOutAlert() {
@@ -626,7 +611,7 @@ func networkErrorHandling(error: Error, method: String, subUrl: String) {
             print(method + urlWithSpaces + "Failure Reason: \(reason)")
         }
         
-        print(method + urlWithSpaces + "Underlying error: \(error.underlyingError)")
+        print(method + urlWithSpaces + "Underlying error: \(String(describing: error.underlyingError))")
     } else if let error = error as? URLError {
         print(method + urlWithSpaces + "URLError occurred: \(error)")
     } else {
