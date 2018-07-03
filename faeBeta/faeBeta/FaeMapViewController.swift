@@ -2160,12 +2160,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
                 }
                 if desiredAnno != nil {
-                    print("[goto] anno found")
+                    joshprint("[goto] anno found")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
                 } else {
-                    print("![goto] anno not found")
+                    joshprint("![goto] anno not found")
                 }
             }
         }
@@ -2305,13 +2305,13 @@ extension FaeMapViewController {
         //        getMapUserInfo.whereKey("user_updated_in", value: "180")
         FaeMap.shared.getMapInformation { [unowned self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
-                print("DEBUG: getMapUserInfo status/100 != 2")
+                joshprint("DEBUG: getMapUserInfo status/100 != 2")
                 self.boolCanUpdateUsers = true
                 return
             }
             let mapUserJSON = JSON(message!)
             guard let mapUserJsonArray = mapUserJSON.array else {
-                print("[getMapUserInfo] fail to parse pin comments")
+                joshprint("[getMapUserInfo] fail to parse pin comments")
                 self.boolCanUpdateUsers = true
                 return
             }
@@ -2664,7 +2664,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     private func tapPlacePin(didSelect view: MKAnnotationView) {
-        print("[tapPlacePin] select anno")
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
         guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }

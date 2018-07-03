@@ -17,7 +17,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     private var arrTitle = ["00":"Go Invisible", "10":"Shadow Location System", "11":"Minimal Effect", "12":"Normal Effect", "13":"Maximum Effect", "20":"Blocked List", "30":"Clear Chat History"]
     private var arrDetail: [String] = ["Hide your own Map Avatar and all other Avatars. You can't see others and others can't see you.", "Now you see me, now you don't! S.L.S is used to protect your true location in public.", "List for all the users you blocked. Banned users will no longer appear in the list.", "Clears all chat contents excluding those with Official Accounts. This does not delete the chat itself."]
     
-    private var uiviewHidden: UIView!
+    private var uiviewInvisible: UIView!
     private var lblHiddenModel: UILabel!
     private var imgviewHidden: UIImageView!
     private var lblHiddenDes: UILabel!
@@ -43,7 +43,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         loadNavBar()
         loadTableView()
         loadBackground()
-        loadHiddenView()
+        loadInvisibleView()
         loaduiviewAlert()
     }
     
@@ -68,11 +68,12 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         tblPrivacy.rowHeight = UITableViewAutomaticDimension
     }
     
-    private func loadHiddenView() {
-        uiviewHidden = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
-        uiviewHidden.backgroundColor = .white
-        uiviewHidden.layer.cornerRadius = 16 * screenWidthFactor
-        uiviewBackground.addSubview(uiviewHidden)
+    private func loadInvisibleView() {
+        uiviewInvisible = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
+        uiviewInvisible.backgroundColor = .white
+        uiviewInvisible.center.y = view.center.y - device_offset_top
+        uiviewInvisible.layer.cornerRadius = 16 * screenWidthFactor
+        uiviewBackground.addSubview(uiviewInvisible)
         
         let lblTitle = UILabel(frame: CGRect(x: 73, y: 27, w: 144, h: 44))
         lblTitle.text = "You're now in\n Invisible Mode!"
@@ -80,11 +81,11 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         lblTitle.numberOfLines = 0
         lblTitle.textAlignment = NSTextAlignment.center
         lblTitle.textColor = UIColor(red: 89 / 255, green: 89.0 / 255, blue: 89.0 / 255, alpha: 1.0)
-        uiviewHidden.addSubview(lblTitle)
+        uiviewInvisible.addSubview(lblTitle)
         
         let imgInvisible = UIImageView(frame: CGRect(x: 89, y: 87, w: 117, h: 139))
         imgInvisible.image = UIImage(named: "InvisibleMode")
-        uiviewHidden.addSubview(imgInvisible)
+        uiviewInvisible.addSubview(imgInvisible)
         
         let lblNote = UILabel(frame: CGRect(x: 41, y: 236, w: 209, h: 66))
         lblNote.numberOfLines = 0
@@ -92,10 +93,10 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         lblNote.textAlignment = NSTextAlignment.center
         lblNote.textColor = UIColor(red: 89 / 255, green: 89 / 255, blue: 89 / 255, alpha: 1)
         lblNote.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenWidthFactor)
-        uiviewHidden.addSubview(lblNote)
+        uiviewInvisible.addSubview(lblNote)
         
         btnGot = UIButton(frame: CGRect(x: 41, y: 315, w: 209, h: 40))
-        uiviewHidden.addSubview(btnGot)
+        uiviewInvisible.addSubview(btnGot)
         btnGot.setTitle("Got it!", for: .normal)
         btnGot.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
         btnGot.backgroundColor = UIColor(red: 249 / 255, green: 90 / 255, blue: 90 / 255, alpha: 1.0)
@@ -112,7 +113,7 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         uiviewBackground.backgroundColor = UIColor._107105105_a50()
         uiviewBackground.addSubview(btnBackground)
         
-        uiviewBackground.isHidden = true
+        uiviewBackground.alpha = 0
     }
     
     private func loaduiviewAlert() {
@@ -165,16 +166,21 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     @objc private func showMainView(_ sender: UIButton) {
-        uiviewHidden.isHidden = true
-        uiviewBackground.isHidden = true
+        showOrHideInvisibleCard(show: false)
     }
     
-    private func invisibleModeDimClicked(_ sender: UIButton) {
-        UIView.animate(withDuration: 0.3, animations: {
-            sender.alpha = 0
-        }, completion: { _ in
-            sender.removeFromSuperview()
-        })
+    private func showOrHideInvisibleCard(show: Bool) {
+        if show {
+            UIView.animate(withDuration: 0.3) {
+                self.uiviewInvisible.alpha = 1
+                self.uiviewBackground.alpha = 1
+            }
+        } else {
+            UIView.animate(withDuration: 0.3) {
+                self.uiviewInvisible.alpha = 0
+                self.uiviewBackground.alpha = 0
+            }
+        }
     }
     
     private func clearChatHistory(completion: @escaping ((Bool) -> Void)) {
@@ -193,13 +199,32 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         loaduiviewAlert()
     }
     
-    @objc private func getintoHiddenModel(_ sender: UISwitch) {
-        if sender.isOn == true {
-            sender.isOn = false
+    @objc private func actionInvisibleModeSwitch(_ sender: UISwitch) {
+        if sender.isOn {
+            FaeUser.shared.whereKey("status", value: "5")
+            FaeUser.shared.setSelfStatus({ status, _ in
+                if status / 100 == 2 {
+                    Key.shared.onlineStatus = 5
+                    let storageForUserStatus = UserDefaults.standard
+                    storageForUserStatus.set(Key.shared.onlineStatus, forKey: "userStatus")
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
+                    self.showOrHideInvisibleCard(show: true)
+                } else {
+                    print("Fail to switch to invisible")
+                }
+            })
         } else {
-            // TODO: show main map and uiviewAlert, need to add mainscreen map here
-            sender.isOn = true
-            uiviewHidden.isHidden = false
+            FaeUser.shared.whereKey("status", value: "1")
+            FaeUser.shared.setSelfStatus({ status, _ in
+                if status / 100 == 2 {
+                    Key.shared.onlineStatus = 1
+                    let storageForUserStatus = UserDefaults.standard
+                    storageForUserStatus.set(Key.shared.onlineStatus, forKey: "userStatus")
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+                } else {
+                    print("Fail to switch to online")
+                }
+            })
         }
     }
 
@@ -246,8 +271,8 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         if section == 0 {
             cell.imgView.isHidden = true
             cell.switchIcon.isHidden = false
-            cell.switchIcon.isOn = Key.shared.onlineStatus == 5
-            cell.switchIcon.addTarget(self, action: #selector(getintoHiddenModel(_:)), for: .valueChanged)
+            cell.switchIcon.setOn(Key.shared.onlineStatus == 5, animated: false)
+            cell.switchIcon.addTarget(self, action: #selector(actionInvisibleModeSwitch(_:)), for: .valueChanged)
             cell.topGrayLine.isHidden = true
         } else if section == 1 {
             cell.imgView.isHidden = true
@@ -273,12 +298,13 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         if section == 0 { // TODO
             let cell = tableView.cellForRow(at: indexPath as IndexPath) as! GeneralTitleCell
             if cell.switchIcon.isOn == false {
-                //show main map and uiviewAlert, need to add mainscreen map here
-                cell.switchIcon.isOn = true
-                uiviewBackground.isHidden = false
                 uiviewAlert.isHidden = true
-                uiviewHidden.isHidden = false
+                cell.switchIcon.setOn(true, animated: true)
+            } else {
+                cell.switchIcon.setOn(false, animated: true)
             }
+            vibrate(type: 4)
+            cell.switchIcon.sendActions(for: .valueChanged)
         } else if section == 1 {
             var effect = "normal"
             switch row {
@@ -337,8 +363,8 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
         } else if section == 3 { // TODO
             //need to clear chat history later
             clearChatHistory() { success in
-                self.uiviewBackground.isHidden = false
-                self.uiviewHidden.isHidden = true
+                self.uiviewBackground.alpha = 1
+                self.uiviewInvisible.alpha = 0
                 self.uiviewAlert.isHidden = false
                 self.tag = 0
             }
