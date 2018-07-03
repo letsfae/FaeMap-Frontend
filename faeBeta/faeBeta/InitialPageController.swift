@@ -36,7 +36,7 @@ class InitialPageController: UIPageViewController {
     
     public func goToFaeMap(animated: Bool = true, _ completion: (() -> ())? = nil) {
         if let faeMap = arrViewCtrl.first {
-            self.setViewControllers([faeMap], direction: .reverse, animated: animated, completion: { _ in
+            self.setViewControllers([faeMap], direction: .forward, animated: animated, completion: { _ in
                 completion?()
             })
         }

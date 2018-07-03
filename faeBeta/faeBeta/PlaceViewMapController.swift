@@ -22,7 +22,7 @@ class PlaceViewMapController: BasicMapController {
         faeMapView.doubleTap.isEnabled = false
         faeMapView.longPress.isEnabled = false
         
-        let edgeView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: screenHeight))
+        let edgeView = LeftMarginToEnableNavGestureView()
         view.addSubview(edgeView)
         
         fullyLoaded = true

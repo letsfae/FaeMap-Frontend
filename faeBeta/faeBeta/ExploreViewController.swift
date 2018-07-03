@@ -23,7 +23,8 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     weak var delegate: ExploreDelegate?
     
     private var uiviewNavBar: FaeNavBar!
-    private var clctViewTypes: UICollectionView!
+    private var scrlViewTypes: UIScrollView!
+    private var dictTypeBtns = [String: UIButton]()
     private var clctViewPlaceCard: UICollectionView!
     private var lblBottomLocation: UILabel!
     private var btnGoLeft: UIButton!
@@ -126,7 +127,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         loadBottomLocation()
         loadPlaceListView()
         loadNoResultLabel()
-        let edgeView = UIView(frame: CGRect(x: 0, y: 0, width: 10, height: screenHeight))
+        let edgeView = LeftMarginToEnableNavGestureView()
         view.addSubview(edgeView)
     }
     
@@ -249,17 +250,36 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         layout.minimumLineSpacing = 20
         layout.estimatedItemSize = CGSize(width: 80, height: 36)
         
-        clctViewTypes = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
-        clctViewTypes.register(EXPClctTypeCell.self, forCellWithReuseIdentifier: "exp_types")
-        clctViewTypes.delegate = self
-        clctViewTypes.dataSource = self
-        clctViewTypes.isPagingEnabled = false
-        clctViewTypes.backgroundColor = UIColor.clear
-        clctViewTypes.showsHorizontalScrollIndicator = false
-        clctViewTypes.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
-        view.addSubview(clctViewTypes)
-        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: clctViewTypes)
-        view.addConstraintsWithFormat("V:|-\(73+device_offset_top)-[v0(36)]", options: [], views: clctViewTypes)
+        scrlViewTypes = UIScrollView()
+        scrlViewTypes.backgroundColor = .clear
+        scrlViewTypes.showsHorizontalScrollIndicator = false
+        scrlViewTypes.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+        view.addSubview(scrlViewTypes)
+        view.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: scrlViewTypes)
+        view.addConstraintsWithFormat("V:|-\(73+device_offset_top)-[v0(36)]", options: [], views: scrlViewTypes)
+        
+        var last_offset: CGFloat = 20
+        var tag = 0
+        for category in categories {
+            let button = UIButton()
+            button.setTitle(category, for: .normal)
+            button.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
+            button.setTitleColor(.lightGray, for: .normal)
+            
+            let width = category.width(withConstrainedWidth: 36, font: FaeFont(fontType: .medium, size: 15))
+            button.frame.origin = CGPoint(x: last_offset, y: 0)
+            button.frame.size = CGSize(width: width + 3.0, height: 36)
+            last_offset = button.frame.origin.x + width + 23.0
+            
+            button.tag = tag
+            tag += 1
+            
+            button.addTarget(self, action: #selector(actionTypeButtonTap(_:)), for: .touchUpInside)
+            
+            dictTypeBtns[category] = button
+            scrlViewTypes.addSubview(button)
+        }
+        scrlViewTypes.contentSize.width = last_offset - 23.0
     }
     
     private func loadPlaceCardCollection() {
@@ -361,7 +381,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @objc private func actionExpMap() {
         var arrPlaceData = [PlacePin]()
-        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let lastSelectedRow = Key.shared.selectedTypeIdx_explore.row
         let cat = categories[lastSelectedRow]
         switch cat {
         case "Random":
@@ -402,7 +422,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     @objc private func actionSwitchPage(_ sender: UIButton) {
         var arrCount = 0
-        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let lastSelectedRow = Key.shared.selectedTypeIdx_explore.row
         let cat = categories[lastSelectedRow]
         switch cat {
         case "Random":
@@ -459,7 +479,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         guard coordinate != nil else { return }
         showWaves()
         buttonEnable(on: false)
-        search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+        search(category: Key.shared.lastCategory_explore, indexPath: Key.shared.selectedTypeIdx_explore)
         resetVisitedIndex()
     }
     
@@ -476,7 +496,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         btnMap.isEnabled = on
         btnGoRight.isEnabled = on
         //lblBottomLocation.isUserInteractionEnabled = on
-        clctViewTypes.isUserInteractionEnabled = on
+        scrlViewTypes.isUserInteractionEnabled = on
     }
     
     // MARK: Save Noti
@@ -539,7 +559,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func checkSavedStatus(idx: Int) {
         var arrPlaceData = [PlacePin]()
-        let lastSelectedRow = Key.shared.selectedTypeIdx.row
+        let lastSelectedRow = Key.shared.selectedTypeIdx_explore.row
         let cat = categories[lastSelectedRow]
         switch cat {
         case "Random":
@@ -604,19 +624,12 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     // MARK: - UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if collectionView == clctViewTypes {
-            let label = UILabel()
-            label.font = FaeFont(fontType: .medium, size: 15)
-            label.text = categories[indexPath.row]
-            let width = label.intrinsicContentSize.width
-            return CGSize(width: width + 3.0, height: 36)
-        }
         return CGSize(width: screenWidth, height: screenHeight - 116 - 156 - device_offset_top - device_offset_bot)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == clctViewPlaceCard {
-            let selectedIdxRow = Key.shared.selectedTypeIdx.row
+            let selectedIdxRow = Key.shared.selectedTypeIdx_explore.row
             let isInitial = categoryState[categories[selectedIdxRow]] != .initial
             var count = 0
             switch selectedIdxRow {
@@ -642,8 +655,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 hideWaves()
             }
             return count
-        } else if collectionView == clctViewTypes {
-            return categories.count
         }
         return 10
     }
@@ -653,7 +664,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "exp_pics", for: indexPath) as! EXPClctPicCell
             cell.delegate = self
             var data: PlacePin!
-            let lastSelectedRow = Key.shared.selectedTypeIdx.row
+            let lastSelectedRow = Key.shared.selectedTypeIdx_explore.row
             let cat = categories[lastSelectedRow]
             switch cat {
             case "Random":
@@ -691,7 +702,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == clctViewPlaceCard {
             var placePin: PlacePin!
-            let lastSelectedRow = Key.shared.selectedTypeIdx.row
+            let lastSelectedRow = Key.shared.selectedTypeIdx_explore.row
             let cat = categories[lastSelectedRow]
             switch cat {
             case "Random":
@@ -712,20 +723,22 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             let vcPlaceDetail = PlaceDetailViewController()
             vcPlaceDetail.place = placePin
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
-        } else {
-            let lastSelected = Key.shared.selectedTypeIdx
-            if let cell = clctViewTypes.cellForItem(at: lastSelected) as? EXPClctTypeCell {
-                cell.state = .read
-            }
-            if let cell = clctViewTypes.cellForItem(at: indexPath) as? EXPClctTypeCell {
-                cell.state = .selected
-            }
-            Key.shared.selectedTypeIdx = indexPath
-            let lastSelectedRow = Key.shared.selectedTypeIdx.row
-            Key.shared.lastCategory = categories[lastSelectedRow]
-            clctViewPlaceCard.setContentOffset(.zero, animated: false)
-            clctViewPlaceCard.reloadData()
         }
+    }
+    
+    @objc private func actionTypeButtonTap(_ button: UIButton) {
+        let indexPath = IndexPath(row: button.tag, section: 0)
+        let lastCategory = Key.shared.lastCategory_explore
+        if let lastBtn = dictTypeBtns[lastCategory] {
+            changeTypeButtonState(lastBtn, .read)
+        }
+        if let curtBtn = dictTypeBtns[categories[button.tag]] {
+            changeTypeButtonState(curtBtn, .selected)
+        }
+        Key.shared.selectedTypeIdx_explore = indexPath
+        Key.shared.lastCategory_explore = categories[button.tag]
+        clctViewPlaceCard.setContentOffset(.zero, animated: false)
+        clctViewPlaceCard.reloadData()
     }
     
     // MARK: - EXPCellDelegate
@@ -746,55 +759,41 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func loadPlaces(center: CLLocationCoordinate2D, indexPath: IndexPath) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            
-            guard !self.USE_TEST_PLACE else {
-                self.arrRandom = generator(center, 20, 0)
-                if Key.shared.selectedTypeIdx.row == 0 {
-                    self.categoryState["Random"] = .selected
-                } else {
-                    self.categoryState["Random"] = .unread
-                }
-                self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
-                if indexPath == Key.shared.selectedTypeIdx {
-                    self.clctViewPlaceCard.reloadData()
-                    self.hideWaves()
-                    self.buttonEnable(on: true)
-                }
-                return
-            }
-            
             General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { [weak self] (status, placesJSON) in
                 guard let `self` = self else { return }
                 guard status / 100 == 2 else {
                     //.fail
-                    if indexPath == Key.shared.selectedTypeIdx {
+                    if indexPath == Key.shared.selectedTypeIdx_explore {
                         self.buttonEnable(on: true)
                     }
                     return
                 }
                 guard let mapPlaceJsonArray = placesJSON.array else {
                     //.fail
-                    if indexPath == Key.shared.selectedTypeIdx {
+                    if indexPath == Key.shared.selectedTypeIdx_explore {
                         self.buttonEnable(on: true)
                     }
                     return
                 }
                 guard mapPlaceJsonArray.count > 0 else {
                     //.fail
-                    if indexPath == Key.shared.selectedTypeIdx {
+                    if indexPath == Key.shared.selectedTypeIdx_explore {
                         self.buttonEnable(on: true)
                     }
                     return
                 }
                 let arrRaw = mapPlaceJsonArray.map { PlacePin(json: $0) }
                 self.arrRandom = self.getRandomIndex(arrRaw)
-                if Key.shared.selectedTypeIdx.row == 0 {
-                    self.categoryState["Random"] = .selected
+                if Key.shared.lastCategory_explore == "Random" {
+                    if let lastBtn = self.dictTypeBtns["Random"] {
+                        self.changeTypeButtonState(lastBtn, .selected)
+                    }
                 } else {
-                    self.categoryState["Random"] = .unread
+                    if let lastBtn = self.dictTypeBtns["Random"] {
+                        self.changeTypeButtonState(lastBtn, .unread)
+                    }
                 }
-                self.clctViewTypes.reloadItems(at: [IndexPath(row: 0, section: 0)])
-                if indexPath == Key.shared.selectedTypeIdx {
+                if indexPath == Key.shared.selectedTypeIdx_explore {
                     self.clctViewPlaceCard.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
@@ -829,7 +828,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             FaeSearch.shared.whereKey("content", value: category)
-            FaeSearch.shared.whereKey("source", value: "categories")
+            FaeSearch.shared.whereKey("source", value: "class_one")
             FaeSearch.shared.whereKey("type", value: "place")
             FaeSearch.shared.whereKey("size", value: "200")
             FaeSearch.shared.whereKey("radius", value: "99999999")
@@ -837,12 +836,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
                                                           "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
-            //FaeSearch.shared.whereKey("location", value: "{latitude:\(self.coordinate.latitude), longitude:\(self.coordinate.longitude)}")
             FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
                 guard let `self` = self else { return }
                 if status / 100 != 2 || message == nil {
                     // 给CategoryState增加fail
-                    if indexPath == Key.shared.selectedTypeIdx {
+                    if category == Key.shared.lastCategory_explore {
                         self.buttonEnable(on: true)
                     }
                     return
@@ -850,7 +848,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 let placeInfoJSON = JSON(message!)
                 guard let placeInfoJsonArray = placeInfoJSON.array else {
                     // .fail
-                    if indexPath == Key.shared.selectedTypeIdx {
+                    if category == Key.shared.lastCategory_explore {
                         self.buttonEnable(on: true)
                     }
                     return
@@ -872,19 +870,41 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 default:
                     break
                 }
-                if Key.shared.selectedTypeIdx == indexPath {
+                if Key.shared.lastCategory_explore == category {
                     self.categoryState[category] = .selected
+                    if let btn = self.dictTypeBtns[category] {
+                        self.changeTypeButtonState(btn, .selected)
+                    }
                 } else {
                     self.categoryState[category] = .unread
+                    if let btn = self.dictTypeBtns[category] {
+                        self.changeTypeButtonState(btn, .unread)
+                    }
                 }
-                self.clctViewTypes.reloadItems(at: [indexPath])
-                if indexPath == Key.shared.selectedTypeIdx {
+                if indexPath == Key.shared.selectedTypeIdx_explore {
                     self.clctViewPlaceCard.reloadData()
                     self.hideWaves()
                     self.buttonEnable(on: true)
                 }
                 self.checkSavedStatus(idx: 0)
             }
+        }
+    }
+    
+    private func changeTypeButtonState(_ btn: UIButton, _ state: CategoryState) {
+        switch state {
+        case .initial:
+            btn.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
+            btn.setTitleColor(.lightGray, for: .normal)
+        case .unread:
+            btn.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
+            btn.setTitleColor(UIColor(r: 102, g: 192, b: 251, alpha: 100), for: .normal)
+        case .read:
+            btn.titleLabel?.font = FaeFont(fontType: .medium, size: 15)
+            btn.setTitleColor(.lightGray, for: .normal)
+        case .selected:
+            btn.titleLabel?.font = FaeFont(fontType: .demiBold, size: 15)
+            btn.setTitleColor(UIColor._2499090(), for: .normal)
         }
     }
     
@@ -955,7 +975,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             reloadBottomText(array[0], array[1])
         }
         self.coordinate = address.coordinate
-        search(category: Key.shared.lastCategory, indexPath: Key.shared.selectedTypeIdx)
+        search(category: Key.shared.lastCategory_explore, indexPath: Key.shared.selectedTypeIdx_explore)
     }
     
 }
