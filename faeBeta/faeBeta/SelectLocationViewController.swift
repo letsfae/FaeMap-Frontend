@@ -89,7 +89,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var boolCanUpdatePlaces = true
     private var isGeoCoding: Bool = false
     
-    public var strShownLoc: String = ""
+    public var strShownLoc: String = "Loading......"
     private var strRawLoc_board: String = ""
     private var strRawLoc_explore: String = ""
     
@@ -1278,6 +1278,67 @@ extension SelectLocationViewController {
 
 extension SelectLocationViewController: MapSearchDelegate {
     
+    func continueSearching(searchText: String) {
+        PLACE_FETCH_ENABLE = false
+        cancelPlacePinsFetch()
+        updateUI(searchText: searchText)
+        deselectAllPlaceAnnos()
+        deselectAllLocAnnos()
+        tblPlaceResult.changeState(isLoading: true, isNoResult: nil)
+        removePlaceAnnotations(with: faePlacePins, forced: true, instantly: false) {
+            self.searchState = .multipleSearch
+            self.PLACE_INSTANT_SHOWUP = true
+            // search and show results
+            var locationToSearch = self.faeMapView.centerCoordinate
+            if let locToSearch = LocManager.shared.locToSearch_map {
+                locationToSearch = locToSearch
+            }
+            let searchAgent = FaeSearch()
+            searchAgent.whereKey("content", value: searchText)
+            searchAgent.whereKey("source", value: "name")
+            searchAgent.whereKey("type", value: "place")
+            searchAgent.whereKey("size", value: "20")
+            searchAgent.whereKey("radius", value: "\(Key.shared.radius_chat)")
+            searchAgent.whereKey("offset", value: "0")
+            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                     "longitude": locationToSearch.longitude])
+            searchAgent.search { [unowned self] (status: Int, message: Any?) in
+                joshprint("map searched places fetched")
+                if status / 100 != 2 || message == nil {
+                    self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
+                    return
+                }
+                let placeInfoJSON = JSON(message!)
+                guard let placeInfoJsonArray = placeInfoJSON.array else {
+                    self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
+                    return
+                }
+                let searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+                guard searchedPlaces.count > 0 else {
+                    self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
+                    return
+                }
+                self.tblPlaceResult.dataOffset = searchedPlaces.count
+                self.tblPlaceResult.currentGroupOfPlaces = self.tblPlaceResult.updatePlacesArray(places: searchedPlaces)
+                self.tblPlaceResult.loading(current: searchedPlaces[0])
+                self.pinsFromSearch = self.tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
+                self.PLACE_INSTANT_SHOWUP = true
+                self.placeClusterManager.maxZoomLevelForClustering = 0
+                self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
+                    if let first = searchedPlaces.first {
+                        self.goTo(annotation: nil, place: first, animated: true)
+                    }
+                    self.PLACE_INSTANT_SHOWUP = false
+                })
+                faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
+                                           places: self.tblPlaceResult.currentGroupOfPlaces,
+                                           edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
+                self.tblPlaceResult.changeState(isLoading: false, isNoResult: false)
+            }
+        }
+    }
+    
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
         PLACE_FETCH_ENABLE = false
         cancelPlacePinsFetch()
@@ -1289,6 +1350,7 @@ extension SelectLocationViewController: MapSearchDelegate {
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
         if let first = places.first {
+            tblPlaceResult.dataOffset = places.count
             tblPlaceResult.changeState(isLoading: false, isNoResult: false)
             tblPlaceResult.currentGroupOfPlaces = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
             tblPlaceResult.loading(current: places[0])

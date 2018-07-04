@@ -1064,6 +1064,7 @@ extension FaeMapViewController {
             btnZoom.isHidden = true
             btnLocateSelf.isHidden = true
             btnTapToShowResultTbl.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+            uiviewDropUpMenu.hide()
         } else {
             sender.tag = 0
             tblPlaceResult.shrink {
@@ -1634,6 +1635,9 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         } else {
             sender.isSelected = true
             uiviewDropUpMenu.show()
+            if btnTapToShowResultTbl.tag == 1 {
+                btnTapToShowResultTbl.sendActions(for: .touchUpInside)
+            }
         }
     }
     
@@ -1949,16 +1953,17 @@ extension FaeMapViewController: MapSearchDelegate {
             if let locToSearch = LocManager.shared.locToSearch_map {
                 locationToSearch = locToSearch
             }
-            FaeSearch.shared.whereKey("content", value: searchText)
-            FaeSearch.shared.whereKey("source", value: "name")
-            FaeSearch.shared.whereKey("type", value: "place")
-            FaeSearch.shared.whereKey("size", value: "20")
-            FaeSearch.shared.whereKey("radius", value: "100000")
-            FaeSearch.shared.whereKey("offset", value: "0")
-            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-            FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
+            let searchAgent = FaeSearch()
+            searchAgent.whereKey("content", value: searchText)
+            searchAgent.whereKey("source", value: "name")
+            searchAgent.whereKey("type", value: "place")
+            searchAgent.whereKey("size", value: "20")
+            searchAgent.whereKey("radius", value: "\(Key.shared.radius_map)")
+            searchAgent.whereKey("offset", value: "0")
+            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                           "longitude": locationToSearch.longitude])
-            FaeSearch.shared.search { [unowned self] (status: Int, message: Any?) in
+            searchAgent.search { [unowned self] (status: Int, message: Any?) in
                 joshprint("map searched places fetched")
                 if status / 100 != 2 || message == nil {
                     self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
@@ -1974,6 +1979,7 @@ extension FaeMapViewController: MapSearchDelegate {
                     self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
                     return
                 }
+                self.tblPlaceResult.dataOffset = searchedPlaces.count
                 self.tblPlaceResult.currentGroupOfPlaces = self.tblPlaceResult.updatePlacesArray(places: searchedPlaces)
                 self.tblPlaceResult.loading(current: searchedPlaces[0])
                 self.pinsFromSearch = self.tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }

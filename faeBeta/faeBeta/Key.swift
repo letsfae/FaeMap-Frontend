@@ -132,6 +132,10 @@ class Key: NSObject { //  singleton class
     var searchContent_chat: String = ""
     var searchSource_chat: String = ""
     
+    var radius_board: Int = 0
+    var searchContent_board: String = ""
+    var searchSource_board: String = ""
+    
     func getUserInfo() {
         getGenderAge()
     }

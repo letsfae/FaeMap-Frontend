@@ -131,11 +131,12 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     }
     
     func loadViewModels() {
+        let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         LocManager.shared.locToSearch_board = LocManager.shared.curtLoc.coordinate
         
         // viewModelCategories - BoardPlaceTabLeftViewModel
         viewModelCategories = BoardPlaceTabLeftViewModel()
-        viewModelCategories.location = LocManager.shared.curtLoc.coordinate
+        viewModelCategories.location = locToSearch
         viewModelCategories.categoriesDataLoaded = { [unowned self] (categories) in
             self.tblPlaceLeft.reloadData()
             self.tblPlaceLeft.stopPullRefreshEver()
@@ -150,17 +151,17 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         }
         viewModelPlaces.boolDataLoaded = { [unowned self] (loaded) in
             if loaded {
-                self.indicatorView.stopAnimating()
-                self.tblPlaceRight.isUserInteractionEnabled = true
+//                self.indicatorView.stopAnimating()
+//                self.tblPlaceRight.isUserInteractionEnabled = true
             } else {
-                self.indicatorView.startAnimating()
-                self.tblPlaceRight.isUserInteractionEnabled = false
+//                self.indicatorView.startAnimating()
+//                self.tblPlaceRight.isUserInteractionEnabled = false
             }
         }
         
         // viewModelPeople - BoardPeopleViewModel
         viewModelPeople = BoardPeopleViewModel()
-        viewModelPeople.location = LocManager.shared.curtLoc.coordinate
+        viewModelPeople.location = locToSearch
         viewModelPeople.boolUserVisible = { [unowned self] (visible) in
             self.tblPeople.reloadData()
             self.tblPeople.stopPullRefreshEver()

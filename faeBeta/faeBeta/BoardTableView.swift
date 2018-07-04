@@ -120,4 +120,17 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             break
         }
     }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        switch tableView {
+        case tblPlaceRight:
+            if indexPath.row == viewModelPlaces.numberOfPlaces - 1 {
+                if viewModelPlaces.category != "All Places" {
+                    viewModelPlaces.fetchMoreSearchedPlaces()
+                }
+            }
+        default:
+            break
+        }
+    }
 }

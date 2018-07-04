@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 class BoardPlaceTabRightViewModel {
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
@@ -61,6 +62,10 @@ class BoardPlaceTabRightViewModel {
     
     var title: String = ""
     
+    var dataOffset: Int = 0
+    
+    var searchRequest: DataRequest?
+    
     // MARK: - Methods
     private func place(at index: Int) -> PlacePin? {
         guard index < places.count else { return nil }
@@ -113,30 +118,74 @@ class BoardPlaceTabRightViewModel {
     func searchByCategories(content: String, source: String = "categories", latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var places: [PlacePin] = []
         loaded = false
-        FaeSearch.shared.whereKey("content", value: content)
-        FaeSearch.shared.whereKey("source", value: source)
-        FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "100000")
-        FaeSearch.shared.whereKey("offset", value: "0")
-        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
+        Key.shared.searchContent_board = content
+        Key.shared.searchSource_board = source
+        Key.shared.radius_board = 100000
+        dataOffset = 0
+        let searchAgent = FaeSearch()
+        searchAgent.whereKey("content", value: content)
+        searchAgent.whereKey("source", value: source)
+        searchAgent.whereKey("type", value: "place")
+        searchAgent.whereKey("size", value: "30")
+        searchAgent.whereKey("radius", value: "100000")
+        searchAgent.whereKey("offset", value: "0")
+        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("location", value: ["latitude": latitude,
                                                       "longitude": longitude])
-        FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
-            self?.loaded = true
-            
-            if status / 100 != 2 || message == nil {
-//                self.showOrHideViews(searchText: content)
+        searchRequest?.cancel()
+        searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
+            self.loaded = true
+            guard status / 100 == 2 else {
+                return
+            }
+            guard message != nil else {
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfo = placeInfoJSON.array else {
-//                self.showOrHideViews(searchText: content)
                 return
             }
-            
             places = placeInfo.map({ PlacePin(json: $0) })
-            self?.places = places
+            self.dataOffset += places.count
+            self.places = places
+        }
+    }
+    
+    func fetchMoreSearchedPlaces() {
+        guard loaded else { return }
+        guard dataOffset % 30 == 0 else { return }
+        loaded = false
+        Key.shared.radius_board = 100000
+        let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+        let searchAgent = FaeSearch()
+        searchAgent.whereKey("content", value: Key.shared.searchContent_board)
+        searchAgent.whereKey("source", value: Key.shared.searchSource_board)
+        searchAgent.whereKey("type", value: "place")
+        searchAgent.whereKey("size", value: "30")
+        searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        searchAgent.whereKey("offset", value: "\(dataOffset)")
+        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("location", value: ["latitude": locToSearch.latitude,
+                                                 "longitude": locToSearch.longitude])
+        searchRequest?.cancel()
+        searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
+            self.loaded = true
+            guard status / 100 == 2 else {
+                return
+            }
+            guard message != nil else {
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfo = placeInfoJSON.array else {
+                return
+            }
+            let searchPlaces = placeInfo.map({ PlacePin(json: $0) })
+            guard searchPlaces.count > 0 else { return }
+            self.dataOffset += searchPlaces.count
+            self.places += searchPlaces
         }
     }
 }

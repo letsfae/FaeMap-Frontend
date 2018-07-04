@@ -198,7 +198,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 return
             }
             let searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
-            self.dataOffset += searchedPlaces.count
             joshprint("Count:", searchedPlaces.count)
             joshprint("[fetchMorePlaces] end")
             self.updateMorePlaces(places: searchedPlaces, numbered: true, start: self.dataOffset)
@@ -227,6 +226,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         btnNextPage.isSelected = places.count > 0
         totalPages += 1
+        dataOffset += places.count
     }
     
     // MARK: - Table Actions

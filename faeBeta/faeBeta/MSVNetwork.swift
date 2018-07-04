@@ -204,14 +204,15 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         joshprint("Source:", source)
         joshprint("Radius:", radius)
         flagPlaceFetched = false
-        FaeSearch.shared.whereKey("content", value: content)
-        FaeSearch.shared.whereKey("source", value: source)
-        FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "20")
-        FaeSearch.shared.whereKey("radius", value: "\(radius)")
-        FaeSearch.shared.whereKey("offset", value: "0")
-        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
+        let searchAgent = FaeSearch()
+        searchAgent.whereKey("content", value: content)
+        searchAgent.whereKey("source", value: source)
+        searchAgent.whereKey("type", value: "place")
+        searchAgent.whereKey("size", value: "20")
+        searchAgent.whereKey("radius", value: "\(radius)")
+        searchAgent.whereKey("offset", value: "0")
+        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                       "longitude": locationToSearch.longitude])
         placeRequest = FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
             //joshprint("places fetched")
@@ -236,13 +237,21 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 self.showOrHideViews(searchText: content)
                 return
             }
-            self.searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            let places = placeInfoJsonArray.map({ PlacePin(json: $0) })
             joshprint("Count:", self.searchedPlaces.count)
             joshprint("[getPlaceInfo] end")
             print("")
             if source == "name" {
+                self.searchedPlaces = places
                 self.showOrHideViews(searchText: content)
             } else {
+                // if source == "categories"
+                self.searchedPlaces.removeAll(keepingCapacity: true)
+                for place in places {
+//                    if place.category.contains(content) {
+                        self.searchedPlaces.append(place)
+//                    }
+                }
                 self.isCategorySearching = false
                 self.delegate?.jumpToPlaces?(searchText: content, places: self.searchedPlaces)
                 self.navigationController?.popViewController(animated: false)
