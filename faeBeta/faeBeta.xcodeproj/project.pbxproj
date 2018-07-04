@@ -279,6 +279,7 @@
 		B3AE75CD1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */; };
 		B3B5201D1F5A299B00A6B0DC /* ManageColListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */; };
 		B3BDA19C20E6FE2400369E2F /* RealmCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BDA19B20E6FE2400369E2F /* RealmCategory.swift */; };
+		B3BDA19E20EC34BD00369E2F /* CategoryTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3BDA19D20EC34BD00369E2F /* CategoryTree.swift */; };
 		B3D106DE1F8891AC00A1725A /* UpdateAccountVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */; };
 		B3D347FB1F67452A00E575AE /* SignInEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */; };
 		B808B49F1F1E9A85008CB624 /* LocManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B808B49E1F1E9A85008CB624 /* LocManager.swift */; };
@@ -676,6 +677,7 @@
 		B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateUsrnameEmailVC.swift; sourceTree = "<group>"; };
 		B3B5201C1F5A299B00A6B0DC /* ManageColListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageColListViewController.swift; sourceTree = "<group>"; };
 		B3BDA19B20E6FE2400369E2F /* RealmCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCategory.swift; sourceTree = "<group>"; };
+		B3BDA19D20EC34BD00369E2F /* CategoryTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTree.swift; sourceTree = "<group>"; };
 		B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAccountVC.swift; sourceTree = "<group>"; };
 		B3D347FA1F67452A00E575AE /* SignInEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailViewController.swift; sourceTree = "<group>"; };
 		B3F422251F52382C00257E8C /* CollectionsListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsListCell.swift; sourceTree = "<group>"; };
@@ -1706,6 +1708,7 @@
 				504D36A120D5AB2700A5C829 /* Throttler.swift */,
 				508768691F47AC6A009922BA /* UserPin.swift */,
 				B3BDA19B20E6FE2400369E2F /* RealmCategory.swift */,
+				B3BDA19D20EC34BD00369E2F /* CategoryTree.swift */,
 			);
 			name = "Classes+Structs";
 			sourceTree = "<group>";
@@ -2025,6 +2028,7 @@
 				9FAAA4B22091418E008BB358 /* SKDetectingView.swift in Sources */,
 				50E46F2120E7E8CC00F4EDA9 /* FMTableExpandButton.swift in Sources */,
 				B0714D431D5E435200356705 /* FaeCellForAddressSearch.swift in Sources */,
+				B3BDA19E20EC34BD00369E2F /* CategoryTree.swift in Sources */,
 				B0BF35781D8DC8D700B0540B /* JSQMessagesInputToolbarCustom.m in Sources */,
 				9FAAA4BE2091418E008BB358 /* SKToolbar.swift in Sources */,
 				86242F971D9B178D00F9FA2A /* JSQMessagesToolbarContentViewCustom.m in Sources */,
