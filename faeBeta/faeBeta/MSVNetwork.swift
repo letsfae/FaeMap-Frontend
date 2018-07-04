@@ -135,36 +135,39 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 locationToSearch = locToSearch
             }
             if let locText = schLocationBar.txtSchField.text {
-                joshprint("[locText]", locText)
+                //joshprint("[locText]", locText)
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    joshprint("[searchArea] Current Location")
+                    //joshprint("[searchArea] Current Location")
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    joshprint("[searchArea] Current Map View")
+                    //joshprint("[searchArea] Current Map View")
                 default:
-                    joshprint("[searchArea] other")
+                    //joshprint("[searchArea] other")
                     break
                 }
             }
             LocManager.shared.locToSearch_map = locationToSearch
+            Key.shared.radius_map = radius
+            Key.shared.searchContent_map = content
+            Key.shared.searchSource_map = source
         case .board:
             //radius = 160934
             if let locToSearch = LocManager.shared.locToSearch_board {
                 locationToSearch = locToSearch
             }
             if let locText = schLocationBar.txtSchField.text {
-                joshprint("[locText]", locText)
+                //joshprint("[locText]", locText)
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
-                    joshprint("[searchArea] Current Location")
+                    //joshprint("[searchArea] Current Location")
                 default:
-                    joshprint("[searchArea] other")
+                    //joshprint("[searchArea] other")
                     break
                 }
             }
@@ -175,37 +178,43 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 locationToSearch = locToSearch
             }
             if let locText = schLocationBar.txtSchField.text {
-                joshprint("[locText]", locText)
+                //joshprint("[locText]", locText)
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    joshprint("[searchArea] Current Location")
+                    //joshprint("[searchArea] Current Location")
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    joshprint("[searchArea] Current Map View")
+                    //joshprint("[searchArea] Current Map View")
                 default:
-                    joshprint("[searchArea] other")
+                    //joshprint("[searchArea] other")
                     break
                 }
             }
             LocManager.shared.locToSearch_chat = locationToSearch
+            Key.shared.radius_chat = radius
+            Key.shared.searchContent_chat = content
+            Key.shared.searchSource_chat = source
         }
-        
+        joshprint("[getPlaceInfo] places fetched")
+        joshprint("Content:", content)
+        joshprint("Source:", source)
+        joshprint("Radius:", radius)
         flagPlaceFetched = false
         FaeSearch.shared.whereKey("content", value: content)
         FaeSearch.shared.whereKey("source", value: source)
         FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
+        FaeSearch.shared.whereKey("size", value: "20")
         FaeSearch.shared.whereKey("radius", value: "\(radius)")
         FaeSearch.shared.whereKey("offset", value: "0")
         FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
         FaeSearch.shared.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                       "longitude": locationToSearch.longitude])
         placeRequest = FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
-            joshprint("places fetched")
+            //joshprint("places fetched")
             guard let `self` = self else { return }
             self.flagPlaceFetched = true
             guard status / 100 == 2 else {
@@ -228,6 +237,9 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 return
             }
             self.searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            joshprint("Count:", self.searchedPlaces.count)
+            joshprint("[getPlaceInfo] end")
+            print("")
             if source == "name" {
                 self.showOrHideViews(searchText: content)
             } else {

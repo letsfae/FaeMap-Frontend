@@ -124,6 +124,15 @@ class Key: NSObject { //  singleton class
     var lastCategory_explore: String = "Random" // Explore
     var lastChosenLoc: CLLocationCoordinate2D?
     
+    // MARK: - Map Search
+    var radius_map: Int = 0
+    var searchContent_map: String = ""
+    var searchSource_map: String = ""
+    
+    var radius_chat: Int = 0
+    var searchContent_chat: String = ""
+    var searchSource_chat: String = ""
+    
     func getUserInfo() {
         getGenderAge()
     }

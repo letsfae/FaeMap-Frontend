@@ -1053,7 +1053,7 @@ extension FaeMapViewController {
     }
     
     @objc private func actionShowResultTbl(_ sender: UIButton) {
-        guard tblPlaceResult.places.count > 0 else { return }
+        guard tblPlaceResult.currentGroupOfPlaces.count > 0 else { return }
         guard tblPlaceResult.canExpandOrShrink() else { return }
         btnZoom.tapToSmallMode()
         if sender.tag == 0 {
@@ -1371,7 +1371,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             tblPlaceResult.altitude = mapView.camera.altitude
         }
         
-        if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
+        if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.visibleAnnotations = visiblePlaces() }
         
         if mapMode == .selecting {
             guard !isGeoCoding else { return }
@@ -1952,7 +1952,7 @@ extension FaeMapViewController: MapSearchDelegate {
             FaeSearch.shared.whereKey("content", value: searchText)
             FaeSearch.shared.whereKey("source", value: "name")
             FaeSearch.shared.whereKey("type", value: "place")
-            FaeSearch.shared.whereKey("size", value: "200")
+            FaeSearch.shared.whereKey("size", value: "20")
             FaeSearch.shared.whereKey("radius", value: "100000")
             FaeSearch.shared.whereKey("offset", value: "0")
             FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
@@ -1974,9 +1974,9 @@ extension FaeMapViewController: MapSearchDelegate {
                     self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
                     return
                 }
-                self.tblPlaceResult.places = self.tblPlaceResult.updatePlacesArray(places: searchedPlaces)
+                self.tblPlaceResult.currentGroupOfPlaces = self.tblPlaceResult.updatePlacesArray(places: searchedPlaces)
                 self.tblPlaceResult.loading(current: searchedPlaces[0])
-                self.pinsFromSearch = self.tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
+                self.pinsFromSearch = self.tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
                 self.PLACE_INSTANT_SHOWUP = true
                 self.placeClusterManager.maxZoomLevelForClustering = 0
                 self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
@@ -1986,7 +1986,7 @@ extension FaeMapViewController: MapSearchDelegate {
                     self.PLACE_INSTANT_SHOWUP = false
                 })
                 faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
-                                           places: self.tblPlaceResult.arrPlaces,
+                                           places: self.tblPlaceResult.currentGroupOfPlaces,
                                            edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
                 self.tblPlaceResult.changeState(isLoading: false, isNoResult: false)
             }
@@ -2010,10 +2010,11 @@ extension FaeMapViewController: MapSearchDelegate {
         deselectAllLocAnnos()
         showOrHideRefreshIcon(show: false, animated: false)
         if let first = places.first {
+            tblPlaceResult.dataOffset = places.count
             tblPlaceResult.changeState(isLoading: false, isNoResult: false)
-            tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
+            tblPlaceResult.currentGroupOfPlaces = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
             tblPlaceResult.loading(current: places[0])
-            let pinsToAdd = tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
+            let pinsToAdd = tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
             if modeCollection == .on {
                 pinsFromCollection = pinsToAdd
             } else {
@@ -2025,7 +2026,7 @@ extension FaeMapViewController: MapSearchDelegate {
                     self.goTo(annotation: nil, place: first, animated: true)
                 })
                 faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
-                                           places: self.tblPlaceResult.places,
+                                           places: self.tblPlaceResult.currentGroupOfPlaces,
                                            edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
             }, nil)
             placeClusterManager.maxZoomLevelForClustering = 0
@@ -2102,6 +2103,7 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         
         tblPlaceResult.tblDelegate = self
         tblPlaceResult.barDelegate = self
+        tblPlaceResult.currentVC = .map
         view.addSubview(tblPlaceResult)
         
         btnTapToShowResultTbl = FMTableExpandButton()
@@ -2160,12 +2162,12 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
                 }
                 if desiredAnno != nil {
-                    joshprint("[goto] anno found")
+                    //joshprint("[goto] anno found")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
                 } else {
-                    joshprint("![goto] anno not found")
+                    //joshprint("![goto] anno not found")
                 }
             }
         }
@@ -2184,14 +2186,14 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         // If going to prev or next group
         if tblPlaceResult.goingToNextGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: true)
-            reloadPlacePinsOnMap(places: tblPlaceResult.places) {
+            reloadPlacePinsOnMap(places: tblPlaceResult.currentGroupOfPlaces) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                     findAnnotation()
                 })
             }
         } else if tblPlaceResult.goingToPrevGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: false)
-            reloadPlacePinsOnMap(places: tblPlaceResult.places) {
+            reloadPlacePinsOnMap(places: tblPlaceResult.currentGroupOfPlaces) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                     findAnnotation()
                 })

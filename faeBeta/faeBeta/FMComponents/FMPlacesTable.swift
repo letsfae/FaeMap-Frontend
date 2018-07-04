@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
 
 protocol FMPlaceTableDelegate: class {
     func selectPlaceFromTable(_ placeData: PlacePin)
@@ -15,14 +17,8 @@ protocol FMPlaceTableDelegate: class {
 
 class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
-    weak var tblDelegate: FMPlaceTableDelegate?
-    weak var barDelegate: PlaceViewDelegate?
-    
-    var arrPlaces = [PlacePin]()
+    // MARK: - UI's
     var showed = false
-    var altitude: CLLocationDistance = 0
-    var groupLastSelected = [Int: PlacePin]()
-    
     private let height_before: CGFloat = 90
     private var height_after: CGFloat = {
         var height: CGFloat = 587
@@ -43,7 +39,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     } ()
     
     // Table
-    private var allPlaces = [[PlacePin]]()
     private var uiviewTblBckg: UIView!
     var tblResults: UITableView!
     private var lblNumResults: UILabel!
@@ -51,47 +46,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     private var btnPrevPage: UIButton!
     private var btnNextPage: UIButton!
     
-    private var dictOffset = [Int: CGPoint]()
-    
     // Bar
     private var imgBack_0 = PlaceView()
     private var imgBack_1 = PlaceView()
     private var imgBack_2 = PlaceView()
-    
-    private var currentIdx: Int = 0
-    var goingToNextGroup: Bool = false
-    var goingToPrevGroup: Bool = false
-    
-    var boolLeft = true
-    var boolRight = true
-    
-    var annotations = [CCHMapClusterAnnotation]()
-    
-    var places = [PlacePin]()
-    
-    private var prevAnnotation: CCHMapClusterAnnotation!
-    private var nextAnnotation: CCHMapClusterAnnotation!
-    
-    var prevPlacePin: PlacePin!
-    var curtPlacePin: PlacePin!
-    var nextPlacePin: PlacePin!
-    
-    private var isLoading: Bool = false
-    private var isNoResult: Bool = false
-    
-    private var isSwipeDisabled = false {
-        didSet {
-            self.boolLeft = !isSwipeDisabled
-            self.boolRight = !isSwipeDisabled
-        }
-    }
-    
-    var searchState: PlaceInfoBarState = .map {
-        didSet {
-            boolLeft = annotations.count > 1 || places.count > 1
-            boolRight = annotations.count > 1 || places.count > 1
-        }
-    }
     
     private var tblVConstraint = [NSLayoutConstraint]() {
         didSet {
@@ -115,9 +73,58 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    // MARK: - Pan Gesture
     var panGesture: UIPanGestureRecognizer!
-    private var fullyLoaded = false
+    var boolLeft = true
+    var boolRight = true
+    private var isSwipeDisabled = false {
+        didSet {
+            self.boolLeft = !isSwipeDisabled
+            self.boolRight = !isSwipeDisabled
+        }
+    }
     
+    private var dictOffset = [Int: CGPoint]()
+    var groupLastSelected = [Int: PlacePin]()
+    var altitude: CLLocationDistance = 0
+    
+    private var allPlaces = [[PlacePin]]()
+    var currentGroupOfPlaces = [PlacePin]()
+    var prevPlacePin: PlacePin!
+    var nextPlacePin: PlacePin!
+    
+    var visibleAnnotations = [CCHMapClusterAnnotation]()
+    private var prevAnnotation: CCHMapClusterAnnotation!
+    private var nextAnnotation: CCHMapClusterAnnotation!
+    
+    private var currentIdx: Int = 0
+    var goingToNextGroup: Bool = false
+    var goingToPrevGroup: Bool = false
+    private var isLoading: Bool = false
+    private var isNoResult: Bool = false
+    private var fullyLoaded = false
+
+    var searchState: PlaceInfoBarState = .map {
+        didSet {
+            boolLeft = visibleAnnotations.count > 1 || currentGroupOfPlaces.count > 1
+            boolRight = visibleAnnotations.count > 1 || currentGroupOfPlaces.count > 1
+        }
+    }
+
+    // MARK: - Delegates
+    weak var tblDelegate: FMPlaceTableDelegate?
+    weak var barDelegate: PlaceViewDelegate?
+    
+    // MARK: - Pagination
+    var dataOffset: Int = 0
+    var request: DataRequest?
+    
+    enum CurrentViewControllerType {
+        case map, chat
+    }
+    var currentVC = CurrentViewControllerType.map
+    
+    // MARK: - Init
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 76 + device_offset_top, width: screenWidth, height: 90))
         loadContent()
@@ -139,24 +146,134 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         super.init(coder: aDecoder)
     }
     
-    // Reset This View
-    private func reset() {
-        arrPlaces.removeAll(keepingCapacity: true)
-        groupLastSelected.removeAll(keepingCapacity: true)
-        allPlaces.removeAll(keepingCapacity: true)
-        dictOffset.removeAll(keepingCapacity: true)
-        resetSubviews()
-        currentIdx = 0
-        goingToNextGroup = false
-        goingToPrevGroup = false
-        places.removeAll(keepingCapacity: true)
-        tblResults.setContentOffset(.zero, animated: false)
-        altitude = 0
+    // MARK: - Data Request
+    func fetchMorePlaces() {
+        request?.cancel()
+        var locationToSearch = LocManager.shared.curtLoc.coordinate
+        if let locToSearch = LocManager.shared.locToSearch_map {
+            locationToSearch = locToSearch
+        }
+        var searchContent = ""
+        var searchSource = ""
+        var radius = 0
+        switch currentVC {
+        case .map:
+            searchContent = Key.shared.searchContent_map
+            searchSource = Key.shared.searchSource_map
+            radius = Key.shared.radius_map
+        case .chat:
+            searchContent = Key.shared.searchContent_chat
+            searchSource = Key.shared.searchSource_chat
+            radius = Key.shared.radius_chat
+        }
+        let searchAgent = FaeSearch()
+        searchAgent.whereKey("content", value: searchContent)
+        searchAgent.whereKey("source", value: searchSource)
+        searchAgent.whereKey("type", value: "place")
+        searchAgent.whereKey("size", value: "20")
+        searchAgent.whereKey("radius", value: "\(radius)")
+        searchAgent.whereKey("offset", value: "\(dataOffset)")
+        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                 "longitude": locationToSearch.longitude])
+        request = searchAgent.search { [weak self] (status: Int, message: Any?) in
+            joshprint("[fetchMorePlaces] places fetched")
+            joshprint("Content:", searchContent)
+            joshprint("Source:", searchSource)
+            joshprint("Radius:", radius)
+            joshprint("offset:", self?.dataOffset as Any)
+            guard let `self` = self else { return }
+            guard status / 100 == 2 else {
+                
+                return
+            }
+            guard message != nil else {
+                
+                return
+            }
+            let placeInfoJSON = JSON(message!)
+            guard let placeInfoJsonArray = placeInfoJSON.array else {
+                
+                return
+            }
+            let searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            joshprint("Count:", searchedPlaces.count)
+            joshprint("[fetchMorePlaces] end")
+            self.updateMorePlaces(places: searchedPlaces, numbered: true, start: self.dataOffset)
+        }
     }
     
-    // Add tap gesture to imgBack_1
-    public func addGestureToImgBack_1(_ gesture: UITapGestureRecognizer) {
-        imgBack_1.addGestureRecognizer(gesture)
+    private func updateMorePlaces(places: [PlacePin], numbered: Bool = true, start: Int = 0) {
+        guard places.count > 0 else {
+            btnNextPage.isSelected = false
+            return
+        }
+        var groupPlaces = [PlacePin]()
+        for i in 0..<places.count {
+            let place = places[i]
+            if numbered {
+                place.name = "\(start+i+1). " + place.name
+            }
+            groupPlaces.append(place)
+            if groupPlaces.count % 20 == 0 {
+                self.allPlaces.append(groupPlaces)
+                groupPlaces.removeAll(keepingCapacity: true)
+            }
+        }
+        if groupPlaces.count != 0 {
+            allPlaces.append(groupPlaces)
+        }
+        btnNextPage.isSelected = places.count > 0
+    }
+    
+    // MARK: - Table Actions
+    
+    @objc private func actionSwitchPage(_ sender: UIButton) {
+        let prevTag = tblResults.tag
+        if sender == btnPrevPage {
+            tblResults.tag -= 1
+            if tblResults.tag <= 0 {
+                tblResults.tag = 0
+                btnPrevPage.isSelected = false
+                if tblResults.tag == prevTag {
+                    return
+                }
+            }
+            btnNextPage.isSelected = allPlaces.count > 1
+        } else {
+            tblResults.tag += 1
+            if tblResults.tag >= allPlaces.count - 1 {
+                tblResults.tag = allPlaces.count - 1
+                btnNextPage.isSelected = false
+                if tblResults.tag == prevTag {
+                    return
+                }
+            }
+            btnPrevPage.isSelected = true
+        }
+        self.currentGroupOfPlaces = self.allPlaces[tblResults.tag]
+        //        self.loading(current: getGroupLastSelectedPlace())
+        self.loading(current: self.currentGroupOfPlaces[0])
+        CATransaction.begin()
+        CATransaction.setCompletionBlock {
+            if let offset = self.dictOffset[self.tblResults.tag] {
+                self.tblResults.setContentOffset(offset, animated: false)
+            } else {
+                self.tblResults.setContentOffset(.zero, animated: false)
+            }
+            self.tblDelegate?.reloadPlacesOnMap(places: self.currentGroupOfPlaces)
+        }
+        tblResults.reloadData()
+        CATransaction.commit()
+    }
+    
+    func getGroupLastSelectedPlace() -> PlacePin {
+        let tag = tblResults.tag
+        if let place = groupLastSelected[tag] {
+            return place
+        } else {
+            return self.currentGroupOfPlaces[0]
+        }
     }
     
     // MARK: - No Result and Loading
@@ -180,24 +297,27 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         return !isLoading && !isNoResult
     }
     
-    // MARK: - Load Bar
-    private func loadBar() {
-        addSubview(imgBack_0)
-        uiviewTblBckg.addSubview(imgBack_1)
-        imgBack_1.frame.origin.x = 0
-        imgBack_1.isLoadingIndicatorAndNoResultLabelEnabled = true
-        imgBack_1.loadExtraParts()
-        addSubview(imgBack_2)
-        addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
-        addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
+    // MARK: - Reset
+    private func reset() {
+        groupLastSelected.removeAll(keepingCapacity: true)
+        allPlaces.removeAll(keepingCapacity: true)
+        dictOffset.removeAll(keepingCapacity: true)
+        resetSubviews()
+        currentIdx = 0
+        goingToNextGroup = false
+        goingToPrevGroup = false
+        currentGroupOfPlaces.removeAll(keepingCapacity: true)
+        tblResults.setContentOffset(.zero, animated: false)
+        altitude = 0
     }
-    
+
     func resetSubviews() {
         imgBack_0.frame.origin.x = -screenWidth + 8
         uiviewTblBckg.frame.origin.x = 8
         imgBack_2.frame.origin.x = screenWidth + 8
     }
     
+    // MARK: - Data Update
     func updatePlacesArray(places: [PlacePin], numbered: Bool = true) -> [PlacePin] {
         reset()
         var groupPlaces = [PlacePin]()
@@ -206,7 +326,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             if numbered {
                 place.name = "\(i+1). " + place.name
             }
-            arrPlaces.append(place)
             groupPlaces.append(place)
             if groupPlaces.count % 20 == 0 {
                 self.allPlaces.append(groupPlaces)
@@ -220,6 +339,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         btnPrevPage.isSelected = false
         btnNextPage.isSelected = allPlaces.count > 1
         tblResults.reloadData()
+        
+        fetchMorePlaces()
+        
         if allPlaces.count > 0 {
             return allPlaces[0]
         }
@@ -238,26 +360,25 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack_1.setValueForPlace(placeInfo: current)
         groupLastSelected[tblResults.tag] = current
         self.alpha = 1
-        guard places.count > 0 else {
+        guard currentGroupOfPlaces.count > 0 else {
             return
         }
-        var prev_idx = places.count - 1
+        var prev_idx = currentGroupOfPlaces.count - 1
         var next_idx = 0
         
-        for i in 0..<places.count {
-            if places[i] == current {
-                prev_idx = (i - 1) < 0 ? places.count - 1 : i - 1
-                next_idx = (i + 1) >= places.count ? 0 : i + 1
+        for i in 0..<currentGroupOfPlaces.count {
+            if currentGroupOfPlaces[i] == current {
+                prev_idx = (i - 1) < 0 ? currentGroupOfPlaces.count - 1 : i - 1
+                next_idx = (i + 1) >= currentGroupOfPlaces.count ? 0 : i + 1
                 currentIdx = i
-                curtPlacePin = current
                 configureIndexForPanGes()
                 break
             } else {
                 continue
             }
         }
-        prevPlacePin = places[prev_idx]
-        nextPlacePin = places[next_idx]
+        prevPlacePin = currentGroupOfPlaces[prev_idx]
+        nextPlacePin = currentGroupOfPlaces[next_idx]
         
         if currentIdx == 0 && boolLeft && tblResults.tag - 1 >= 0 {
             let places = allPlaces[tblResults.tag - 1]
@@ -265,7 +386,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             prevPlacePin = places[prev_idx]
         }
         
-        if currentIdx == places.count - 1 && boolRight && tblResults.tag + 1 <= allPlaces.count - 1 {
+        if currentIdx == currentGroupOfPlaces.count - 1 && boolRight && tblResults.tag + 1 <= allPlaces.count - 1 {
             let places = allPlaces[tblResults.tag + 1]
             next_idx = 0
             nextPlacePin = places[next_idx]
@@ -277,15 +398,48 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         panGesture.isEnabled = true
         goingToNextGroup = false
         goingToPrevGroup = false
-        print("[loading] pan gesture enabled")
-        print("")
+        //print("[loading] pan gesture enabled")
+        //print("")
+    }
+    
+    func loadingData(current: CCHMapClusterAnnotation) {
+        searchState = .map
+        if let place = current.annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_1.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        guard visibleAnnotations.count > 0 else { return }
+        var prev_idx = visibleAnnotations.count - 1
+        var next_idx = 0
+        for i in 0..<visibleAnnotations.count {
+            if visibleAnnotations[i] == current {
+                prev_idx = (i - 1) < 0 ? visibleAnnotations.count - 1 : i - 1
+                next_idx = (i + 1) >= visibleAnnotations.count ? 0 : i + 1
+                break
+            } else {
+                continue
+            }
+        }
+        prevAnnotation = visibleAnnotations[prev_idx]
+        nextAnnotation = visibleAnnotations[next_idx]
+        if let place = visibleAnnotations[prev_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_0.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        if let place = visibleAnnotations[next_idx].annotations.first as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_2.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
     }
     
     func configureCurrentPlaces(goingNext: Bool) {
         if goingNext {
             if tblResults.tag + 1 <= allPlaces.count - 1 {
                 tblResults.tag += 1
-                places = allPlaces[tblResults.tag]
+                currentGroupOfPlaces = allPlaces[tblResults.tag]
                 if tblResults.tag >= allPlaces.count - 1 {
                     tblResults.tag = allPlaces.count - 1
                     btnNextPage.isSelected = false
@@ -295,7 +449,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         } else if goingToPrevGroup {
             if tblResults.tag - 1 >= 0 {
                 tblResults.tag -= 1
-                places = allPlaces[tblResults.tag]
+                currentGroupOfPlaces = allPlaces[tblResults.tag]
                 if tblResults.tag <= 0 {
                     tblResults.tag = 0
                     btnPrevPage.isSelected = false
@@ -306,38 +460,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         tblResults.reloadData()
     }
     
-    func loadingData(current: CCHMapClusterAnnotation) {
-        searchState = .map
-        if let place = current.annotations.first as? FaePinAnnotation {
-            if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_1.setValueForPlace(placeInfo: placeInfo)
-            }
-        }
-        guard annotations.count > 0 else { return }
-        var prev_idx = annotations.count - 1
-        var next_idx = 0
-        for i in 0..<annotations.count {
-            if annotations[i] == current {
-                prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
-                next_idx = (i + 1) >= annotations.count ? 0 : i + 1
-                break
-            } else {
-                continue
-            }
-        }
-        prevAnnotation = annotations[prev_idx]
-        nextAnnotation = annotations[next_idx]
-        if let place = annotations[prev_idx].annotations.first as? FaePinAnnotation {
-            if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_0.setValueForPlace(placeInfo: placeInfo)
-            }
-        }
-        if let place = annotations[next_idx].annotations.first as? FaePinAnnotation {
-            if let placeInfo = place.pinInfo as? PlacePin {
-                imgBack_2.setValueForPlace(placeInfo: placeInfo)
-            }
-        }
-    }
+    // MARK: - Pan Gesture
     
     private func panToPrev(_ time: Double = 0.3) {
         UIView.animate(withDuration: time, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
@@ -366,7 +489,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             if self.searchState == .map {
                 self.barDelegate?.goTo(annotation: self.nextAnnotation, place: nil, animated: true)
             } else if self.searchState == .multipleSearch {
-                if self.currentIdx == self.places.count - 1 {
+                if self.currentIdx == self.currentGroupOfPlaces.count - 1 {
                     self.panGesture.isEnabled = false
                     print("[panToNext] pan gesture disabled")
                     self.goingToNextGroup = true
@@ -441,7 +564,24 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    // MARK: - Load Table
+    // MARK: - Setup UI
+    
+    public func addGestureToImgBack_1(_ gesture: UITapGestureRecognizer) {
+        // Add tap gesture to imgBack_1
+        imgBack_1.addGestureRecognizer(gesture)
+    }
+    
+    private func loadBar() {
+        addSubview(imgBack_0)
+        uiviewTblBckg.addSubview(imgBack_1)
+        imgBack_1.frame.origin.x = 0
+        imgBack_1.isLoadingIndicatorAndNoResultLabelEnabled = true
+        imgBack_1.loadExtraParts()
+        addSubview(imgBack_2)
+        addShadow(view: imgBack_0, opa: 0.5, offset: CGSize.zero, radius: 3)
+        addShadow(view: imgBack_2, opa: 0.5, offset: CGSize.zero, radius: 3)
+    }
+    
     private func loadContent() {
         uiviewTblBckg = UIView(frame: CGRect(x: 8, y: 0, width: screenWidth - 16, height: 90))
         uiviewTblBckg.backgroundColor = .clear
@@ -501,56 +641,6 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         uiviewTblBckg.addSubview(grayLine)
         uiviewTblBckg.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: grayLine)
         lineVConstraint = returnConstraintsWithFormat("V:[v0(1)]-0-|", options: [], views: grayLine)
-    }
-    
-    // MARK: - Table Actions
-    
-    @objc private func actionSwitchPage(_ sender: UIButton) {
-        let prevTag = tblResults.tag
-        if sender == btnPrevPage {
-            tblResults.tag -= 1
-            if tblResults.tag <= 0 {
-                tblResults.tag = 0
-                btnPrevPage.isSelected = false
-                if tblResults.tag == prevTag {
-                    return
-                }
-            }
-            btnNextPage.isSelected = allPlaces.count > 1
-        } else {
-            tblResults.tag += 1
-            if tblResults.tag >= allPlaces.count - 1 {
-                tblResults.tag = allPlaces.count - 1
-                btnNextPage.isSelected = false
-                if tblResults.tag == prevTag {
-                    return
-                }
-            }
-            btnPrevPage.isSelected = true
-        }
-        self.places = self.allPlaces[tblResults.tag]
-//        self.loading(current: getGroupLastSelectedPlace())
-        self.loading(current: self.places[0])
-        CATransaction.begin()
-        CATransaction.setCompletionBlock {
-            if let offset = self.dictOffset[self.tblResults.tag] {
-                self.tblResults.setContentOffset(offset, animated: false)
-            } else {
-                self.tblResults.setContentOffset(.zero, animated: false)
-            }
-            self.tblDelegate?.reloadPlacesOnMap(places: self.places)
-        }
-        tblResults.reloadData()
-        CATransaction.commit()
-    }
-    
-    func getGroupLastSelectedPlace() -> PlacePin {
-        let tag = tblResults.tag
-        if let place = groupLastSelected[tag] {
-            return place
-        } else {
-            return self.places[0]
-        }
     }
     
     // MARK: - Table Animation

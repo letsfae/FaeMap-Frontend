@@ -35,11 +35,13 @@ class FaeMap {
         }
     }
     
-    func getMapInformation(_ completion: @escaping (Int, Any?) -> Void) {
-        getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
+    @discardableResult
+    func getMapInformation(_ completion: @escaping (Int, Any?) -> Void) -> DataRequest {
+        let request = getFromURL("map", parameter: keyValue, authentication: Key.shared.headerAuthentication()) { (status: Int, message: Any?) in
             self.clearKeyValue()
             completion(status, message)
         }
+        return request
     }
     
     func getPlacePins(_ completion: @escaping (Int, Any?) -> Void) {
