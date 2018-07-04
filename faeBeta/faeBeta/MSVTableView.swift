@@ -65,6 +65,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 } else {
                     getPlaceInfo(content: selectedCat, source: "categories")
                 }
+                
+                // update Category Dictionary
+                Category.shared.visitCategory(category: selectedCat)
             case 1:
                 // place
                 let selectedPlace = searchedPlaces[indexPath.row]
