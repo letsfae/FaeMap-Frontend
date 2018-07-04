@@ -58,6 +58,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var lblSearchContent: UILabel!
     var btnClearSearchRes: UIButton!
     var btnSearchLoc: UIButton!   // fake button to search location
+    
+    var tblRightActivityIndicator: UIActivityIndicatorView!
 
     var testArrPlaces = [[PlacePin]]()
 //    var testArrPopular = [PlacePin]()
@@ -77,6 +79,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var uiviewAvatarWave: BoardAvatarWaves!
     // name card view - when click people cell
     var uiviewNameCard = FMNameCardView()
+    
+    var fullyLoaded: Bool = false
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -102,6 +106,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         
         // userStatus == 5 -> invisible, userStatus == 1 -> visible
         userInvisible(isOn: Key.shared.onlineStatus == 5)
+        
+        fullyLoaded = true
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -339,6 +345,15 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         tblPlaceRight.separatorStyle = .none
         tblPlaceRight.showsVerticalScrollIndicator = true
         tblPlaceRight.scrollsToTop = true
+        let footViewHeight: CGFloat = 75
+        tblPlaceRight.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -footViewHeight, right: 0)
+        let footView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: footViewHeight))
+//        footView.backgroundColor = .blue
+        tblPlaceRight.tableFooterView = footView
+        tblRightActivityIndicator = faeBeta.createActivityIndicator(large: false)
+        tblRightActivityIndicator.center = CGPoint(x: screenWidth / 2, y: footViewHeight / 2)
+        tblRightActivityIndicator.startAnimating()
+        footView.addSubview(tblRightActivityIndicator)
         
         tblPeople = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top - device_offset_bot), style: .plain)
         view.addSubview(tblPeople)

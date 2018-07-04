@@ -27,9 +27,9 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard fullyLoaded else { return 0 }
         switch tableView {
         case tblPeople:
-            
             return viewModelPeople.hasUsers ? viewModelPeople.numberOfUsers : 1
         case tblPlaceLeft:
                 return viewModelCategories.numberOfCategories

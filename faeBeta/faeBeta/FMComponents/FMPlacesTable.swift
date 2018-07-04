@@ -12,7 +12,7 @@ import SwiftyJSON
 
 protocol FMPlaceTableDelegate: class {
     func selectPlaceFromTable(_ placeData: PlacePin)
-    func reloadPlacesOnMap(places: [PlacePin])
+    func reloadPlacesOnMap(places: [PlacePin], animated: Bool)
 }
 
 class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
@@ -260,17 +260,19 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         self.currentGroupOfPlaces = self.allPlaces[tblResults.tag]
         //        self.loading(current: getGroupLastSelectedPlace())
         self.loading(current: self.currentGroupOfPlaces[0])
-        CATransaction.begin()
-        CATransaction.setCompletionBlock {
-            if let offset = self.dictOffset[self.tblResults.tag] {
-                self.tblResults.setContentOffset(offset, animated: false)
-            } else {
-                self.tblResults.setContentOffset(.zero, animated: false)
-            }
-            self.tblDelegate?.reloadPlacesOnMap(places: self.currentGroupOfPlaces)
-        }
+//        CATransaction.begin()
+//        CATransaction.setCompletionBlock {
+//            if let offset = self.dictOffset[self.tblResults.tag] {
+//                self.tblResults.setContentOffset(offset, animated: false)
+//            } else {
+//                self.tblResults.setContentOffset(.zero, animated: false)
+//            }
+//            self.tblDelegate?.reloadPlacesOnMap(places: self.currentGroupOfPlaces)
+//        }
+        tblResults.setContentOffset(.zero, animated: false)
         tblResults.reloadData()
-        CATransaction.commit()
+        tblDelegate?.reloadPlacesOnMap(places: self.currentGroupOfPlaces, animated: false)
+//        CATransaction.commit()
     }
     
     func getGroupLastSelectedPlace() -> PlacePin {

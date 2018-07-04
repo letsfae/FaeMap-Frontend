@@ -214,7 +214,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                  "longitude": locationToSearch.longitude])
-        placeRequest = FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
+        placeRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
             //joshprint("places fetched")
             guard let `self` = self else { return }
             self.flagPlaceFetched = true
@@ -245,13 +245,14 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 self.searchedPlaces = places
                 self.showOrHideViews(searchText: content)
             } else {
+                self.searchedPlaces = places
                 // if source == "categories"
-                self.searchedPlaces.removeAll(keepingCapacity: true)
-                for place in places {
-//                    if place.category.contains(content) {
-                        self.searchedPlaces.append(place)
+//                self.searchedPlaces.removeAll(keepingCapacity: true)
+//                for place in places {
+//                    if place.category.lowercased().contains(content.lowercased()) {
+//                        self.searchedPlaces.append(place)
 //                    }
-                }
+//                }
                 self.isCategorySearching = false
                 self.delegate?.jumpToPlaces?(searchText: content, places: self.searchedPlaces)
                 self.navigationController?.popViewController(animated: false)

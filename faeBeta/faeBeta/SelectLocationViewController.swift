@@ -370,14 +370,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     // FMPlaceTableDelegate
-    func reloadPlacesOnMap(places: [PlacePin]) {
+    func reloadPlacesOnMap(places: [PlacePin], animated: Bool) {
         self.PLACE_INSTANT_SHOWUP = true
         //self.placeClusterManager.marginFactor = 10000
         let camera = faeMapView.camera
         camera.altitude = tblPlaceResult.altitude
         faeMapView.setCamera(camera, animated: false)
         reloadPlacePinsOnMap(places: places) {
-            self.goTo(annotation: nil, place: places[0], animated: true)
+            self.goTo(annotation: nil, place: places[0], animated: animated)
             self.PLACE_INSTANT_SHOWUP = false
         }
     }
@@ -1013,6 +1013,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 }
                 if animated {
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
+                } else {
+                    let camera = faeMapView.camera
+                    camera.centerCoordinate = placeData.coordinate
+                    faeMapView.setCamera(camera, animated: false)
                 }
                 if desiredAnno != nil {
                     //print("[goto] anno found")
