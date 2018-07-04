@@ -101,7 +101,7 @@ extension MapSearchViewController {
     }
     
     func filterPlaceCat(searchText: String, scope: String = "All") {
-        var filtered = Key.shared.categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
+        var filtered = Category.shared.categories.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
         
         if filtered.count == 0 {
             filteredCategory = []
