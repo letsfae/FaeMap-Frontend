@@ -213,7 +213,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         searchAgent.whereKey("offset", value: "0")
         searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
-                                                      "longitude": locationToSearch.longitude])
+                                                 "longitude": locationToSearch.longitude])
         placeRequest = FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
             //joshprint("places fetched")
             guard let `self` = self else { return }

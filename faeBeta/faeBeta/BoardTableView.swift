@@ -120,7 +120,7 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             break
         }
     }
-    
+
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         switch tableView {
         case tblPlaceRight:

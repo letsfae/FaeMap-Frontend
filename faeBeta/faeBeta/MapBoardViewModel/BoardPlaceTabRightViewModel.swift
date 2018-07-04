@@ -144,6 +144,7 @@ class BoardPlaceTabRightViewModel {
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfo = placeInfoJSON.array else {
+
                 return
             }
             places = placeInfo.map({ PlacePin(json: $0) })

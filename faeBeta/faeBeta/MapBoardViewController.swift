@@ -131,6 +131,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     }
     
     func loadViewModels() {
+
         let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         LocManager.shared.locToSearch_board = LocManager.shared.curtLoc.coordinate
         

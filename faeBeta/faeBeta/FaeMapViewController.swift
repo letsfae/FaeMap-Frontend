@@ -1953,6 +1953,7 @@ extension FaeMapViewController: MapSearchDelegate {
             if let locToSearch = LocManager.shared.locToSearch_map {
                 locationToSearch = locToSearch
             }
+
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: searchText)
             searchAgent.whereKey("source", value: "name")
