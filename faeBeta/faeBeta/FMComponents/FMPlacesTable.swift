@@ -117,6 +117,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     // MARK: - Pagination
     var dataOffset: Int = 0
+    var totalPages: Int = 0
     var request: DataRequest?
     
     enum CurrentViewControllerType {
@@ -149,6 +150,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     // MARK: - Data Request
     func fetchMorePlaces() {
         request?.cancel()
+        btnNextPage.isSelected = false
         var locationToSearch = LocManager.shared.curtLoc.coordinate
         if let locToSearch = LocManager.shared.locToSearch_map {
             locationToSearch = locToSearch
@@ -166,6 +168,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             searchSource = Key.shared.searchSource_chat
             radius = Key.shared.radius_chat
         }
+        guard self.dataOffset % 20 == 0 else { return }
         let searchAgent = FaeSearch()
         searchAgent.whereKey("content", value: searchContent)
         searchAgent.whereKey("source", value: searchSource)
@@ -184,11 +187,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             joshprint("offset:", self?.dataOffset as Any)
             guard let `self` = self else { return }
             guard status / 100 == 2 else {
-                
                 return
             }
             guard message != nil else {
-                
                 return
             }
             let placeInfoJSON = JSON(message!)
@@ -197,6 +198,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 return
             }
             let searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+            self.dataOffset += searchedPlaces.count
             joshprint("Count:", searchedPlaces.count)
             joshprint("[fetchMorePlaces] end")
             self.updateMorePlaces(places: searchedPlaces, numbered: true, start: self.dataOffset)
@@ -224,6 +226,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             allPlaces.append(groupPlaces)
         }
         btnNextPage.isSelected = places.count > 0
+        totalPages += 1
     }
     
     // MARK: - Table Actions
@@ -250,6 +253,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 }
             }
             btnPrevPage.isSelected = true
+            if tblResults.tag >= totalPages - 1 {
+                fetchMorePlaces()
+            }
         }
         self.currentGroupOfPlaces = self.allPlaces[tblResults.tag]
         //        self.loading(current: getGroupLastSelectedPlace())
@@ -309,6 +315,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         currentGroupOfPlaces.removeAll(keepingCapacity: true)
         tblResults.setContentOffset(.zero, animated: false)
         altitude = 0
+        totalPages = 0
     }
 
     func resetSubviews() {
@@ -336,6 +343,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             allPlaces.append(groupPlaces)
         }
         tblResults.tag = 0
+        totalPages = 1
         btnPrevPage.isSelected = false
         btnNextPage.isSelected = allPlaces.count > 1
         tblResults.reloadData()
@@ -472,7 +480,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             } else if self.searchState == .multipleSearch {
                 if self.currentIdx == 0 {
                     self.panGesture.isEnabled = false
-                    print("[panToPrev] pan gesture disabled")
+                    //print("[panToPrev] pan gesture disabled")
                     self.goingToPrevGroup = true
                 }
                 self.barDelegate?.goTo(annotation: nil, place: self.prevPlacePin, animated: true)
@@ -491,8 +499,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             } else if self.searchState == .multipleSearch {
                 if self.currentIdx == self.currentGroupOfPlaces.count - 1 {
                     self.panGesture.isEnabled = false
-                    print("[panToNext] pan gesture disabled")
+                    //print("[panToNext] pan gesture disabled")
                     self.goingToNextGroup = true
+                    self.fetchMorePlaces()
                 }
                 self.barDelegate?.goTo(annotation: nil, place: self.nextPlacePin, animated: true)
             }
@@ -671,6 +680,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         self.dictOffset.removeAll()
         self.tblResults.contentOffset = .zero
         self.isSwipeDisabled = true
+        self.panGesture.isEnabled = false
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.frame.size.height = self.height_after
             self.tblResults.alpha = 1
@@ -698,6 +708,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }, completion: { _ in
             self.showed = false
             self.isSwipeDisabled = false || self.isNoResult || self.isLoading
+            self.panGesture.isEnabled = true
         })
     }
     
