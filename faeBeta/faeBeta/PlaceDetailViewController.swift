@@ -530,7 +530,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 uiviewPlaceImages.frame.origin.y = 0
             }
         }
-        print(scrollView.contentOffset.y)
         var offset_y: CGFloat = 286 * screenHeightFactor
         if screenHeight == 812 { offset_y = 273 }
         if tblPlaceDetail.contentOffset.y >= offset_y {

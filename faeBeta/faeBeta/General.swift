@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
+import Alamofire
 
 class General: NSObject {
     
@@ -197,14 +198,15 @@ class General: NSObject {
         }
     }
     
-    public func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) {
+    @discardableResult
+    public func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) -> DataRequest {
         let getPlaces = FaeMap()
         getPlaces.whereKey("geo_latitude", value: "\(coordinate.latitude)")
         getPlaces.whereKey("geo_longitude", value: "\(coordinate.longitude)")
         getPlaces.whereKey("radius", value: "99999999")
         getPlaces.whereKey("type", value: "place")
         getPlaces.whereKey("max_count", value: "\(count)")
-        getPlaces.getMapInformation { (status: Int, message: Any?) in
+        let request = getPlaces.getMapInformation { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 completion(status, JSON.null)
                 return
@@ -220,6 +222,7 @@ class General: NSObject {
             }
             completion(status, mapPlaceJSON)
         }
+        return request
     }
     
     public func downloadImageForView(url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {

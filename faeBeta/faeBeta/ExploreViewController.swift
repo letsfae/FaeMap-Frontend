@@ -10,6 +10,7 @@
 import UIKit
 import SwiftyJSON
 import CoreLocation
+import Alamofire
 
 protocol ExploreDelegate: class {
     func jumpToExpPlacesCollection(places: [PlacePin], category: String)
@@ -38,6 +39,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private var categories: [String] = ["Random", "Food", "Drinks", "Shopping", "Outdoors", "Recreation"]
     private var categoryState: [String: CategoryState] = ["Random": .initial, "Food": .initial, "Drinks": .initial, "Shopping": .initial, "Outdoors": .initial, "Recreation": .initial]
+    
+    // MARK: Requests
+    private var requests = [String: DataRequest]()
     
     // MARK: Six Types Categories
     private var arrRandom = [PlacePin]()
@@ -111,6 +115,11 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cancelAllRequests()
     }
     
     deinit {
@@ -403,21 +412,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         vc.arrExpPlace = arrPlaceData
         vc.strCategory = cat
         navigationController?.pushViewController(vc, animated: false)
-//        delegate?.jumpToExpPlacesCollection(places: arrPlaceData, category: cat)
-//        var arrCtrlers = navigationController?.viewControllers
-//        if let ctrler = Key.shared.FMVCtrler {
-//            ctrler.arrCtrlers = arrCtrlers!
-//        }
-//        while !(arrCtrlers?.last is InitialPageController) {
-//            arrCtrlers?.removeLast()
-//        }
-//        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-//        navigationController?.setViewControllers(arrCtrlers!, animated: false)
     }
     
     @objc private func actionSave(_ sender: UIButton) {
         uiviewSavedList.show()
-//        uiviewSavedList.loadCollectionData()
     }
     
     @objc private func actionSwitchPage(_ sender: UIButton) {
@@ -495,7 +493,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         btnRefresh.isEnabled = on
         btnMap.isEnabled = on
         btnGoRight.isEnabled = on
-        //lblBottomLocation.isUserInteractionEnabled = on
         scrlViewTypes.isUserInteractionEnabled = on
     }
     
@@ -759,10 +756,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private func loadPlaces(center: CLLocationCoordinate2D, indexPath: IndexPath) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { [weak self] (status, placesJSON) in
+            self.requests["Random"] = General.shared.getPlacePins(coordinate: center, radius: 0, count: 200, completion: { [weak self] (status, placesJSON) in
                 guard let `self` = self else { return }
                 guard status / 100 == 2 else {
-                    //.fail
                     if indexPath == Key.shared.selectedTypeIdx_explore {
                         self.buttonEnable(on: true)
                     }
@@ -819,7 +815,13 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         })
     }
     
-    private func search(category: String, indexPath: IndexPath, flag: Bool = true) {
+    private func cancelAllRequests() {
+        for (_, request) in requests {
+            request.cancel()
+        }
+    }
+    
+    private func search(category: String, indexPath: IndexPath) {
         
         if category == "Random" {
             loadPlaces(center: coordinate, indexPath: indexPath)
@@ -827,19 +829,32 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         }
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            FaeSearch.shared.whereKey("content", value: category)
-            FaeSearch.shared.whereKey("source", value: "class_one")
-            FaeSearch.shared.whereKey("type", value: "place")
-            FaeSearch.shared.whereKey("size", value: "200")
-            FaeSearch.shared.whereKey("radius", value: "99999999")
-            FaeSearch.shared.whereKey("offset", value: "0")
-            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-            FaeSearch.shared.whereKey("location", value: ["latitude": LocManager.shared.searchedLoc.coordinate.latitude,
-                                                          "longitude": LocManager.shared.searchedLoc.coordinate.longitude])
-            FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
+            
+            var locationToSearch = LocManager.shared.curtLoc.coordinate
+            if let locToSearch = LocManager.shared.locToSearch_explore {
+                locationToSearch = locToSearch
+            }
+            
+            let searchAgent = FaeSearch()
+            searchAgent.whereKey("content", value: category)
+            searchAgent.whereKey("source", value: "class_one")
+            searchAgent.whereKey("type", value: "place")
+            searchAgent.whereKey("size", value: "20")
+            searchAgent.whereKey("radius", value: "500000")
+            searchAgent.whereKey("offset", value: "0")
+            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                     "longitude": locationToSearch.longitude])
+            self.requests[category] = searchAgent.search { [weak self] (status: Int, message: Any?) in
                 guard let `self` = self else { return }
-                if status / 100 != 2 || message == nil {
-                    // 给CategoryState增加fail
+                
+                if status / 100 != 2 {
+                    if category == Key.shared.lastCategory_explore {
+                        self.buttonEnable(on: true)
+                    }
+                    return
+                }
+                guard message != nil else {
                     if category == Key.shared.lastCategory_explore {
                         self.buttonEnable(on: true)
                     }
@@ -847,7 +862,6 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
                 }
                 let placeInfoJSON = JSON(message!)
                 guard let placeInfoJsonArray = placeInfoJSON.array else {
-                    // .fail
                     if category == Key.shared.lastCategory_explore {
                         self.buttonEnable(on: true)
                     }
@@ -975,6 +989,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             reloadBottomText(array[0], array[1])
         }
         self.coordinate = address.coordinate
+        self.showWaves()
         search(category: Key.shared.lastCategory_explore, indexPath: Key.shared.selectedTypeIdx_explore)
     }
     
