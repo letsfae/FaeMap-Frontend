@@ -34,8 +34,8 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
-    var vickyDebug: Bool = true
+    var joshDebug: Bool = true
+    var vickyDebug: Bool = false
     var felixDebug: Bool = false
     
     // change this to .production to switch to production mode
