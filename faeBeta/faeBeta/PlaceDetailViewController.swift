@@ -94,48 +94,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     private func updateCategoryDictionary() {
-        let base: Double = 1.0
-        let factor: Double = 0.5
-        var level1 = "", level2 = "", level3 = "", level4 = ""
-        switch place.category {
-        case place.class_4:
-            level1 = place.class_4
-            level2 = place.class_3
-            level3 = place.class_2
-            level4 = place.class_1
-            break
-        case place.class_3:
-            level1 = place.class_3
-            level2 = place.class_2
-            level3 = place.class_1
-            break
-        case place.class_2:
-            level1 = place.class_2
-            level2 = place.class_1
-            break
-        case place.class_1:
-            level1 = place.class_1
-            break
-        default:
-            break
-        }
-        
-        if level1 != "" {
-            Key.shared.writeInRealmCategory(category: level1, weight: base)
-        }
-        if level2 != "" {
-            Key.shared.writeInRealmCategory(category: level2, weight: base * factor)
-        }
-        if level3 != "" {
-            Key.shared.writeInRealmCategory(category: level3, weight: base * factor * factor)
-        }
-        if level4 != "" {
-            Key.shared.writeInRealmCategory(category: level4, weight: base * factor * factor * factor)
-        }
-        
-//        let realm = try! Realm()
-//        let realmCategory = realm.filterMyCatDict()
-//        vickyprint(realmCategory)
+        Category.shared.updateCategoryDictionary(place: place)
     }
     
     deinit {
