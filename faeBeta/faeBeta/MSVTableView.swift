@@ -128,6 +128,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 }
                 strPreviousFixedOptionSelection = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 schLocationBar.txtSchField.resignFirstResponder()
+                schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
                 if indexPath.row == 0 {
                     let curLoc = LocManager.shared.curtLoc.coordinate

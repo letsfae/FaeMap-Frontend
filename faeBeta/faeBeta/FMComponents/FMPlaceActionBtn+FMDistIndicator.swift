@@ -47,7 +47,7 @@ class FMDistIndicator: UIImageView {
         addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: lblDistance)
         addConstraintsWithFormat("V:|-17-[v0(30)]", options: [], views: lblDistance)
         
-        activityIndicator = createActivityIndicator(large: true)
+        activityIndicator = createActivityIndicator(large: false)
         addSubview(activityIndicator)
         activityIndicator.center = CGPoint(x: frame.width / 2, y: frame.height / 2)
     }

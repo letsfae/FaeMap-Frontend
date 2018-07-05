@@ -27,9 +27,9 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard fullyLoaded else { return 0 }
         switch tableView {
         case tblPeople:
-            
             return viewModelPeople.hasUsers ? viewModelPeople.numberOfUsers : 1
         case tblPlaceLeft:
                 return viewModelCategories.numberOfCategories
@@ -116,6 +116,19 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             
             navigationController?.pushViewController(vcPlaceDetail, animated: true)
             break
+        default:
+            break
+        }
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        switch tableView {
+        case tblPlaceRight:
+            if indexPath.row == viewModelPlaces.numberOfPlaces - 1 {
+                if viewModelPlaces.category != "All Places" {
+                    viewModelPlaces.fetchMoreSearchedPlaces()
+                }
+            }
         default:
             break
         }

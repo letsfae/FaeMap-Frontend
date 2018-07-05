@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 class BoardPlaceTabRightViewModel {
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
@@ -15,11 +16,12 @@ class BoardPlaceTabRightViewModel {
 //            let from = CLLocation(latitude: oldValue.latitude, longitude: oldValue.longitude)
 //            let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
 //            if to.distance(from: from) > 282 {
-                if category == "All Places" {
-                    getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
-                } else {
-                    searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
-                }
+            places.removeAll(keepingCapacity: true)
+            if category == "All Places" {
+                getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
+            } else {
+                searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
+            }
 //            }
         }
     }
@@ -27,6 +29,7 @@ class BoardPlaceTabRightViewModel {
     var category = "" {
         didSet {
             if oldValue != category {
+                places.removeAll(keepingCapacity: true)
                 if category == "All Places" {
                     getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
                 } else {
@@ -61,6 +64,12 @@ class BoardPlaceTabRightViewModel {
     
     var title: String = ""
     
+    var dataOffset: Int = 0
+    
+    var searchRequest: DataRequest?
+    
+    var fetchMoreDataStatus: ((Bool, String) -> ())?
+    
     // MARK: - Methods
     private func place(at index: Int) -> PlacePin? {
         guard index < places.count else { return nil }
@@ -76,12 +85,13 @@ class BoardPlaceTabRightViewModel {
         var places: [PlacePin] = []
         loaded = false
         
-        FaeMap.shared.whereKey("geo_latitude", value: "\(latitude)")
-        FaeMap.shared.whereKey("geo_longitude", value: "\(longitude)")
-        FaeMap.shared.whereKey("radius", value: "100000")
-        FaeMap.shared.whereKey("type", value: "place")
-        FaeMap.shared.whereKey("max_count", value: "200")
-        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+        let placesAgent = FaeMap()
+        placesAgent.whereKey("geo_latitude", value: "\(latitude)")
+        placesAgent.whereKey("geo_longitude", value: "\(longitude)")
+        placesAgent.whereKey("radius", value: "100000")
+        placesAgent.whereKey("type", value: "place")
+        placesAgent.whereKey("max_count", value: "30")
+        placesAgent.getMapInformation { [weak self] (status: Int, message: Any?) in
             self?.loaded = true
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
@@ -112,30 +122,87 @@ class BoardPlaceTabRightViewModel {
     func searchByCategories(content: String, source: String = "categories", latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var places: [PlacePin] = []
         loaded = false
-        FaeSearch.shared.whereKey("content", value: content)
-        FaeSearch.shared.whereKey("source", value: source)
-        FaeSearch.shared.whereKey("type", value: "place")
-        FaeSearch.shared.whereKey("size", value: "200")
-        FaeSearch.shared.whereKey("radius", value: "100000")
-        FaeSearch.shared.whereKey("offset", value: "0")
-        FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
-        FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
+        Key.shared.searchContent_board = content
+        Key.shared.searchSource_board = source
+        Key.shared.radius_board = 100000
+        dataOffset = 0
+        let searchAgent = FaeSearch()
+        searchAgent.whereKey("content", value: content)
+        searchAgent.whereKey("source", value: source)
+        searchAgent.whereKey("type", value: "place")
+        searchAgent.whereKey("size", value: "30")
+        searchAgent.whereKey("radius", value: "100000")
+        searchAgent.whereKey("offset", value: "0")
+        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("location", value: ["latitude": latitude,
                                                       "longitude": longitude])
-        FaeSearch.shared.search { [weak self] (status: Int, message: Any?) in
-            self?.loaded = true
-            
-            if status / 100 != 2 || message == nil {
-//                self.showOrHideViews(searchText: content)
+        searchRequest?.cancel()
+        searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
+            self.loaded = true
+            guard status / 100 == 2 else {
+                return
+            }
+            guard message != nil else {
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfo = placeInfoJSON.array else {
-//                self.showOrHideViews(searchText: content)
+
                 return
             }
-            
             places = placeInfo.map({ PlacePin(json: $0) })
-            self?.places = places
+            self.dataOffset += places.count
+            self.places = places
+        }
+    }
+    
+    func fetchMoreSearchedPlaces() {
+        guard loaded else { return }
+        guard dataOffset % 30 == 0 else {
+            fetchMoreDataStatus?(true, "No more data")
+            return
+        }
+        loaded = false
+        fetchMoreDataStatus?(false, "")
+        Key.shared.radius_board = 100000
+        let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+        let searchAgent = FaeSearch()
+        searchAgent.whereKey("content", value: Key.shared.searchContent_board)
+        searchAgent.whereKey("source", value: Key.shared.searchSource_board)
+        searchAgent.whereKey("type", value: "place")
+        searchAgent.whereKey("size", value: "30")
+        searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        searchAgent.whereKey("offset", value: "\(dataOffset)")
+        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("location", value: ["latitude": locToSearch.latitude,
+                                                 "longitude": locToSearch.longitude])
+        searchRequest?.cancel()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
+                self.loaded = true
+                guard status / 100 == 2 else {
+                    self.fetchMoreDataStatus?(true, "Network error!")
+                    return
+                }
+                guard message != nil else {
+                    self.fetchMoreDataStatus?(true, "Network error!")
+                    return
+                }
+                let placeInfoJSON = JSON(message!)
+                guard let placeInfo = placeInfoJSON.array else {
+                    self.fetchMoreDataStatus?(true, "No more data")
+                    return
+                }
+                let searchPlaces = placeInfo.map({ PlacePin(json: $0) })
+                guard searchPlaces.count > 0 else {
+                    self.fetchMoreDataStatus?(true, "No more data")
+                    return
+                }
+                self.dataOffset += searchPlaces.count
+                self.places += searchPlaces
+            }
         }
     }
 }

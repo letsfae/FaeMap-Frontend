@@ -34,8 +34,8 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
-    var vickyDebug: Bool = true
+    var joshDebug: Bool = true
+    var vickyDebug: Bool = false
     var felixDebug: Bool = false
     
     // change this to .production to switch to production mode
@@ -131,6 +131,10 @@ class Key: NSObject { //  singleton class
     var radius_chat: Int = 0
     var searchContent_chat: String = ""
     var searchSource_chat: String = ""
+    
+    var radius_board: Int = 0
+    var searchContent_board: String = ""
+    var searchSource_board: String = ""
     
     func getUserInfo() {
         getGenderAge()
