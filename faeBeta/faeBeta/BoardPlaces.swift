@@ -113,9 +113,7 @@ extension MapBoardViewController: SeeAllPlacesDelegate, MapBoardPlaceTabDelegate
         uiviewPlaceTab.btnPlaceTabRight.isSelected = true
         tblPlaceRight.scrollToTop(animated: false)
         jumpToRightTab()
-        
         viewModelPlaces.category = category
-        
         
 //        if catDict[category] == nil {
 //            catDict[category] = 0

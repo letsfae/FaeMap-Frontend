@@ -16,11 +16,12 @@ class BoardPlaceTabRightViewModel {
 //            let from = CLLocation(latitude: oldValue.latitude, longitude: oldValue.longitude)
 //            let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
 //            if to.distance(from: from) > 282 {
-                if category == "All Places" {
-                    getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
-                } else {
-                    searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
-                }
+            places.removeAll(keepingCapacity: true)
+            if category == "All Places" {
+                getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
+            } else {
+                searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
+            }
 //            }
         }
     }
@@ -28,6 +29,7 @@ class BoardPlaceTabRightViewModel {
     var category = "" {
         didSet {
             if oldValue != category {
+                places.removeAll(keepingCapacity: true)
                 if category == "All Places" {
                     getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
                 } else {
@@ -65,6 +67,8 @@ class BoardPlaceTabRightViewModel {
     var dataOffset: Int = 0
     
     var searchRequest: DataRequest?
+    
+    var fetchMoreDataStatus: ((Bool, String) -> ())?
     
     // MARK: - Methods
     private func place(at index: Int) -> PlacePin? {
@@ -155,8 +159,12 @@ class BoardPlaceTabRightViewModel {
     
     func fetchMoreSearchedPlaces() {
         guard loaded else { return }
-        guard dataOffset % 30 == 0 else { return }
+        guard dataOffset % 30 == 0 else {
+            fetchMoreDataStatus?(true, "No more data")
+            return
+        }
         loaded = false
+        fetchMoreDataStatus?(false, "")
         Key.shared.radius_board = 100000
         let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         let searchAgent = FaeSearch()
@@ -170,23 +178,31 @@ class BoardPlaceTabRightViewModel {
         searchAgent.whereKey("location", value: ["latitude": locToSearch.latitude,
                                                  "longitude": locToSearch.longitude])
         searchRequest?.cancel()
-        searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
-            guard let `self` = self else { return }
-            self.loaded = true
-            guard status / 100 == 2 else {
-                return
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
+                self.loaded = true
+                guard status / 100 == 2 else {
+                    self.fetchMoreDataStatus?(true, "Network error!")
+                    return
+                }
+                guard message != nil else {
+                    self.fetchMoreDataStatus?(true, "Network error!")
+                    return
+                }
+                let placeInfoJSON = JSON(message!)
+                guard let placeInfo = placeInfoJSON.array else {
+                    self.fetchMoreDataStatus?(true, "No more data")
+                    return
+                }
+                let searchPlaces = placeInfo.map({ PlacePin(json: $0) })
+                guard searchPlaces.count > 0 else {
+                    self.fetchMoreDataStatus?(true, "No more data")
+                    return
+                }
+                self.dataOffset += searchPlaces.count
+                self.places += searchPlaces
             }
-            guard message != nil else {
-                return
-            }
-            let placeInfoJSON = JSON(message!)
-            guard let placeInfo = placeInfoJSON.array else {
-                return
-            }
-            let searchPlaces = placeInfo.map({ PlacePin(json: $0) })
-            guard searchPlaces.count > 0 else { return }
-            self.dataOffset += searchPlaces.count
-            self.places += searchPlaces
         }
     }
 }

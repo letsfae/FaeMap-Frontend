@@ -60,6 +60,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var btnSearchLoc: UIButton!   // fake button to search location
     
     var tblRightActivityIndicator: UIActivityIndicatorView!
+    var lblRightFetchMoreDataMessage: FaeLabel!
 
     var testArrPlaces = [[PlacePin]]()
 //    var testArrPopular = [PlacePin]()
@@ -163,6 +164,17 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
             } else {
 //                self.indicatorView.startAnimating()
 //                self.tblPlaceRight.isUserInteractionEnabled = false
+            }
+        }
+        viewModelPlaces.fetchMoreDataStatus = { [unowned self] (noMoreData, message) in
+            if noMoreData {
+                self.tblRightActivityIndicator.stopAnimating()
+                self.lblRightFetchMoreDataMessage.text = message
+                self.lblRightFetchMoreDataMessage.isHidden = false
+            } else {
+                self.tblRightActivityIndicator.startAnimating()
+                self.lblRightFetchMoreDataMessage.text = ""
+                self.lblRightFetchMoreDataMessage.isHidden = true
             }
         }
         
@@ -297,7 +309,11 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         
         imgCurtLoc = UIImageView(frame: CGRect(x: 14, y: 13, width: 24, height: 24))
         imgCurtLoc.contentMode = .center
-        lblCurtLoc = UILabel(frame: CGRect(x: 50, y: 14.5, width: 300, height: 21))
+        lblCurtLoc = UILabel()
+        // frame: CGRect(x: 50, y: 14.5, width: 300, height: 21)
+        uiviewCurtLoc.addSubview(lblCurtLoc)
+        uiviewCurtLoc.addConstraintsWithFormat("H:|-50-[v0]-40-|", options: [], views: lblCurtLoc)
+        uiviewCurtLoc.addConstraintsWithFormat("V:|-14.5-[v0(21)]|", options: [], views: lblCurtLoc)
         lblCurtLoc.font = UIFont(name: "AvenirNext-Medium", size: 16)
         lblCurtLoc.textColor = UIColor._107107107()
         imgPeopleLocDetail = UIImageView()
@@ -317,7 +333,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         uiviewCurtLoc.addSubview(uiviewLineBelowLoc)
         
         uiviewCurtLoc.addSubview(imgCurtLoc)
-        uiviewCurtLoc.addSubview(lblCurtLoc)
+        
     }
     
     // load three tables
@@ -348,12 +364,14 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         let footViewHeight: CGFloat = 75
         tblPlaceRight.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: -footViewHeight, right: 0)
         let footView = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: footViewHeight))
-//        footView.backgroundColor = .blue
         tblPlaceRight.tableFooterView = footView
         tblRightActivityIndicator = faeBeta.createActivityIndicator(large: false)
+        tblRightActivityIndicator.color = .lightGray
         tblRightActivityIndicator.center = CGPoint(x: screenWidth / 2, y: footViewHeight / 2)
         tblRightActivityIndicator.startAnimating()
         footView.addSubview(tblRightActivityIndicator)
+        lblRightFetchMoreDataMessage = FaeLabel(CGRect(x: 0, y: 0, width: screenWidth, height: footViewHeight), .center, .medium, 15, UIColor._146146146())
+        footView.addSubview(lblRightFetchMoreDataMessage)
         
         tblPeople = UITableView(frame: CGRect(x: 0, y: 114 + device_offset_top, width: screenWidth, height: screenHeight - 114 - device_offset_top - device_offset_bot), style: .plain)
         view.addSubview(tblPeople)
@@ -373,7 +391,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     
     fileprivate func addPullToRefresh() {
         tblPlaceLeft.addPullRefresh { [weak self] in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 if let locToSearch = LocManager.shared.locToSearch_board {
                     self?.viewModelCategories.location = locToSearch
                 } else {
@@ -382,7 +400,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
             })
         }
         tblPlaceRight.addPullRefresh { [weak self] in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 if let locToSearch = LocManager.shared.locToSearch_board {
                     self?.viewModelPlaces.location = locToSearch
                 } else {
@@ -391,7 +409,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
             })
         }
         tblPeople.addPullRefresh { [weak self] in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 if let locToSearch = LocManager.shared.locToSearch_board {
                     self?.viewModelPeople.location = locToSearch
                 } else {

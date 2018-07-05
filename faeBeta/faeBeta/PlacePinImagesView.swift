@@ -22,6 +22,8 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
         }
     }
     var arrSKPhoto = [SKPhoto]()
+    var firstView: UIImageView!
+    var lastView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -62,6 +64,37 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
                     subView.image = Key.shared.defaultPlace
                 }
                 subView.sd_setShowActivityIndicatorView(false)
+            }
+            if index == 0 {
+                firstView = UIImageView(frame: frame)
+                firstView.frame.origin.x = frame.size.width * (CGFloat(arrURLs.count) - 1)
+                firstView.contentMode = .scaleAspectFill
+                firstView.clipsToBounds = true
+                firstView.sd_setShowActivityIndicatorView(true)
+                firstView.backgroundColor = ._210210210()
+                firstView.image = nil
+                firstView.sd_setImage(with: URL(string: arrURLs[index]), placeholderImage: nil, options: [.retryFailed]) { [weak self] (img, err, _, _) in
+                    if img == nil || err != nil {
+                        self?.firstView.image = Key.shared.defaultPlace
+                    }
+                    self?.firstView.sd_setShowActivityIndicatorView(false)
+                }
+                addSubview(firstView)
+            } else if index == arrURLs.count - 1 {
+                lastView = UIImageView(frame: frame)
+                lastView.frame.origin.x = 0
+                lastView.contentMode = .scaleAspectFill
+                lastView.clipsToBounds = true
+                lastView.sd_setShowActivityIndicatorView(true)
+                lastView.backgroundColor = ._210210210()
+                lastView.image = nil
+                lastView.sd_setImage(with: URL(string: arrURLs[index]), placeholderImage: nil, options: [.retryFailed]) { [weak self] (img, err, _, _) in
+                    if img == nil || err != nil {
+                        self?.lastView.image = Key.shared.defaultPlace
+                    }
+                    self?.lastView.sd_setShowActivityIndicatorView(false)
+                }
+                addSubview(lastView)
             }
         }
     }
@@ -142,6 +175,14 @@ class PlacePinImagesView: UIScrollView, UIScrollViewDelegate {
     // MARK: - UIScrollView Delegate
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x >= frame.size.width / 2 && scrollView.contentOffset.x <= frame.size.width {
+            lastView.isHidden = false
+        } else if scrollView.contentOffset.x >= frame.size.width * (CGFloat(arrURLs.count) - 0.5) && scrollView.contentOffset.x <= frame.size.width * CGFloat(arrURLs.count) {
+            firstView.isHidden = false
+        } else {
+            lastView.isHidden = true
+            firstView.isHidden = true
+        }
         let pageWidth = frame.size.width
         let page = floor((contentOffset.x - (pageWidth/2)) / pageWidth) + 1
         loadScrollViewWithPage(Int(page - 1))
