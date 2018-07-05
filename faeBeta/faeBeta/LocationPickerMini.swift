@@ -92,11 +92,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         placeClusterManager.animator = self
         
         let camera = faeMapView.camera
-        if let loc = Key.shared.lastChosenLoc {
-            camera.centerCoordinate = loc
-        } else {
-            camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
-        }
+        camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
         let viewDistance: CLLocationDistance = 800
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(camera.centerCoordinate, viewDistance, viewDistance)
         faeMapView.setRegion(coordinateRegion, animated: false)
@@ -167,7 +163,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         
-        Key.shared.lastChosenLoc = mapView.centerCoordinate
+        //Key.shared.lastChosenLoc = mapView.centerCoordinate
         
         updatePlacePins()
         

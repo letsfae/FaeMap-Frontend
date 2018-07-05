@@ -106,12 +106,12 @@ class RegisterUsernameViewController: RegisterBaseViewController {
                     checkForUniqueUsername()
                 }
             } else {
-                jumpToRegisterNext()
+                //jumpToRegisterNext()
+                checkForUniqueUsername()
             }
         } else {
             checkForUniqueUsername()
         }
-        FaeCoreData.shared.save("signup_username", value: username!)
     }
     
     private func checkForUniqueUsername() {
@@ -120,7 +120,7 @@ class RegisterUsernameViewController: RegisterBaseViewController {
         faeUser.checkUserExistence { [weak self] (status, message) in
             guard let `self` = self else { return }
             self.hideActivityIndicator()
-            if status/100 == 2 {
+            if status / 100 == 2 {
                 let valueInfo = JSON(message!)
                 if let value = valueInfo["existence"].int {
                     if value == 0 {
@@ -139,12 +139,21 @@ class RegisterUsernameViewController: RegisterBaseViewController {
                         // handle
                         felixprint("\(error_code)")
                     })
+                } else {
+                    if status == NSURLErrorTimedOut {
+                        self.lblError.text = "Time out! Please try later!"
+                        self.lblError.textColor = UIColor._2499090()
+                    } else {
+                        self.lblError.text = "Error! Please try later!"
+                        self.lblError.textColor = UIColor._2499090()
+                    }
                 }
             }
         }
     }
     
     private func jumpToRegisterNext() {
+        FaeCoreData.shared.save("signup_username", value: username!)
         let nextRegister = RegisterPasswordViewController()
         nextRegister.faeUser = faeUser
         navigationController?.pushViewController(nextRegister, animated: false)

@@ -184,22 +184,23 @@ class RegisterEmailViewController: RegisterBaseViewController {
         } else {
             jumpToEnterCode()
         }
-        FaeCoreData.shared.save("signup_email", value: email!)
     }
     
     private func jumpToEnterCode() {
         faeUser.whereKey("email", value: email!)
         showActivityIndicator()
-        faeUser.signUpInBackground { status, message in
+        faeUser.signUpInBackground { [weak self] (status, message) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 self.faeUser.keyValue.removeValue(forKey: "email")
-                self.faeUser.logInBackground({ [weak self] (status: Int, message: Any?) in
+                self.faeUser.logInBackground({ (status, message) in
+                    //guard let `self` = self else { return }
                     if status / 100 == 2 {
-                        guard let `self` = self else { return }
                         self.faeUser.whereKey("email", value: self.email!)
-                        self.faeUser.updateEmail { [weak self] (status: Int, message: Any?) in
-                            guard let `self` = self else { return }
+                        self.faeUser.updateEmail { (status, message) in
+                            //guard let `self` = self else { return }
                             if status / 100 == 2 {
+                                FaeCoreData.shared.save("signup_email", value: self.email!)
                                 let vc = VerifyCodeViewController()
                                 vc.enterMode = .email
                                 vc.enterEmailMode = .signup
@@ -210,28 +211,52 @@ class RegisterEmailViewController: RegisterBaseViewController {
                                 print("[Update Email Fail] \(status) \(message!)")
                                 let messageJSON = JSON(message!)
                                 if let error_code = messageJSON["error_code"].string {
-                                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                                    handleErrorCode(.auth, error_code, { (prompt) in
                                         // handle
-                                        guard let `self` = self else { return }
+                                        //guard let `self` = self else { return }
+                                        self.setErrorMessage("Error! Please try later!")
                                         self.hideActivityIndicator()
                                     })
+                                } else {
+                                    if status == NSURLErrorTimedOut {
+                                        self.setErrorMessage("Time out! Please try later!")
+                                    } else {
+                                        self.setErrorMessage("Error! Please try later!")
+                                    }
                                 }
                             }
                             self.hideActivityIndicator()
                         }
+                    } else {
+                        if status == NSURLErrorTimedOut {
+                            self.setErrorMessage("Time out! Please try later!")
+                        } else {
+                            self.setErrorMessage("Error! Please try later!")
+                        }
+                        self.hideActivityIndicator()
                     }
                 })
             } else {
                 let messageJSON = JSON(message!)
                 if let error_code = messageJSON["error_code"].string {
-                    handleErrorCode(.auth, error_code, { [weak self] (prompt) in
+                    handleErrorCode(.auth, error_code, { (prompt) in
                         // handle
                         if error_code == "422-3" {
-                            self?.setEmailExists()
+                            self.setEmailExists()
+                        } else if error_code == "422-2" {
+                            self.setErrorMessage("Error! Please discard this register!\nTry it from the beginning!")
+                        } else {
+                            self.setErrorMessage("Error! Please try later!")
                         }
-                        self?.hideActivityIndicator()
                     })
+                } else {
+                    if status == NSURLErrorTimedOut {
+                        self.setErrorMessage("Time out! Please try later!")
+                    } else {
+                        self.setErrorMessage("Error! Please try later!")
+                    }
                 }
+                self.hideActivityIndicator()
             }
         }
     }
@@ -267,6 +292,11 @@ class RegisterEmailViewController: RegisterBaseViewController {
     
     private func setEmailExists() {
         lblCont.text = "Oops… This Email is already being\nused to Secure an Account."
+        lblCont.textColor = UIColor._2499090()
+    }
+    
+    private func setErrorMessage(_ error: String) {
+        lblCont.text = error
         lblCont.textColor = UIColor._2499090()
     }
     

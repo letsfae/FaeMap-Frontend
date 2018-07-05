@@ -28,7 +28,7 @@ enum PostMethod: String {
 
 let configuration = { () -> URLSessionConfiguration in
     let con = URLSessionConfiguration.default
-//    con.timeoutIntervalForRequest = 4 // seconds
+    con.timeoutIntervalForRequest = 4 // seconds
 //    con.timeoutIntervalForResource = 4
     return con
 }()
@@ -70,7 +70,25 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
     
     let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter, encoding: JSONEncoding.default, headers: headers)
         .responseJSON { response in
-            guard response.response != nil else {
+            switch response.result {
+            case .success:
+                if let statusCode = response.response?.statusCode {
+                    if let value = response.result.value {
+                        completion(statusCode, value)
+                    } else {
+                        completion(statusCode, "No response message")
+                    }
+                } else {
+                    completion(NSURLErrorBadServerResponse, "[POST to \(method.rawValue), no response value]")
+                }
+            case .failure(let error):
+                if let statusCode = response.response?.statusCode {
+                    completion(statusCode, "No response message")
+                } else {
+                    completion(error._code, error.localizedDescription)
+                }
+            }
+            /*guard response.response != nil else {
                 completion(-500, "Internet error")
                 return
             }
@@ -84,7 +102,7 @@ func searchToURL(_ method: PostMethod, parameter: [String: Any], completion: @es
                 completion(response.response!.statusCode, resMess)
             } else {
                 completion(response.response!.statusCode, "no Json body")
-            }
+            }*/
     }
     
     return request
@@ -98,7 +116,25 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
     
     let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter, headers: headers)
         .responseJSON { response in
-            guard response.response != nil else {
+            switch response.result {
+            case .success:
+                if let statusCode = response.response?.statusCode {
+                    if let value = response.result.value {
+                        completion(statusCode, value)
+                    } else {
+                        completion(statusCode, "No response message")
+                    }
+                } else {
+                    completion(NSURLErrorBadServerResponse, "[POST to \(className), no response value]")
+                }
+            case .failure(let error):
+                if let statusCode = response.response?.statusCode {
+                    completion(statusCode, "No response message")
+                } else {
+                    completion(error._code, error.localizedDescription)
+                }
+            }
+            /*guard response.response != nil else {
                 print("POST NO RESPONSE")
                 print(response.debugDescription)
                 print(response.description)
@@ -117,7 +153,7 @@ func postToURL(_ className: String, parameter: [String: String], authentication:
                 completion(response.response!.statusCode, resMess)
             } else {
                 completion(response.response!.statusCode, "no Json body")
-            }
+            }*/
     }
     
     return request
@@ -134,20 +170,56 @@ func getFromURL(_ className: String, parameter: [String: Any]?, authentication: 
     if parameter == nil {
         request = alamoFireManager.request(fullURL, method: .get, headers: headers)
             .responseJSON { response in
-                if response.response != nil {
+                switch response.result {
+                case .success:
+                    if let statusCode = response.response?.statusCode {
+                        if let value = response.result.value {
+                            completion(statusCode, value)
+                        } else {
+                            completion(statusCode, "No response message")
+                        }
+                    } else {
+                        completion(NSURLErrorBadServerResponse, "[GET from \(className) w/ para, no response value]")
+                    }
+                case .failure(let error):
+                    if let statusCode = response.response?.statusCode {
+                        completion(statusCode, "No response message")
+                    } else {
+                        completion(error._code, error.localizedDescription)
+                    }
+                }
+                /*if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
                 } else {
                     completion(-500, "Internet error")
-                }
+                }*/
             }
     } else {
         request = alamoFireManager.request(fullURL, method: .get, parameters: parameter!, headers: headers)
             .responseJSON { response in
-                if response.response != nil {
+                switch response.result {
+                case .success:
+                    if let statusCode = response.response?.statusCode {
+                        if let value = response.result.value {
+                            completion(statusCode, value)
+                        } else {
+                            completion(statusCode, "No response message")
+                        }
+                    } else {
+                        completion(NSURLErrorBadServerResponse, "[GET from \(className) with para, no response value]")
+                    }
+                case .failure(let error):
+                    if let statusCode = response.response?.statusCode {
+                        completion(statusCode, "No response message")
+                    } else {
+                        completion(error._code, error.localizedDescription)
+                    }
+                }
+                /*if response.response != nil {
                     completion(response.response!.statusCode, response.result.value)
                 } else {
                     completion(-500, "Internet error")
-                }
+                }*/
             }
     }
     
@@ -161,11 +233,29 @@ func deleteFromURL(_ className: String, parameter: [String: Any], completion: @e
     
     alamoFireManager.request(fullURL, method: .delete, headers: headers)
         .responseJSON { response in
-            if response.response != nil {
+            switch response.result {
+            case .success:
+                if let statusCode = response.response?.statusCode {
+                    if let value = response.result.value {
+                        completion(statusCode, value)
+                    } else {
+                        completion(statusCode, "No response message")
+                    }
+                } else {
+                    completion(NSURLErrorBadServerResponse, "[DELETE from \(className), no response value]")
+                }
+            case .failure(let error):
+                if let statusCode = response.response?.statusCode {
+                    completion(statusCode, "No response message")
+                } else {
+                    completion(error._code, error.localizedDescription)
+                }
+            }
+            /*if response.response != nil {
                 completion(response.response!.statusCode, "nothing here")
             } else {
                 completion(-500, "Internet error")
-            }
+            }*/
         }
 }
 
@@ -195,56 +285,61 @@ func getAvatar(userID: Int, type: Int, _ authentication: [String: String] = Key.
     
     alamoFireManager.request(urlRequest)
         .responseJSON { response in
-            guard response.response != nil else {
-                completion(-500, "", nil)
-                return
-            }
-            guard let statusCode = response.response?.statusCode else {
-                completion(-500, "", nil)
-                return
-            }
-            if let JSON = response.response?.allHeaderFields {
-                guard var etag = JSON["Etag"] as? String else {
-                    completion(statusCode, "", nil)
-                    return
-                }
-                //joshprint("[getAvatar - \(userID)] before", etag)
-                etag = etag.removeSpecialChars()
-                //joshprint("[getAvatar - \(userID)] after ", etag)
-                if statusCode / 100 == 3 {
-                    completion(304, etag, avatarInRealm)
-                    //joshprint("[getAvatar - \(userID)] 304")
-                    return
-                }
-                //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
-                if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
-                    try! realm.write {
-                        if type == 0 {
-                            realmUser.largeAvatarEtag = etag
-                            realmUser.userLargeAvatar = response.data as NSData?
-                        } else {
-                            realmUser.smallAvatarEtag = etag
-                            realmUser.userSmallAvatar = response.data as NSData?
+            switch response.result {
+            case .success:
+                if let statusCode = response.response?.statusCode {
+                    if let JSON = response.response?.allHeaderFields {
+                        guard var etag = JSON["Etag"] as? String else {
+                            completion(statusCode, "", nil)
+                            return
                         }
-                        completion(statusCode, etag, response.data)
+                        //joshprint("[getAvatar - \(userID)] before", etag)
+                        etag = etag.removeSpecialChars()
+                        //joshprint("[getAvatar - \(userID)] after ", etag)
+                        if statusCode / 100 == 3 {
+                            completion(304, etag, avatarInRealm)
+                            //joshprint("[getAvatar - \(userID)] 304")
+                            return
+                        }
+                        //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
+                        if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
+                            try! realm.write {
+                                if type == 0 {
+                                    realmUser.largeAvatarEtag = etag
+                                    realmUser.userLargeAvatar = response.data as NSData?
+                                } else {
+                                    realmUser.smallAvatarEtag = etag
+                                    realmUser.userSmallAvatar = response.data as NSData?
+                                }
+                                completion(statusCode, etag, response.data)
+                            }
+                        } else {
+                            let realmUser = UserImage()
+                            realmUser.user_id = "\(userID)"
+                            if type == 0 {
+                                realmUser.largeAvatarEtag = etag
+                                realmUser.userLargeAvatar = response.data as NSData?
+                            } else {
+                                realmUser.smallAvatarEtag = etag
+                                realmUser.userSmallAvatar = response.data as NSData?
+                            }
+                            try! realm.write {
+                                realm.add(realmUser)
+                                completion(statusCode, etag, response.data)
+                            }
+                        }
+                    } else {
+                        completion(statusCode, "", nil)
                     }
                 } else {
-                    let realmUser = UserImage()
-                    realmUser.user_id = "\(userID)"
-                    if type == 0 {
-                        realmUser.largeAvatarEtag = etag
-                        realmUser.userLargeAvatar = response.data as NSData?
-                    } else {
-                        realmUser.smallAvatarEtag = etag
-                        realmUser.userSmallAvatar = response.data as NSData?
-                    }
-                    try! realm.write {
-                        realm.add(realmUser)
-                        completion(statusCode, etag, response.data)
-                    }
+                    completion(NSURLErrorBadServerResponse, "[GET avatar with id-\(userID), no response value]", nil)
                 }
-            } else {
-                completion(statusCode, "", nil)
+            case .failure(let error):
+                if let statusCode = response.response?.statusCode {
+                    completion(statusCode, "No response message", nil)
+                } else {
+                    completion(error._code, error.localizedDescription, nil)
+                }
             }
         }
 }
@@ -275,49 +370,54 @@ func getCoverPhoto(userID: Int, type: Int, _ authentication: [String: String] = 
     
     alamoFireManager.request(urlRequest)
         .responseJSON { response in
-            guard response.response != nil else {
-                completion(-500, "", nil)
-                return
-            }
-            guard let statusCode = response.response?.statusCode else {
-                completion(-500, "", nil)
-                return
-            }
-            if let JSON = response.response?.allHeaderFields {
-                guard var etag = JSON["Etag"] as? String else {
-                    completion(statusCode, "", nil)
-                    return
-                }
-                //joshprint("[getAvatar - \(userID)] before", etag)
-                etag = etag.removeSpecialChars()
-                //joshprint("[getAvatar - \(userID)] after ", etag)
-                if statusCode / 100 == 3 {
-                    completion(304, etag, coverPhotoInRealm)
-                    //joshprint("[getAvatar - \(userID)] 304")
-                    return
-                }
-                if statusCode == 404 {
-                    completion(404, "", nil)
-                }
-                //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
-                if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
-                    try! realm.write {
-                        realmUser.coverPhotoEtag = etag
-                        realmUser.userCoverPhoto = response.data as NSData?
-                        completion(statusCode, etag, response.data)
+            switch response.result {
+            case .success:
+                if let statusCode = response.response?.statusCode {
+                    if let JSON = response.response?.allHeaderFields {
+                        guard var etag = JSON["Etag"] as? String else {
+                            completion(statusCode, "", nil)
+                            return
+                        }
+                        //joshprint("[getAvatar - \(userID)] before", etag)
+                        etag = etag.removeSpecialChars()
+                        //joshprint("[getAvatar - \(userID)] after ", etag)
+                        if statusCode / 100 == 3 {
+                            completion(304, etag, coverPhotoInRealm)
+                            //joshprint("[getAvatar - \(userID)] 304")
+                            return
+                        }
+                        if statusCode == 404 {
+                            completion(404, "", nil)
+                        }
+                        //joshprint("[getAvatar - \(userID)] check statusCode", statusCode)
+                        if let realmUser = realm.objects(UserImage.self).filter("user_id == %@", "\(userID)").first {
+                            try! realm.write {
+                                realmUser.coverPhotoEtag = etag
+                                realmUser.userCoverPhoto = response.data as NSData?
+                                completion(statusCode, etag, response.data)
+                            }
+                        } else {
+                            let realmUser = UserImage()
+                            realmUser.user_id = "\(userID)"
+                            realmUser.coverPhotoEtag = etag
+                            realmUser.userCoverPhoto = response.data as NSData?
+                            try! realm.write {
+                                realm.add(realmUser)
+                                completion(statusCode, etag, response.data)
+                            }
+                        }
+                    } else {
+                        completion(statusCode, "", nil)
                     }
                 } else {
-                    let realmUser = UserImage()
-                    realmUser.user_id = "\(userID)"
-                    realmUser.coverPhotoEtag = etag
-                    realmUser.userCoverPhoto = response.data as NSData?
-                    try! realm.write {
-                        realm.add(realmUser)
-                        completion(statusCode, etag, response.data)
-                    }
+                    completion(NSURLErrorBadServerResponse, "[GET cover photo with id-\(userID), no response value]", nil)
                 }
-            } else {
-                completion(statusCode, "", nil)
+            case .failure(let error):
+                if let statusCode = response.response?.statusCode {
+                    completion(statusCode, "No response message", nil)
+                } else {
+                    completion(error._code, error.localizedDescription, nil)
+                }
             }
     }
 }
@@ -336,23 +436,28 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
     
     alamoFireManager.request(URL, headers: headers)
         .responseJSON { response in
-            if response.response != nil {
-                guard let statusCode = response.response?.statusCode else {
-                    completion(-500, "", nil)
-                    return
-                }
-                if let JSON = response.response?.allHeaderFields {
-                    guard var etag = JSON["Etag"] as? String else {
+            switch response.result {
+            case .success:
+                if let statusCode = response.response?.statusCode {
+                    if let JSON = response.response?.allHeaderFields {
+                        guard var etag = JSON["Etag"] as? String else {
+                            completion(statusCode, "", nil)
+                            return
+                        }
+                        etag = etag.removeSpecialChars()
+                        completion(statusCode, etag, response.data)
+                    } else {
                         completion(statusCode, "", nil)
-                        return
                     }
-                    etag = etag.removeSpecialChars()
-                    completion(statusCode, etag, response.data)
                 } else {
-                    completion(statusCode, "", nil)
+                    completion(NSURLErrorBadServerResponse, "[GET image with id-\(fileID), no response value]", nil)
                 }
-            } else {
-                completion(-500, "", nil)
+            case .failure(let error):
+                if let statusCode = response.response?.statusCode {
+                    completion(statusCode, "No response message", nil)
+                } else {
+                    completion(error._code, error.localizedDescription, nil)
+                }
             }
         }
 }

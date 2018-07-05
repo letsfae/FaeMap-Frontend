@@ -99,7 +99,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
     }
     
     private func createGenderView() {
-        let genderView = UIView(frame: CGRect(x: 0, y: 245 * screenHeightFactor + 1.5 * device_offset_top, width: screenWidth, height: 150 * screenHeightFactor))
+        let genderView = UIView(frame: CGRect(x: 0, y: 225 * screenHeightFactor + 1.5 * device_offset_top, width: screenWidth, height: 150 * screenHeightFactor))
         
         let titleLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 27))
         titleLabel.textColor = UIColor._898989()
@@ -176,8 +176,7 @@ class RegisterInfoViewController: RegisterBaseViewController {
             setValueInUser()
             jumpToRegisterNext()            
         }
-        FaeCoreData.shared.save("signup_gender", value: gender!)
-        FaeCoreData.shared.save("signup_dateofbirth", value: dateOfBirth!)
+        
     }
     
     private func setValueInUser() {
@@ -190,6 +189,9 @@ class RegisterInfoViewController: RegisterBaseViewController {
         let dateString = dateFormatter.string(from: date!)
         
         faeUser.whereKey("birthday", value: dateString)
+        
+        FaeCoreData.shared.save("signup_gender", value: gender!)
+        FaeCoreData.shared.save("signup_dateofbirth", value: dateString)
     }
     
     private func jumpToRegisterNext() {

@@ -108,6 +108,9 @@ class RegisterNameViewController: RegisterBaseViewController {
         FaeCoreData.shared.removeByKey("signup_dateofbirth")
         FaeCoreData.shared.removeByKey("signup_email")
         navigationController?.popViewController(animated: true)
+        if Key.shared.is_Login {
+            faeUser?.logOut({ _,_ in })
+        }
     }
     
     override func continueButtonPressed() {
