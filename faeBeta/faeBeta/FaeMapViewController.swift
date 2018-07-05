@@ -28,7 +28,7 @@ enum FaeMode {
 class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MapView Data and Control
-    private var faeMapView: FaeMapView!
+    var faeMapView: FaeMapView!
     
     var placeClusterManager: CCHMapClusterController!
     private var faePlacePins = [FaePinAnnotation]()
@@ -103,6 +103,31 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Place Pin Control
     private var placePinOPQueue: OperationQueue!
+    private var eightRawJSONs = [JSON]()
+    private var eightFetchesCount = 0 {
+        didSet {
+            guard eightFetchesCount == 8 else { return }
+            self.placePinFetchQueue.cancelAllOperations()
+            let fetcher = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: eightRawJSONs, idSet: self.setPlacePins)
+            fetcher.completionBlock = {
+                DispatchQueue.main.async { [unowned self] in
+                    if fetcher.isCancelled {
+                        //joshprint("[fetchPlacePins] operation cancelled")
+                        return
+                    }
+                    guard self.PLACE_FETCH_ENABLE else { return }
+                    guard self.modeCollection == .off else { return }
+                    guard self.searchState == .map else { return }
+                    //joshprint("[fetchPlacePins] fetched")
+                    self.addPlaceAnnotations(with: fetcher.placePins, forced: false, instantly: false, {
+                        self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
+                        self.faePlacePins += fetcher.placePins
+                    })
+                }
+            }
+            self.placePinFetchQueue.addOperation(fetcher)
+        }
+    }
     
     // Results from Search
     private var btnTapToShowResultTbl: FMTableExpandButton!
@@ -2725,7 +2750,9 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     private func fetchPlacePins() {
+        eightArea()
         
+        /*
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
             let nowTime = DispatchTime.now()
@@ -2761,12 +2788,13 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         boolCanUpdatePlaces = false
         let radius = Int(faeMapView.region.span.latitudeDelta * 222090)
         let locToFetch = faeMapView.centerCoordinate
-        FaeMap.shared.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
-        FaeMap.shared.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
-        FaeMap.shared.whereKey("radius", value: "\(radius)")
-        FaeMap.shared.whereKey("type", value: "place")
-        FaeMap.shared.whereKey("max_count", value: "1000")
-        FaeMap.shared.getPlacePins { [unowned self] (status, message) in
+        let placeAgent = FaeMap()
+        placeAgent.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
+        placeAgent.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
+        placeAgent.whereKey("radius", value: "\(radius)")
+        placeAgent.whereKey("type", value: "place")
+        placeAgent.whereKey("max_count", value: "1000")
+        placeAgent.getPlacePins { [unowned self] (status, message) in
             guard status / 100 == 2 else {
                 stopIconSpin(delay: getDelay(prevTime: time_start))
                 //joshprint("[fetchPlacePins] status", status)
@@ -2809,6 +2837,82 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             }
             self.placePinFetchQueue.addOperation(fetcher)
             stopIconSpin(delay: getDelay(prevTime: time_start))
+        }
+        */
+    }
+    
+    func eightArea() {
+        
+        eightFetchesCount = 0
+        renewSelfLocation()
+        var point_centers = [CGPoint]()
+        var coordinates = [CLLocationCoordinate2D]()
+        for i in [1, 3, 5, 7] {
+            for j in [1, 3] {
+                let point = CGPoint(x: screenWidth / 4 * CGFloat(j), y: screenHeight / 8 * CGFloat(i))
+                point_centers.append(point)
+            }
+        }
+        var count = 0
+        for point in point_centers {
+            let coordinate = faeMapView.convert(point, toCoordinateFrom: nil)
+            coordinates.append(coordinate)
+            fetchPlacePinsOneEightPart(center: coordinate, count: count)
+            count += 1
+        }
+    }
+    
+    func fetchPlacePinsOneEightPart(center: CLLocationCoordinate2D, count: Int) {
+        let radius = calculateRadius(mapView: faeMapView)
+        let placeAgent = FaeMap()
+        placeAgent.whereKey("geo_latitude", value: "\(center.latitude)")
+        placeAgent.whereKey("geo_longitude", value: "\(center.longitude)")
+        placeAgent.whereKey("radius", value: "\(radius)")
+        placeAgent.whereKey("type", value: "place")
+        placeAgent.whereKey("max_count", value: "50")
+        placeAgent.getMapInformation { [unowned self] (status, message) in
+            joshprint("No.\(count) fetched")
+            
+            guard status / 100 == 2 else {
+                self.eightFetchesCount += 1
+                return
+            }
+            guard message != nil else {
+                self.eightFetchesCount += 1
+                return
+            }
+            let mapPlaceJSON = JSON(message!)
+            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
+                self.eightFetchesCount += 1
+                return
+            }
+            guard mapPlaceJsonArray.count > 0 else {
+                self.eightFetchesCount += 1
+                return
+            }
+            self.eightRawJSONs += mapPlaceJsonArray
+            self.eightFetchesCount += 1
+            /*
+            self.placePinFetchQueue.cancelAllOperations()
+            let fetcher = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+            fetcher.completionBlock = {
+                DispatchQueue.main.async { [unowned self] in
+                    if fetcher.isCancelled {
+                        //joshprint("[fetchPlacePins] operation cancelled")
+                        return
+                    }
+                    guard self.PLACE_FETCH_ENABLE else { return }
+                    guard self.modeCollection == .off else { return }
+                    guard self.searchState == .map else { return }
+                    //joshprint("[fetchPlacePins] fetched")
+                    self.addPlaceAnnotations(with: fetcher.placePins, forced: false, instantly: false, {
+                        self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
+                        self.faePlacePins += fetcher.placePins
+                    })
+                }
+            }
+            self.placePinFetchQueue.addOperation(fetcher)
+             */
         }
     }
     
