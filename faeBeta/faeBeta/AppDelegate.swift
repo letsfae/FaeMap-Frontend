@@ -10,6 +10,7 @@ import UIKit
 import CoreData
 import CoreLocation
 import RealmSwift
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -28,6 +29,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureReachability()
         configureRealm()
         setupNavigationController()
+        GMSServices.provideAPIKey("AIzaSyBVHv0Lp-MfiigWhrcEgYv-aTsvrLQ3trE")
+        General.shared.convertCoordinateToAddress(coordinate: CLLocationCoordinate2D(latitude: 37.37643563606646, longitude: -121.95652692326185)) { (result) in
+            if let error = result as? Error {
+                print(error.localizedDescription)
+                return
+            }
+            if let address = result as? String {
+                print(address)
+                return
+            }
+            if let lines = result as? [String] {
+                print(lines)
+            }
+        }
         
         return true
     }

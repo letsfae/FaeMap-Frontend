@@ -487,7 +487,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     
     private func updateTimerForAllPins() {
         updateTimerForUserPin()
-        updatePlacePins()
+        fetchPlacePins()
     }
     
     private func jumpToWelcomeView(animated: Bool) {
@@ -506,7 +506,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             updateTimerForUserPin()
         }
         if places {
-            updatePlacePins()
+            fetchPlacePins()
         }
     }
     
@@ -1477,7 +1477,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard distance >= self.screenWidthInMeters() else { return }
             self.prevMapCenter = curtMapCenter
             DispatchQueue.main.async {
-                self.updatePlacePins()
+                self.fetchPlacePins()
                 self.fetchUserPins()
             }
         }
@@ -1620,7 +1620,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
                 self.faePlacePins.append(self.selectedPlace!)
                 self.setPlacePins.insert(self.selectedPlace!.id)
             }
-            self.updatePlacePins()
+            self.fetchPlacePins()
         }) {
             self.faeUserPins.removeAll(keepingCapacity: true)
             self.setUserPins.removeAll(keepingCapacity: true)
@@ -2306,17 +2306,19 @@ extension FaeMapViewController {
     @objc private func fetchUserPins() {
         guard !HIDE_AVATARS else { return }
         guard boolCanUpdateUsers else { return }
-        let coorDistance = cameraDiagonalDistance(mapView: faeMapView)
+//        let coorDistance = cameraDiagonalDistance(mapView: faeMapView)
+        let coorDistance = Int(faeMapView.region.span.latitudeDelta * 222090)
         boolCanUpdateUsers = false
         renewSelfLocation()
         let locToFetch = faeMapView.centerCoordinate
-        FaeMap.shared.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
-        FaeMap.shared.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
-        FaeMap.shared.whereKey("radius", value: "\(coorDistance)")
-        FaeMap.shared.whereKey("type", value: "user")
-        FaeMap.shared.whereKey("max_count ", value: "100")
-        //        getMapUserInfo.whereKey("user_updated_in", value: "180")
-        FaeMap.shared.getMapInformation { [unowned self] (status: Int, message: Any?) in
+        let userAgent = FaeMap()
+        userAgent.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
+        userAgent.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
+        userAgent.whereKey("radius", value: "\(coorDistance)")
+        userAgent.whereKey("type", value: "user")
+        userAgent.whereKey("max_count ", value: "100")
+        userAgent.whereKey("user_updated_in", value: "180")
+        userAgent.getMapInformation { [unowned self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 joshprint("DEBUG: getMapUserInfo status/100 != 2")
                 self.boolCanUpdateUsers = true
@@ -2722,13 +2724,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         placePinFetchQueue.cancelAllOperations()
     }
     
-    private func updatePlacePins() {
-        //let coorDistance = cameraDiagonalDistance(mapView: faeMapView)
-        let coorDistance = Int(faeMapView.region.span.latitudeDelta * 222090)
-        fetchPlacePins(radius: coorDistance)
-    }
-    
-    private func fetchPlacePins(radius: Int) {
+    private func fetchPlacePins() {
         
         func getDelay(prevTime: DispatchTime) -> Double {
             let standardInterval: Double = 1
@@ -2763,7 +2759,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             return
         }
         boolCanUpdatePlaces = false
-        
+        let radius = Int(faeMapView.region.span.latitudeDelta * 222090)
         let locToFetch = faeMapView.centerCoordinate
         FaeMap.shared.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
         FaeMap.shared.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
