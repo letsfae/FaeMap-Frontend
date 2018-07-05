@@ -68,6 +68,17 @@ class PlaceDetailCell: UITableViewCell {
             imgIcon.image = #imageLiteral(resourceName: "place_location")
             var addr = place.address1 == "" ? "" : place.address1 + ", "
             addr += place.address2
+            
+            
+            General.shared.getAddress(location: place.loc_coordinate) { (status, address) in
+                guard status != 400 else {
+                    return
+                }
+                if let addr = address as? String {
+                    print("test placepin \(addr)")
+                }
+            }
+            
             lblContent.text = addr
             break
         case "hour":

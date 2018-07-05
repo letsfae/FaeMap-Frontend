@@ -14,6 +14,7 @@ class PlacePin: NSObject, FaePin {
     var id: Int = 0
     var name: String = ""
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
+    var loc_coordinate: CLLocation = CLLocation()
     
     var address1: String = ""
     var address2: String = ""
@@ -57,16 +58,33 @@ class PlacePin: NSObject, FaePin {
         return val
     }()
     
+    lazy var address: String = {
+        var res_addr = ""
+        General.shared.getAddress(location: loc_coordinate) { (status, address) in
+            guard status != 400 else {
+                return
+            }
+            if let addr = address as? String {
+                print("placepin \(addr)")
+                res_addr = addr
+            }
+        }
+        return res_addr
+    }()
+    
     init(json: JSON) {
         id = json["place_id"].intValue
         name = json["name"].stringValue
         address1 = json["location"]["address"].stringValue
+        
         address2 = json["location"]["city"].stringValue == "" ? "" : json["location"]["city"].stringValue + ", "
         address2 += json["location"]["state"].stringValue == "" ? "" : json["location"]["state"].stringValue + " "
         address2 += json["location"]["zip_code"].string == nil || json["location"]["zip_code"].stringValue == "" ? "" : json["location"]["zip_code"].stringValue + ", "
         address2 += json["location"]["country"].stringValue == "" ? "" : json["location"]["country"].stringValue
         
+        
         coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
+        loc_coordinate = CLLocation(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         
         // process categories
         class_1 = json["categories"]["class1"].stringValue
@@ -122,6 +140,20 @@ class PlacePin: NSObject, FaePin {
     
     override init() {
         super.init()
+    }
+    
+    func getAddress(json: JSON) -> String {
+        var res_address: String = ""
+        General.shared.getAddress(location: CLLocation(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)) { (status, address) in
+            //                guard let `self` = self else { return }
+            guard status != 400 else {
+                return
+            }
+            if let addr = address as? String {
+                res_address = addr
+            }
+        }
+        return res_address
     }
     
     private func processHours(day: String, hour: JSON) -> [String: [String]] {
