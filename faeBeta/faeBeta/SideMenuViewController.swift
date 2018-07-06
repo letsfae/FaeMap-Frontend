@@ -315,10 +315,9 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
         actionCloseMenu(btnBackground)
     }
     @objc func invisibleSwitch(_ sender: UISwitch) {
-        let switchToInvisible = FaeUser()
         if sender.isOn {
-            switchToInvisible.whereKey("status", value: "5")
-            switchToInvisible.setSelfStatus({ status, _ in
+            FaeUser.shared.whereKey("status", value: "5")
+            FaeUser.shared.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
                     Key.shared.onlineStatus = 5
                     self.tableSelections = .goInvisible
@@ -331,8 +330,8 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
                 }
             })
         } else {
-            switchToInvisible.whereKey("status", value: "1")
-            switchToInvisible.setSelfStatus({ status, _ in
+            FaeUser.shared.whereKey("status", value: "1")
+            FaeUser.shared.setSelfStatus({ status, _ in
                 if status / 100 == 2 {
                     Key.shared.onlineStatus = 1
                     self.delegate?.userInvisible(isOn: false)

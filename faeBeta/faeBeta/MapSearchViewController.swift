@@ -305,17 +305,17 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         var content = ""
         switch sender.tag {
         case 0:
-            content = "Restaurants"
+            content = "Restaurant"
         case 1:
-            content = "Bars"
+            content = "Bar"
         case 2:
             content = "Shopping"
         case 3:
             content = "Coffee"
         case 4:
-            content = "Parks"
+            content = "Park"
         case 5:
-            content = "Hotels"
+            content = "Hotel"
         default: break
         }
         

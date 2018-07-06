@@ -36,6 +36,7 @@ class AllPlacesCell: UITableViewCell {
     fileprivate func loadCellContent() {
         imgPlaceIcon = UIImageView(frame: CGRect(x: 12, y: 12, width: 66, height: 66))
         imgPlaceIcon.layer.cornerRadius = 5
+        imgPlaceIcon.contentMode = .scaleAspectFill
         imgPlaceIcon.clipsToBounds = true
         addSubview(imgPlaceIcon)
         

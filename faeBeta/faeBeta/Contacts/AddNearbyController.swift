@@ -51,7 +51,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
         faeMap.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
         faeMap.whereKey("radius", value: "9999999")
         faeMap.whereKey("type", value: "user")
-        faeMap.getMapInformation { [weak self] (status: Int, message: Any?) in
+        faeMap.getMapPins { [weak self] (status: Int, message: Any?) in
             guard let `self` = self else { return }
             if status / 100 != 2 || message == nil {
                 print("[loadNearbyPeople] status/100 != 2")

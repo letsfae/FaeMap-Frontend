@@ -64,6 +64,14 @@ extension String {
         return boundingBox.height
     }
     
+    // Calculate text width in all cases
+    func width(withConstrainedWidth height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: font], context: nil)
+        
+        return boundingBox.width
+    }
+    
     func formatFaeDate() -> String {
         // convert to NSDate
         let dateFormatter = DateFormatter()

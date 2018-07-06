@@ -89,7 +89,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var boolCanUpdatePlaces = true
     private var isGeoCoding: Bool = false
     
-    public var strShownLoc: String = ""
+    public var strShownLoc: String = "Loading......"
     private var strRawLoc_board: String = ""
     private var strRawLoc_explore: String = ""
     
@@ -105,6 +105,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var selectedLocAnno: LocPinAnnotationView?
     private var activityIndicatorLocPin: UIActivityIndicatorView!
     private var locationPinClusterManager: CCHMapClusterController!
+    
+    private var chosenLocation: CLLocationCoordinate2D?
     
     private var modeLocation: FaeMode = .off {
         didSet {
@@ -160,6 +162,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadLocationView()
         loadPlaceDetailTable()
         loadPinIcon()
+        let edgeView = LeftMarginToEnableNavGestureView()
+        view.addSubview(edgeView)
         fullyLoaded = true
         mapView(faeMapView, regionDidChangeAnimated: true)
     }
@@ -299,7 +303,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         btnSelect.lblDistance.textColor = UIColor._255160160()
         btnSelect.isUserInteractionEnabled = false
         view.addSubview(btnSelect)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(actionSelect(_:)))
         btnSelect.addGestureRecognizer(tapGesture)
         
         btnZoom = FMZoomButton()
@@ -342,6 +346,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
         tblPlaceResult.tblDelegate = self
         tblPlaceResult.barDelegate = self
+        if previousVC == .chat {
+            tblPlaceResult.currentVC = .chat
+        }
         view.addSubview(tblPlaceResult)
         
         btnTapToShowResultTbl = FMTableExpandButton()
@@ -363,14 +370,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     // FMPlaceTableDelegate
-    func reloadPlacesOnMap(places: [PlacePin]) {
+    func reloadPlacesOnMap(places: [PlacePin], animated: Bool) {
         self.PLACE_INSTANT_SHOWUP = true
         //self.placeClusterManager.marginFactor = 10000
         let camera = faeMapView.camera
         camera.altitude = tblPlaceResult.altitude
         faeMapView.setCamera(camera, animated: false)
         reloadPlacePinsOnMap(places: places) {
-            self.goTo(annotation: nil, place: places[0], animated: true)
+            self.goTo(annotation: nil, place: places[0], animated: animated)
             self.PLACE_INSTANT_SHOWUP = false
         }
     }
@@ -452,14 +459,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         guard fullyLoaded else { return }
         
-        switch previousVC {
-        case .board:
-            LocManager.shared.locToSearch_board = mapView.centerCoordinate
-        case .explore:
-            LocManager.shared.locToSearch_explore = mapView.centerCoordinate
-        case .chat:
-            LocManager.shared.locToSearch_chat = mapView.centerCoordinate
-        }
+        chosenLocation = mapView.centerCoordinate
+//        switch previousVC {
+//        case .board:
+//            LocManager.shared.locToSearch_board = mapView.centerCoordinate
+//        case .explore:
+//            LocManager.shared.locToSearch_explore = mapView.centerCoordinate
+//        case .chat:
+//            LocManager.shared.locToSearch_chat = mapView.centerCoordinate
+//        }
         
         calculateDistanceOffset()
         
@@ -467,7 +475,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             tblPlaceResult.altitude = mapView.camera.altitude
         }
         
-        if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.annotations = visiblePlaces() }
+        if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.visibleAnnotations = visiblePlaces() }
         
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -809,7 +817,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "1000")
-        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+        FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
             guard let `self` = self else { return }
             guard status / 100 == 2 else {
                 self.boolCanUpdatePlaces = true
@@ -913,9 +921,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     // MARK: - Actions in Controller
     
-    @objc private func handleTap(_ tap: UITapGestureRecognizer) {
+    @objc private func actionSelect(_ tap: UITapGestureRecognizer) {
         switch previousVC {
         case .board:
+            LocManager.shared.locToSearch_board = faeMapView.centerCoordinate
             let location = CLLocation(latitude: faeMapView.centerCoordinate.latitude,
                                       longitude: faeMapView.centerCoordinate.longitude)
             delegate?.jumpToLocationSearchResult?(icon: #imageLiteral(resourceName: "place_location"), searchText: strRawLoc_board, location: location)
@@ -932,6 +941,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 delegate?.sendPlaceBack?(placeData: placeData)
             }
         case .explore:
+            LocManager.shared.locToSearch_explore = faeMapView.centerCoordinate
             let address = RouteAddress(name: strRawLoc_explore, coordinate: faeMapView.centerCoordinate)
             delegate?.sendLocationBack?(address: address)
             navigationController?.popViewController(animated: false)
@@ -958,7 +968,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     @objc private func actionShowResultTbl(_ sender: UIButton) {
-        guard tblPlaceResult.places.count > 0 else { return }
+        guard tblPlaceResult.currentGroupOfPlaces.count > 0 else { return }
         guard tblPlaceResult.canExpandOrShrink() else { return }
         btnZoom.tapToSmallMode()
         if sender.tag == 0 {
@@ -1003,14 +1013,18 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 }
                 if animated {
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
+                } else {
+                    let camera = faeMapView.camera
+                    camera.centerCoordinate = placeData.coordinate
+                    faeMapView.setCamera(camera, animated: false)
                 }
                 if desiredAnno != nil {
-                    print("[goto] anno found")
+                    //print("[goto] anno found")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
                 } else {
-                    print("![goto] anno not found")
+                    //print("![goto] anno not found")
                 }
             }
         }
@@ -1027,14 +1041,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         // If going to prev or next group
         if tblPlaceResult.goingToNextGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: true)
-            reloadPlacePinsOnMap(places: tblPlaceResult.places) {
+            reloadPlacePinsOnMap(places: tblPlaceResult.currentGroupOfPlaces) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                     findAnnotation()
                 })
             }
         } else if tblPlaceResult.goingToPrevGroup {
             tblPlaceResult.configureCurrentPlaces(goingNext: false)
-            reloadPlacePinsOnMap(places: tblPlaceResult.places) {
+            reloadPlacePinsOnMap(places: tblPlaceResult.currentGroupOfPlaces) {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: {
                     findAnnotation()
                 })
@@ -1268,6 +1282,67 @@ extension SelectLocationViewController {
 
 extension SelectLocationViewController: MapSearchDelegate {
     
+    func continueSearching(searchText: String) {
+        PLACE_FETCH_ENABLE = false
+        cancelPlacePinsFetch()
+        updateUI(searchText: searchText)
+        deselectAllPlaceAnnos()
+        deselectAllLocAnnos()
+        tblPlaceResult.changeState(isLoading: true, isNoResult: nil)
+        removePlaceAnnotations(with: faePlacePins, forced: true, instantly: false) {
+            self.searchState = .multipleSearch
+            self.PLACE_INSTANT_SHOWUP = true
+            // search and show results
+            var locationToSearch = self.faeMapView.centerCoordinate
+            if let locToSearch = LocManager.shared.locToSearch_map {
+                locationToSearch = locToSearch
+            }
+            let searchAgent = FaeSearch()
+            searchAgent.whereKey("content", value: searchText)
+            searchAgent.whereKey("source", value: "name")
+            searchAgent.whereKey("type", value: "place")
+            searchAgent.whereKey("size", value: "20")
+            searchAgent.whereKey("radius", value: "\(Key.shared.radius_chat)")
+            searchAgent.whereKey("offset", value: "0")
+            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
+                                                     "longitude": locationToSearch.longitude])
+            searchAgent.search { [unowned self] (status: Int, message: Any?) in
+                joshprint("map searched places fetched")
+                if status / 100 != 2 || message == nil {
+                    self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
+                    return
+                }
+                let placeInfoJSON = JSON(message!)
+                guard let placeInfoJsonArray = placeInfoJSON.array else {
+                    self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
+                    return
+                }
+                let searchedPlaces = placeInfoJsonArray.map({ PlacePin(json: $0) })
+                guard searchedPlaces.count > 0 else {
+                    self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
+                    return
+                }
+                self.tblPlaceResult.dataOffset = searchedPlaces.count
+                self.tblPlaceResult.currentGroupOfPlaces = self.tblPlaceResult.updatePlacesArray(places: searchedPlaces)
+                self.tblPlaceResult.loading(current: searchedPlaces[0])
+                self.pinsFromSearch = self.tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
+                self.PLACE_INSTANT_SHOWUP = true
+                self.placeClusterManager.maxZoomLevelForClustering = 0
+                self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
+                    if let first = searchedPlaces.first {
+                        self.goTo(annotation: nil, place: first, animated: true)
+                    }
+                    self.PLACE_INSTANT_SHOWUP = false
+                })
+                faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
+                                           places: self.tblPlaceResult.currentGroupOfPlaces,
+                                           edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
+                self.tblPlaceResult.changeState(isLoading: false, isNoResult: false)
+            }
+        }
+    }
+    
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
         PLACE_FETCH_ENABLE = false
         cancelPlacePinsFetch()
@@ -1279,10 +1354,11 @@ extension SelectLocationViewController: MapSearchDelegate {
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
         if let first = places.first {
+            tblPlaceResult.dataOffset = places.count
             tblPlaceResult.changeState(isLoading: false, isNoResult: false)
-            tblPlaceResult.places = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
+            tblPlaceResult.currentGroupOfPlaces = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
             tblPlaceResult.loading(current: places[0])
-            let pinsToAdd = tblPlaceResult.places.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
+            let pinsToAdd = tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
             pinsFromSearch = pinsToAdd
             removePlaceAnnotations(with: faePlacePins, forced: true, instantly: false) {
                 self.addPlaceAnnotations(with: pinsToAdd, forced: true, instantly: true, {
@@ -1290,7 +1366,7 @@ extension SelectLocationViewController: MapSearchDelegate {
                     self.goTo(annotation: nil, place: first, animated: true)
                 })
                 faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
-                                           places: self.tblPlaceResult.places,
+                                           places: self.tblPlaceResult.currentGroupOfPlaces,
                                            edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
             }
             placeClusterManager.maxZoomLevelForClustering = 0

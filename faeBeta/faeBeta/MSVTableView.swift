@@ -65,6 +65,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 } else {
                     getPlaceInfo(content: selectedCat, source: "categories")
                 }
+                
+                // update Category Dictionary
+                Category.shared.visitCategory(category: selectedCat)
             case 1:
                 // place
                 let selectedPlace = searchedPlaces[indexPath.row]
@@ -125,6 +128,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 }
                 strPreviousFixedOptionSelection = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 schLocationBar.txtSchField.resignFirstResponder()
+                schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
                 if indexPath.row == 0 {
                     let curLoc = LocManager.shared.curtLoc.coordinate

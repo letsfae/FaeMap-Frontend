@@ -283,7 +283,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "200")
-        FaeMap.shared.getMapInformation { (status: Int, message: Any?) in
+        FaeMap.shared.getMapPins { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 return
             }

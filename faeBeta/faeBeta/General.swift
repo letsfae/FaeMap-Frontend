@@ -9,6 +9,8 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
+import Alamofire
+import GoogleMaps
 
 class General: NSObject {
     
@@ -95,6 +97,38 @@ class General: NSObject {
                 completion(imageToCache)
             })
         }
+    }
+    
+    public func convertCoordinateToAddress(coordinate: CLLocationCoordinate2D, full: Bool = true, completion: @escaping (Any?) -> Void) {
+        
+        let geocoder = GMSGeocoder()
+        geocoder.reverseGeocodeCoordinate(coordinate) { (response, error) in
+            if let err = error {
+                print(err.localizedDescription)
+                completion(err)
+                return
+            }
+            guard let lines = response?.firstResult()?.lines else {
+                completion(nil)
+                return
+            }
+            if full {
+                var full_address = ""
+                var count = 0
+                for line in lines {
+                    count += 1
+                    if count == lines.count {
+                        full_address += line
+                    } else {
+                        full_address += line + ", "
+                    }
+                }
+                completion(full_address)
+            } else {
+                completion(lines)
+            }
+        }
+        
     }
     
     public func getAddress(location: CLLocation, original: Bool = false, full: Bool = true, detach: Bool = false, completion: @escaping (Int, Any) -> Void) {
@@ -197,14 +231,15 @@ class General: NSObject {
         }
     }
     
-    public func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) {
+    @discardableResult
+    public func getPlacePins(coordinate: CLLocationCoordinate2D, radius: Int, count: Int, completion: @escaping (Int, JSON) -> Void) -> DataRequest {
         let getPlaces = FaeMap()
         getPlaces.whereKey("geo_latitude", value: "\(coordinate.latitude)")
         getPlaces.whereKey("geo_longitude", value: "\(coordinate.longitude)")
         getPlaces.whereKey("radius", value: "99999999")
         getPlaces.whereKey("type", value: "place")
         getPlaces.whereKey("max_count", value: "\(count)")
-        getPlaces.getMapInformation { (status: Int, message: Any?) in
+        let request = getPlaces.getMapPins { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 completion(status, JSON.null)
                 return
@@ -220,6 +255,7 @@ class General: NSObject {
             }
             completion(status, mapPlaceJSON)
         }
+        return request
     }
     
     public func downloadImageForView(url: String, imgPic: UIImageView, _ completion: (() -> ())? = nil) {

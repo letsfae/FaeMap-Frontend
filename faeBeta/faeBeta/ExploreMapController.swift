@@ -34,6 +34,8 @@ class ExploreMapController: BasicMapController, UICollectionViewDelegate, UIColl
         faeMapView.mapAction = self
         btnZoom.isHidden = true
         btnLocat.isHidden = true
+        let edgeView = LeftMarginToEnableNavGestureView()
+        view.addSubview(edgeView)
     }
     
     // MARK: - Setup UI

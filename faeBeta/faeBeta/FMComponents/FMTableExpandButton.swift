@@ -18,7 +18,7 @@ class FMTableExpandButton: UIButton {
         
         switch screenHeight {
         case 812:
-            after = 705
+            after = 700
             break
         case 736:
             after = 645

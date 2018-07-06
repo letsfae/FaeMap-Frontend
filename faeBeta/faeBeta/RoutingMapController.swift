@@ -54,6 +54,8 @@ class RoutingMapController: BasicMapController, SelectLocationDelegate, FMRouteC
         loadTopBar()
         setupRoutingPart()
         updateRoutingInfo()
+        let edgeView = LeftMarginToEnableNavGestureView()
+        view.addSubview(edgeView)
         fullyLoaded = true
     }
     
