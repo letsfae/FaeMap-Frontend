@@ -107,6 +107,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     Key.shared.selectedSearchedCity_map = geobytesCityData[indexPath.row]
                 case .board:
                     Key.shared.selectedSearchedCity_board = geobytesCityData[indexPath.row]
+                    changeLocBarText?(geobytesCityData[indexPath.row], true)
                 case .chat:
                     Key.shared.selectedSearchedCity_chat = geobytesCityData[indexPath.row]
                 }
@@ -123,6 +124,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     Key.shared.selectedSearchedCity_map = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 case .board:
                     Key.shared.selectedSearchedCity_board = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                    changeLocBarText?(geobytesCityData[0], false)
                 case .chat:
                     Key.shared.selectedSearchedCity_chat = indexPath.row == 0 ? "Current Location" : "Current Map View"
                 }

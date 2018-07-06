@@ -242,6 +242,7 @@ extension MapSearchViewController {
                     Key.shared.selectedSearchedCity_map = geobytesCityData[0]
                 case .board:
                     Key.shared.selectedSearchedCity_board = geobytesCityData[0]
+                    changeLocBarText?(geobytesCityData[0], true)
                 case .chat:
                     Key.shared.selectedSearchedCity_chat = geobytesCityData[0]
                 }

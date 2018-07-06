@@ -73,6 +73,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var addressCompleter = MKLocalSearchCompleter()     // Apple Place Data Getter
     var geobytesCityData = [String]()                   // Geobytes City Data
     var cityToSearch: String = ""
+    var changeLocBarText: ((String, Bool) -> ())?
     
     // iOS Geocoder
     let clgeocoder = CLGeocoder()
