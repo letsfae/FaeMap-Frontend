@@ -159,11 +159,11 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         }
         viewModelPlaces.boolDataLoaded = { [unowned self] (loaded) in
             if loaded {
-//                self.indicatorView.stopAnimating()
-//                self.tblPlaceRight.isUserInteractionEnabled = true
+                self.indicatorView.stopAnimating()
+                self.tblPlaceRight.isUserInteractionEnabled = true
             } else {
-//                self.indicatorView.startAnimating()
-//                self.tblPlaceRight.isUserInteractionEnabled = false
+                self.indicatorView.startAnimating()
+                self.tblPlaceRight.isUserInteractionEnabled = false
             }
         }
         viewModelPlaces.fetchMoreDataStatus = { [unowned self] (noMoreData, message) in
