@@ -43,6 +43,14 @@ extension MapBoardViewController: SelectLocationDelegate {
         if let text = locToSearchTextRaw {
             searchVC.strSearchedLocation = text
         }
+        searchVC.changeLocBarText = { [unowned self] (locText, shouldChangeStyle) in
+            if shouldChangeStyle {
+                self.lblCurtLoc.attributedText = locText.faeSearchBarAttributedText()
+            } else {
+                self.lblCurtLoc.attributedText = nil
+                self.lblCurtLoc.text = locText
+            }
+        }
         //searchVC.searchedPlaces = viewModelPlaces.places
         navigationController?.pushViewController(searchVC, animated: false)
     }
