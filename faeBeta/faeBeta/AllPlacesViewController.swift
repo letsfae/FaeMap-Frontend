@@ -102,7 +102,7 @@ class AllPlacesViewController: UIViewController, UITableViewDelegate, UITableVie
 //            cell.setValueForCell(place: searchedPlaces[indexPath.row])
 //        }
         if let viewModelPlace = viewModelPlaces.viewModel(for: indexPath.row) {
-            cell.setValueForCell(place: viewModelPlace)
+            cell.setValueForCell(place: viewModelPlace, row: indexPath.row)
         }
         return cell
     }

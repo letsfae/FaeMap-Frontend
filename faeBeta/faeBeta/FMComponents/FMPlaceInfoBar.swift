@@ -564,40 +564,12 @@ class PlaceView: UIView {
     
     func setValueForPlace(placeInfo: PlacePin) {
         lblName.text = placeInfo.name
-        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
-        addr += placeInfo.address2
-//        var addr = "test "
-//        if placeInfo.address1 == "" {
-//            print("test \(placeInfo.address)")
-//            addr = placeInfo.address
-//        } else {
-//            addr = placeInfo.address1 + ", " + placeInfo.address2
-//        }
+        if placeInfo.address1 != "" {
+            lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        } else {
+            General.shared.updateAddress(label: lblAddr, place: placeInfo)
+        }
         
-//        if placeInfo.address1 == "" {
-//            General.shared.getAddress(location: placeInfo.loc_coordinate) {[weak self] (status, address) in
-//                guard status != 400 else {
-//                    self?.lblAddr.text = placeInfo.address2
-//                    return
-//                }
-//                if let addr = address as? String {
-//                    print("placepin \(addr)")
-//                    self?.lblAddr.text = addr
-//                }
-//            }
-//        } else {
-//            lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
-//            General.shared.getAddress(location: placeInfo.loc_coordinate) {[weak self] (status, address) in
-//                guard status != 400 else {
-//                    return
-//                }
-//                if let addr = address as? String {
-//                    print("test placepin \(addr)")
-//                }
-//            }
-//        }
-        
-        lblAddr.text = addr
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .clear
         let hoursToday = placeInfo.hoursToday

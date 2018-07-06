@@ -15,6 +15,7 @@ import GoogleMaps
 class General: NSObject {
     
     static let shared = General()
+    let addressCache = NSCache<AnyObject, AnyObject>()
     
     public func avatarCached(userid: Int, completion:@escaping (UIImage) -> Void) {
         let realm = try! Realm()
@@ -99,7 +100,51 @@ class General: NSObject {
         }
     }
     
-    public func convertCoordinateToAddress(coordinate: CLLocationCoordinate2D, full: Bool = true, completion: @escaping (Any?) -> Void) {
+    func updateAddress(label: UILabel, place: PlacePin, full: Bool = true) {
+        if full {
+            if let addressFromCache = addressCache.object(forKey: place.id as AnyObject) as? String {
+                label.text = addressFromCache
+                return
+            }
+            
+            label.text = place.address2
+            convertCoordinateToAddress(coordinate: place.coordinate) { (result) in
+                if let error = result as? Error {
+                    print(error.localizedDescription)
+                    return
+                }
+                if let address = result as? String {
+                    DispatchQueue.main.async {
+                        label.text = address
+                    }
+                    self.addressCache.setObject(address as AnyObject, forKey: place.id as AnyObject)
+                    return
+                }
+            }
+        } else {
+            if let addressFromCache = addressCache.object(forKey: "\(place.id)exp" as AnyObject) as? String {
+                label.text = addressFromCache
+                return
+            }
+            
+            label.text = place.address2
+            convertCoordinateToAddress(coordinate: place.coordinate, full: full) { (result) in
+                if let error = result as? Error {
+                    print(error.localizedDescription)
+                    return
+                }
+                if let address = result as? String {
+                    DispatchQueue.main.async {
+                        label.text = address
+                    }
+                    self.addressCache.setObject(address as AnyObject, forKey: "\(place.id)exp" as AnyObject)
+                    return
+                }
+            }
+        }
+    }
+    
+    private func convertCoordinateToAddress(coordinate: CLLocationCoordinate2D, full: Bool = true, completion: @escaping (Any?) -> Void) {
         
         let geocoder = GMSGeocoder()
         geocoder.reverseGeocodeCoordinate(coordinate) { (response, error) in
@@ -112,20 +157,37 @@ class General: NSObject {
                 completion(nil)
                 return
             }
+            guard let country = response?.firstResult()?.country else {
+                completion(nil)
+                return
+            }
+            
             if full {
                 var full_address = ""
-                var count = 0
                 for line in lines {
-                    count += 1
-                    if count == lines.count {
-                        full_address += line
-                    } else {
-                        full_address += line + ", "
+                    if line.isEmpty || line == " " {
+                        continue
                     }
+                    full_address += line + ", "
                 }
+                full_address += country
+                vickyprint("full_address \(full_address)")
                 completion(full_address)
             } else {
-                completion(lines)
+                var address = ""
+                if let thoroughfare = response?.firstResult()?.thoroughfare {
+                    address += "\(thoroughfare), "
+                }
+                if let locality = response?.firstResult()?.locality {
+                    address += locality
+                } else {
+                    if let adminiArea = response?.firstResult()?.administrativeArea {
+                        address += adminiArea
+                    }
+                }
+                
+                completion(address)
+                vickyprint("lines \(address)")
             }
         }
         

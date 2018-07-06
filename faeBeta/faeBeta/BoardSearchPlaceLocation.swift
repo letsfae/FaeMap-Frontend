@@ -48,32 +48,34 @@ extension MapBoardViewController: SelectLocationDelegate {
     }
     
     // MARK: - MapSearchDelegate
-    // TODO JOSHUA - 从search返回board的数据请求全部交给我。只需要给我搜索的source(name或categories)以及搜索的content就够了。还有更新location的文字。
-    // 意思就是 进入搜索有三种选择，1：点击category搜索button，此时只需返回给我category是什么（不要做数据请求）。2. 输入一些字符后点击search，此时只需返回给我searchText即可。3. 点击cell进入place detail，无需给我返回东西。
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = searchText
+        lblCurtLoc.attributedText = Key.shared.selectedSearchedCity_board?.faeSearchBarAttributedText()
+        if Key.shared.selectedSearchedCity_board != "Current Location" {
+            imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
+        } else {
+            imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
+        }
+        
         let location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         viewModelPlaces.searchByCategories(content: searchText, source: "name", latitude: location.latitude, longitude: location.longitude)
-        print("name")
         updateLocationInViewModel(updatePlaces: false)
-        // TODO VICKY - MAPSEARCH
-        // 搜索name, 回传的参数里places没有用
-        // 使用LocManager.shared.locToSearch_board, it's an optional value, safely unwrapp it
-        // if nil, then use LocManager.shared.curtLoc
     }
     
     func jumpToCategory(category: String) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = category
+        lblCurtLoc.attributedText = Key.shared.selectedSearchedCity_board?.faeSearchBarAttributedText()
+        if Key.shared.selectedSearchedCity_board != "Current Location" {
+            imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
+        } else {
+            imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
+        }
         tblPlaceRight.scrollToTop(animated: false)
         viewModelPlaces.category = category
-        print("category")
+        viewModelPlaces.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         updateLocationInViewModel(updatePlaces: false)
-        // TODO VICKY - MAPSEARCH
-        // 搜索category
-        // 使用LocManager.shared.locToSearch_board, it's an optional value, safely unwrapp it
-        // if nil, then use LocManager.shared.curtLoc
     }
     
     // MARK: - SelectLocationDelegate

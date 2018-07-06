@@ -242,7 +242,7 @@ class NewChatShareController: UIViewController  {
                 vcChat.storeChatMessageToRealm(type: type, text: text)
             case .place:
                 type = "[Place]"
-                text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
+                text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1), \(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
                 downloadImage(URL: placeDetail!.imageURL) { (rawData) in
                     guard let data = rawData else { return }
                     media = data
@@ -273,7 +273,7 @@ class NewChatShareController: UIViewController  {
             newMessage.text = "{\"id\":\"\(collectionDetail!.collection_id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.pins.count)\", \"creator\":\"\"}"
         case .place:
             newMessage.type = "[Place]"
-            newMessage.text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1),\(placeDetail!.address2)\"}"
+            newMessage.text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1), \(placeDetail!.address2)\"}"
         default: break
         }
         let recentRealm = RealmRecentMessage()

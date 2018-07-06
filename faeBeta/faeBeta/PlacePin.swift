@@ -14,8 +14,6 @@ class PlacePin: NSObject, FaePin {
     var id: Int = 0
     var name: String = ""
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D()
-    var loc_coordinate: CLLocation = CLLocation()
-    
     var address1: String = ""
     var address2: String = ""
     var icon: UIImage?
@@ -60,15 +58,15 @@ class PlacePin: NSObject, FaePin {
     
     lazy var address: String = {
         var res_addr = ""
-        General.shared.getAddress(location: loc_coordinate) { (status, address) in
-            guard status != 400 else {
-                return
-            }
-            if let addr = address as? String {
-                print("placepin \(addr)")
-                res_addr = addr
-            }
-        }
+//        General.shared.getAddress(location: loc_coordinate) { (status, address) in
+//            guard status != 400 else {
+//                return
+//            }
+//            if let addr = address as? String {
+//                print("placepin \(addr)")
+//                res_addr = addr
+//            }
+//        }
         return res_addr
     }()
     
@@ -84,7 +82,6 @@ class PlacePin: NSObject, FaePin {
         
         
         coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
-        loc_coordinate = CLLocation(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         
         // process categories
         class_1 = json["categories"]["class1"].stringValue

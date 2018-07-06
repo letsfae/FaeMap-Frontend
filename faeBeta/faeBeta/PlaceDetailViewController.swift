@@ -145,8 +145,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.reloadData()
         let lat = String(place.coordinate.latitude)
         let long = String(place.coordinate.longitude)
+        
+        // TODO Vicky - 在similar places加载出来前点击展开cell偶尔会崩溃
         getRelatedPlaces(lat, long, isSimilar: true) {
-            print("Exist duplicate place: \(self.testDuplicates())")
+            vickyprint("Exist duplicate place: \(self.testDuplicates())")
             self.getRelatedPlaces(lat, long, isSimilar: false, {
                 self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
                 self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
@@ -160,8 +162,8 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         var testset = Set<PlacePin>()
         for similar in self.arrSimilarPlaces {
             if (testset.contains(similar)) {
-                vickyprint(similar.id)
-                vickyprint(arrSimilarPlaces)
+//                vickyprint(similar.id)
+//                vickyprint(arrSimilarPlaces)
                 return true
             }
             testset.insert(similar)
@@ -284,10 +286,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 let json = JSON(message!)
 //                vickyprint(json)
                 guard let placesJson = json.array else { return }
-                vickyprint("placesJson \(placesJson.count)")
+//                vickyprint("placesJson \(placesJson.count)")
                 for similarPlaces in placesJson {
                     guard let similarJson = similarPlaces.array else { return }
-                    vickyprint("similarJson \(similarJson.count)")
+//                    vickyprint("similarJson \(similarJson.count)")
                     let places = similarJson.map( { PlacePin(json: $0) } )
                     for place in places {
                         if place.id != self.place.id && !self.placeIdSet.contains(place.id) {
@@ -297,7 +299,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                     }
                 }
                 
-                vickyprint("set \(self.placeIdSet.count)")
+//                vickyprint("set \(self.placeIdSet.count)")
                 self.arrSimilarPlaces = Array(self.arrSimilarPlaces.prefix(20))
                 self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                 completion()

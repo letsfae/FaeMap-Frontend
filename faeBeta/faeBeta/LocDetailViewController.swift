@@ -514,7 +514,7 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
         let colCell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlacesCollectionCell", for: indexPath) as! PlacesCollectionCell
 //        let place = arrNearbyPlaces[indexPath.row]
         if let viewModelPlace = viewModelNearby.viewModel(for: indexPath.row) {
-            colCell.setValueForColCell(place: viewModelPlace)
+            colCell.setValueForColCell(place: viewModelPlace, row: indexPath.row)
         }
         return colCell
     }
