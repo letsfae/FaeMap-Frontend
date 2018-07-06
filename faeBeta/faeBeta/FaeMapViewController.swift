@@ -1194,7 +1194,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 } else {
                     anView.alpha = 0
                     anView.imgIcon.frame = CGRect(x: 20, y: 46, width: 0, height: 0)
-                    let delay: Double = Double(arc4random_uniform(25)) / 100 // Delay 0-1 seconds, randomly
+                    let delay: Double = Double.random(min: 0, max: 0.5)// Delay 0-1 seconds, randomly
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                             anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
@@ -1386,23 +1386,28 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        cancelPlacePinsFetch()
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         guard fullyLoaded else { return }
         Key.shared.lastChosenLoc = mapView.centerCoordinate
         
         if AUTO_REFRESH {
             //calculateDistanceOffset()
-            guard PLACE_FETCH_ENABLE else {
-                return
-            }
-            guard boolCanUpdatePlaces else {
-                return
-            }
-            boolCanUpdatePlaces = false
+//            guard PLACE_FETCH_ENABLE else {
+//                return
+//            }
+//            guard boolCanUpdatePlaces else {
+//                return
+//            }
+//            boolCanUpdatePlaces = false
             mapViewPanningFetchesCount = 0
             numberOfAreasWithNoPins = 0
             renewSelfLocation()
-            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + 1) {
+            rawPlaceJSONs.removeAll()
+            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now()) {
                 for i in 0...23 {
                     self.fetchDataInCertainMapRect(number: i)
                 }
@@ -2966,12 +2971,11 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     }
     
     func fetchDataInCertainMapRect(number: Int) {
-        
         var mapRect = faeMapView.visibleMapRect
         let map_width = mapRect.size.width
         let map_height = mapRect.size.height
-        mapRect.origin.x = Double(number % 3) * (map_width / 3)
-        mapRect.origin.y = Double(number / 3) * (map_height / 8)
+        mapRect.origin.x += Double(number % 3) * (map_width / 3)
+        mapRect.origin.y += Double(number / 3) * (map_height / 8)
         mapRect.size.width = map_width / 3
         mapRect.size.height = map_height / 8
         let annos = faeMapView.annotations(in: mapRect)
@@ -2981,7 +2985,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard point_centers.count == 24 else { return }
         let coordinate = faeMapView.convert(point_centers[number], toCoordinateFrom: nil)
         fetchPlacePinsOneEightPart(center: coordinate, number: number)
-        
     }
     
     /*
