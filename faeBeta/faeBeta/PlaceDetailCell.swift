@@ -66,9 +66,12 @@ class PlaceDetailCell: UITableViewCell {
         switch identifier {
         case "map":
             imgIcon.image = #imageLiteral(resourceName: "place_location")
-            var addr = place.address1 == "" ? "" : place.address1 + ", "
-            addr += place.address2
-            lblContent.text = addr
+            
+            if place.address1 != "" {
+                lblContent.text = place.address1 + ", " + place.address2
+            } else {
+                General.shared.updateAddress(label: lblContent, place: place)
+            }
             break
         case "hour":
             imgIcon.image = #imageLiteral(resourceName: "place_openinghour")

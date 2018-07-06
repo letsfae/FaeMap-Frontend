@@ -79,7 +79,7 @@ class BoardPlacesCell: UITableViewCell, UICollectionViewDelegate, UICollectionVi
         let colCell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlacesCollectionCell", for: indexPath) as! PlacesCollectionCell
         
         if let viewModelPlace = viewModelPlaces.viewModel(for: indexPath.row) {
-            colCell.setValueForColCell(place: viewModelPlace)
+            colCell.setValueForColCell(place: viewModelPlace, row: indexPath.row)
         }
         
         return colCell
@@ -130,10 +130,14 @@ class PlacesCollectionCell: UICollectionViewCell {
         addSubview(lblAddress)
     }
     
-    func setValueForColCell(place: BoardPlaceViewModel) {
+    func setValueForColCell(place: BoardPlaceViewModel, row: Int) {
         imgPic.image = nil
-        lblName.text = place.name
-        lblAddress.text = place.address
+        lblName.text = "\(row + 1). \(place.name)"
+        if place.address.contains(",") {
+            lblAddress.text = place.address
+        } else {
+            General.shared.updateAddress(label: lblAddress, place: place.place)
+        }
         
         imgPic.backgroundColor = ._210210210()
         imgPic.image = nil

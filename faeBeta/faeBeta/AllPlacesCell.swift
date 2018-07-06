@@ -64,44 +64,16 @@ class AllPlacesCell: UITableViewCell {
         addConstraintsWithFormat("V:[v0(18)]-9-|", options: [], views: lblPrice)
     }
     
-    func setValueForCell(place: BoardPlaceViewModel) {
+    func setValueForCell(place: BoardPlaceViewModel, row: Int) {
         // if use BoardPlaceViewModel
-        lblPlaceName.text = place.name
-        lblPlaceAddr.text = place.address
+        lblPlaceName.text = "\(row + 1). \(place.name)"
+        if place.address.contains(",") {
+            lblPlaceAddr.text = place.address
+        } else {
+            General.shared.updateAddress(label: lblPlaceAddr, place: place.place)
+        }
         lblPrice.text = place.price
         lblOpeninghour.text = place.openingHour
-        
-//        lblPlaceName.text = place.name
-//        var addr = place.address1 == "" ? "" : place.address1 + ", "
-//        addr += place.address2
-//        lblPlaceAddr.text = addr
-//
-//        lblPrice.text = place.price
-//
-//        var opening = ""
-//
-//        let hoursToday = place.hoursToday
-//        let openOrClose = place.openOrClose
-//        if openOrClose == "N/A" {
-//            opening = "N/A"
-//        } else {
-//            var hours = " "
-//            for (index, hour) in hoursToday.enumerated() {
-//                if hour == "24 Hours" {
-//                    hours += hour
-//                    break
-//                } else {
-//                    if index == hoursToday.count - 1 {
-//                        hours += hour
-//                    } else {
-//                        hours += hour + ", "
-//                    }
-//                }
-//            }
-//            opening = openOrClose + hours
-//        }
-//
-//        lblOpeninghour.text = opening
         
         imgPlaceIcon.backgroundColor = ._210210210()
         imgPlaceIcon.image = nil

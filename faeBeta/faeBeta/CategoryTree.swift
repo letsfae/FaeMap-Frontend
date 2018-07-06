@@ -88,9 +88,9 @@ class Category {
             writeInRealmCategory(category: level4, weight: base * factor * factor * factor)
         }
         
-        let realm = try! Realm()
-        let realmCategory = realm.filterMyCatDict()
-        vickyprint(realmCategory)
+//        let realm = try! Realm()
+//        let realmCategory = realm.filterMyCatDict()
+//        vickyprint(realmCategory)
     }
     
     func buildTree() {

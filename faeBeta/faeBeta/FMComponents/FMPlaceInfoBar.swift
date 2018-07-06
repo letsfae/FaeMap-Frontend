@@ -564,9 +564,12 @@ class PlaceView: UIView {
     
     func setValueForPlace(placeInfo: PlacePin) {
         lblName.text = placeInfo.name
-        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
-        addr += placeInfo.address2
-        lblAddr.text = addr
+        if placeInfo.address1 != "" {
+            lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        } else {
+            General.shared.updateAddress(label: lblAddr, place: placeInfo)
+        }
+        
         lblPrice.text = placeInfo.price
         imgType.backgroundColor = .clear
         let hoursToday = placeInfo.hoursToday
