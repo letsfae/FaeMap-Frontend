@@ -154,7 +154,7 @@ func calculateRadius(mapView: MKMapView?) -> Int {
     let from: CLLocationCoordinate2D = map.convert(CGPoint(x: 0, y: screenHeight/2), toCoordinateFrom: nil)
     // init center location from center coordinate
     let from_loc = CLLocation(latitude: from.latitude, longitude: from.longitude)
-    let to: CLLocationCoordinate2D = map.convert(CGPoint(x: screenWidth/4, y: screenHeight/2), toCoordinateFrom: nil)
+    let to: CLLocationCoordinate2D = map.convert(CGPoint(x: screenWidth/6, y: screenHeight/2), toCoordinateFrom: nil)
     let to_loc = CLLocation(latitude: to.latitude, longitude: to.longitude)
     let radius: CLLocationDistance = from_loc.distance(from: to_loc)
     return Int(radius * 1.5)

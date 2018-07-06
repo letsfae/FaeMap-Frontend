@@ -177,7 +177,7 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
         FaeMap.shared.whereKey("radius", value: "5000")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "20")
-        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+        FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 //print("Get Related Places Fail \(status) \(message!)")
                 completion()
@@ -259,7 +259,7 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
         faeMap.whereKey("radius", value: "\(radius)")
         faeMap.whereKey("type", value: "place")
         faeMap.whereKey("max_count", value: "1000")
-        faeMap.getMapInformation { (status: Int, message: Any?) in
+        faeMap.getMapPins { (status: Int, message: Any?) in
             var arrPlaces = [PlacePin]()
             arrPlaces.removeAll()
             if status / 100 == 2 {

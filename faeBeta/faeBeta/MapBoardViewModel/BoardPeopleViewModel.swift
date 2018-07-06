@@ -119,7 +119,7 @@ class BoardPeopleViewModel {
         FaeMap.shared.whereKey("geo_longitude", value: "\(longitude)")
         FaeMap.shared.whereKey("radius", value: "\(radius)")   // 100km, 100mi
         FaeMap.shared.whereKey("type", value: "user")
-        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+        FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
             self?.loaded = true
             
             if status / 100 != 2 || message == nil {

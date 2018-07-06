@@ -817,7 +817,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         FaeMap.shared.whereKey("radius", value: "\(radius)")
         FaeMap.shared.whereKey("type", value: "place")
         FaeMap.shared.whereKey("max_count", value: "1000")
-        FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+        FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
             guard let `self` = self else { return }
             guard status / 100 == 2 else {
                 self.boolCanUpdatePlaces = true

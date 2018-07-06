@@ -309,7 +309,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             FaeMap.shared.whereKey("radius", value: "5000")
             FaeMap.shared.whereKey("type", value: "place")
             FaeMap.shared.whereKey("max_count", value: "20")
-            FaeMap.shared.getMapInformation { [weak self] (status: Int, message: Any?) in
+            FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
                 guard let `self` = self else { return }
                 guard status / 100 == 2 && message != nil else {
                     //print("Get Related Places Fail \(status) \(message!)")

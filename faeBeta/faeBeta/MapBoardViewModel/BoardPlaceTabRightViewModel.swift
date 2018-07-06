@@ -91,7 +91,7 @@ class BoardPlaceTabRightViewModel {
         placesAgent.whereKey("radius", value: "100000")
         placesAgent.whereKey("type", value: "place")
         placesAgent.whereKey("max_count", value: "30")
-        placesAgent.getMapInformation { [weak self] (status: Int, message: Any?) in
+        placesAgent.getMapPins { [weak self] (status: Int, message: Any?) in
             self?.loaded = true
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")

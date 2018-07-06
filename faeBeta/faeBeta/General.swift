@@ -239,7 +239,7 @@ class General: NSObject {
         getPlaces.whereKey("radius", value: "99999999")
         getPlaces.whereKey("type", value: "place")
         getPlaces.whereKey("max_count", value: "\(count)")
-        let request = getPlaces.getMapInformation { (status: Int, message: Any?) in
+        let request = getPlaces.getMapPins { (status: Int, message: Any?) in
             guard status / 100 == 2 && message != nil else {
                 completion(status, JSON.null)
                 return
