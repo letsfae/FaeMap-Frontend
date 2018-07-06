@@ -473,7 +473,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
             
             for pin in arrLocPinId {
                 arrSavedPinIds.append(pin["pin_id"].intValue)
-                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
+                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(colInfo.collection_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, colInfo.collection_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
                 let realm = try! Realm()
                 try! realm.write {
                     realm.add(collectedPin, update: true)

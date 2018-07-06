@@ -496,24 +496,22 @@ class FaeInputBar: UIView {
                         self.inputTextView.becomeFirstResponder()
                         self.prevInputView = nil
                     } else {
-                        if let inputView = self.setupInputView(button.tag) {
-                            self.inputTextView.inputView = inputView
-                            self.currentInputViewType = InputViewType(rawValue: button.tag)!
-                            self.inputTextView.reloadInputViews()
-                            self.inputTextView.becomeFirstResponder()
-                        } else {
-                            //self.inputTextView.inputView = self.prevInputView
-                            //self.inputTextView.reloadInputViews()
-                            button.isSelected = false
-                            if self.inputTextView.isFirstResponder {
-                                for btn in self.bottomStackViewItems {
-                                    if btn.tag == self.currentInputViewType.rawValue {
-                                        btn.isSelected = true
+                        self.setupInputView(button.tag) { view in
+                            if view == nil {
+                                button.isSelected = false
+                                if self.inputTextView.isFirstResponder {
+                                    for btn in self.bottomStackViewItems {
+                                        if btn.tag == self.currentInputViewType.rawValue {
+                                            btn.isSelected = true
+                                        }
                                     }
                                 }
+                            } else {
+                                self.inputTextView.inputView = view
+                                self.currentInputViewType = InputViewType(rawValue: button.tag)!
+                                self.inputTextView.reloadInputViews()
+                                self.inputTextView.becomeFirstResponder()
                             }
-                            //self.currentInputViewType = .keyboard
-                            //self.inputTextView.resignFirstResponder()
                         }
                     }
                 }
@@ -631,13 +629,13 @@ extension FaeInputBar {
 // MARK: - InputView delegates
 extension FaeInputBar: SendStickerDelegate, LocationMiniPickerDelegate, AudioRecorderViewDelegate {
     
-    func setupInputView(_ tag: Int) -> UIView? {
+    func setupInputView(_ tag: Int, complete: @escaping (UIView?) -> Void) {
         let floatInputViewHeight: CGFloat = 271 + device_offset_bot
         switch InputViewType(rawValue: tag) {
         case .sticker?:
             viewStickerPicker = StickerKeyboardView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: floatInputViewHeight))
             viewStickerPicker.delegate = self
-            return viewStickerPicker
+            complete(viewStickerPicker)
         case .photo?:
             
             func showLibrary() -> UIView {
@@ -662,48 +660,36 @@ extension FaeInputBar: SendStickerDelegate, LocationMiniPickerDelegate, AudioRec
                 
                 return faePhotoPicker
             }
-            
-            let semaphore = DispatchSemaphore(value: 0)
-            var view: UIView?
-            
             if PHPhotoLibrary.authorizationStatus() != .authorized {
                 //inputTextView.resignFirstResponder()
-                DispatchQueue.global().sync {
-                    PHPhotoLibrary.requestAuthorization { [weak self] status in
+                PHPhotoLibrary.requestAuthorization { [weak self] status in
+                    DispatchQueue.main.async {
                         if status != .authorized {
                             print("not authorized!")
-                            DispatchQueue.main.async {
-                                let vc = self?.delegate as! ChatViewController
-                                vc.showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
-                                //semaphore.signal()
-                            }
+                            let vc = self?.delegate as! ChatViewController
+                            vc.showAlertView(withWarning: "Cannot use this function without authorization to Photo!")
                         } else {
-                            view = showLibrary()
+                            complete(showLibrary())
                         }
-                        //semaphore.signal()
                     }
                 }
             } else {
-                view = showLibrary()
-                //semaphore.signal()
+                complete(showLibrary())
             }
-            //semaphore.wait()
-            
-            return view
         case .recorder?:
             viewAudioRecorder = AudioRecorderView(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight))
             viewAudioRecorder.backgroundColor = backgroundView.backgroundColor
             viewAudioRecorder.delegate = self
-            return viewAudioRecorder
+            complete(viewAudioRecorder)
         case .map?:
             //viewMiniLoc = LocationPickerMini()
             //viewMiniLoc.delegate = self
             viewMiniLoc = LocationMiniPicker(frame: CGRect(x: 0, y: 0, width: frame.width, height: floatInputViewHeight))
             viewMiniLoc.delegate = self
-            return viewMiniLoc
+            complete(viewMiniLoc)
         default: break
         }
-        return nil
+        complete(nil)
     }
     
     // MARK: SendStickerDelegate

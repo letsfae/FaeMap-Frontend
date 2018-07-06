@@ -76,6 +76,11 @@ extension ChatViewController {
                     if let user = insertMessage.sender, user.id != "\(Key.shared.user_id)" {
                         realm.beginWrite()
                         insertMessage.unread_count = 0
+                        let recentRealm = RealmRecentMessage()
+                        recentRealm.created_at = insertMessage.created_at
+                        recentRealm.unread_count = 0
+                        recentRealm.setPrimaryKeyInfo("\(Key.shared.user_id)", 0, user.id)
+                        realm.add(recentRealm, update: true)
                         try! realm.commitWrite()
                     }
                 }
