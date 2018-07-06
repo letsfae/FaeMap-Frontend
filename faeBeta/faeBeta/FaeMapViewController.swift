@@ -112,7 +112,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             doneFetchingAreaOfData()
         }
     }
+    private var mapViewPanningFetchesCount = 0 {
+        didSet {
+            guard mapViewPanningFetchesCount == numberOfAreasWithNoPins else { return }
+            doneFetchingAreaOfData()
+        }
+    }
+    private var numberOfAreasWithNoPins = 48
     private var time_start: DispatchTime!
+    var point_centers = [CGPoint]()
+    var coordinates = [CLLocationCoordinate2D]()
     
     // Results from Search
     private var btnTapToShowResultTbl: FMTableExpandButton!
@@ -259,6 +268,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         loadUserSettingsFromCloud()
         
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
+        
+        for i in [1,3,5,7,9,11,13,15] {
+            for j in [1,3,5] {
+                let point = CGPoint(x: screenWidth / 6 * CGFloat(j), y: screenHeight / 16 * CGFloat(i))
+                point_centers.append(point)
+            }
+        }
         
         fullyLoaded = true
     }
@@ -1178,7 +1194,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 } else {
                     anView.alpha = 0
                     anView.imgIcon.frame = CGRect(x: 20, y: 46, width: 0, height: 0)
-                    let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
+                    let delay: Double = Double.random(min: 0, max: 0.5)// Delay 0-1 seconds, randomly
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                             anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
@@ -1370,12 +1386,32 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        cancelPlacePinsFetch()
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
+        guard fullyLoaded else { return }
         Key.shared.lastChosenLoc = mapView.centerCoordinate
         
         if AUTO_REFRESH {
-            calculateDistanceOffset()
+            //calculateDistanceOffset()
+//            guard PLACE_FETCH_ENABLE else {
+//                return
+//            }
+//            guard boolCanUpdatePlaces else {
+//                return
+//            }
+//            boolCanUpdatePlaces = false
+            mapViewPanningFetchesCount = 0
+            numberOfAreasWithNoPins = 0
+            renewSelfLocation()
+            rawPlaceJSONs.removeAll()
+            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now()) {
+                for i in 0...23 {
+                    self.fetchDataInCertainMapRect(number: i)
+                }
+            }
         }
         
         if searchState == .multipleSearch && tblPlaceResult.altitude == 0 {
@@ -2863,14 +2899,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         boolCanUpdatePlaces = false
         placeFetchesCount = 0
         renewSelfLocation()
-        var point_centers = [CGPoint]()
-        var coordinates = [CLLocationCoordinate2D]()
-        for i in [1,3,5,7,9,11,13,15] {
-            for j in [1,3,5] {
-                let point = CGPoint(x: screenWidth / 6 * CGFloat(j), y: screenHeight / 16 * CGFloat(i))
-                point_centers.append(point)
-            }
-        }
+        rawPlaceJSONs.removeAll()
+        coordinates.removeAll(keepingCapacity: true)
         var count = 0
         for point in point_centers {
             let coordinate = faeMapView.convert(point, toCoordinateFrom: nil)
@@ -2915,24 +2945,53 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             joshprint("No.\(number) fetched")
             guard status / 100 == 2 else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             guard message != nil else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             self.rawPlaceJSONs += mapPlaceJsonArray
             self.placeFetchesCount += 1
+            self.mapViewPanningFetchesCount += 1
         }
+    }
+    
+    func fetchDataInCertainMapRect(number: Int) {
+        var mapRect = faeMapView.visibleMapRect
+        let map_width = mapRect.size.width
+        let map_height = mapRect.size.height
+        mapRect.origin.x += Double(number % 3) * (map_width / 3)
+        mapRect.origin.y += Double(number / 3) * (map_height / 8)
+        mapRect.size.width = map_width / 3
+        mapRect.size.height = map_height / 8
+        let annos = faeMapView.annotations(in: mapRect)
+        var userAnnoFound = false
+        for anno in annos {
+            if anno is MKUserLocation {
+                userAnnoFound = true
+                break
+            }
+        }
+        guard (annos.count == 0 && !userAnnoFound) || (annos.count == 1 && userAnnoFound) else { return }
+        numberOfAreasWithNoPins += 1
+        joshprint("no annos found in area \(number)");
+        guard point_centers.count == 24 else { return }
+        let coordinate = faeMapView.convert(point_centers[number], toCoordinateFrom: nil)
+        fetchPlacePinsOneEightPart(center: coordinate, number: number)
     }
     
     /*
