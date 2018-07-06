@@ -56,7 +56,7 @@ class Category {
     init() {
         buildTree()
         // print tree
-        print(root.description)
+//        vickyprint(root.description)
     }
     
     private func writeInRealmCategory(category: String, weight: Double) {

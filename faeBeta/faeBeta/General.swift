@@ -101,45 +101,24 @@ class General: NSObject {
     }
     
     func updateAddress(label: UILabel, place: PlacePin, full: Bool = true) {
-        if full {
-            if let addressFromCache = addressCache.object(forKey: place.id as AnyObject) as? String {
-                label.text = addressFromCache
+        let key = full ? "\(place.id)" : "\(place.id)exp"
+        if let addressFromCache = addressCache.object(forKey: key as AnyObject) as? String {
+            label.text = addressFromCache
+            return
+        }
+        
+        label.text = place.address2
+        convertCoordinateToAddress(coordinate: place.coordinate, full: full) { (result) in
+            if let error = result as? Error {
+                print(error.localizedDescription)
                 return
             }
-            
-            label.text = place.address2
-            convertCoordinateToAddress(coordinate: place.coordinate) { (result) in
-                if let error = result as? Error {
-                    print(error.localizedDescription)
-                    return
+            if let address = result as? String {
+                DispatchQueue.main.async {
+                    label.text = address
                 }
-                if let address = result as? String {
-                    DispatchQueue.main.async {
-                        label.text = address
-                    }
-                    self.addressCache.setObject(address as AnyObject, forKey: place.id as AnyObject)
-                    return
-                }
-            }
-        } else {
-            if let addressFromCache = addressCache.object(forKey: "\(place.id)exp" as AnyObject) as? String {
-                label.text = addressFromCache
+                self.addressCache.setObject(address as AnyObject, forKey: key as AnyObject)
                 return
-            }
-            
-            label.text = place.address2
-            convertCoordinateToAddress(coordinate: place.coordinate, full: full) { (result) in
-                if let error = result as? Error {
-                    print(error.localizedDescription)
-                    return
-                }
-                if let address = result as? String {
-                    DispatchQueue.main.async {
-                        label.text = address
-                    }
-                    self.addressCache.setObject(address as AnyObject, forKey: "\(place.id)exp" as AnyObject)
-                    return
-                }
             }
         }
     }
