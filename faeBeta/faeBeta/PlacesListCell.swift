@@ -48,9 +48,11 @@ class PlacesListCell: UITableViewCell {
     
     public func configureCell(_ placeInfo: PlacePin, last: Bool) {
         lblPlaceName.text = placeInfo.name
-        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
-        addr += placeInfo.address2
-        lblAddress.text = addr
+        if placeInfo.address1 != "" {
+            lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
+        } else {
+            General.shared.updateAddress(label: lblAddress, place: placeInfo)
+        }
         bottomLine.isHidden = last
         imgPic.backgroundColor = ._210210210()
         imgPic.image = nil

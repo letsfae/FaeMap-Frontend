@@ -104,7 +104,11 @@ class InputBarTopPinView : UIView {
         lblLine2.frame = CGRect(x: 94, y: 47, width: 267 * screenWidthFactor, height: 16)
         if let place = placeData {
             lblLine1.text = place.name
-            lblLine2.text = "\(place.address1), \(place.address2)"
+            if place.address1 != "" {
+                lblLine2.text = "\(place.address1), \(place.address2)"
+            } else {
+                General.shared.updateAddress(label: lblLine2, place: place)
+            }
         }
         lblLine3.isHidden = true
     }

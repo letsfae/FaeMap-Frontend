@@ -82,7 +82,7 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "AllPlacesCell", for: indexPath) as! AllPlacesCell
                 if let place = viewModelPlaces?.viewModel(for: indexPath.row) {
-                    cell.setValueForCell(place: place)
+                    cell.setValueForCell(place: place, row: indexPath.row)
                 }
                 return cell
             }

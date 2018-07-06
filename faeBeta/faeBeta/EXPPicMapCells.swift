@@ -51,14 +51,17 @@ class EXPClctPicMapCell: UICollectionViewCell, UICollectionViewDelegate, UIColle
     func updateCell(placeData: PlacePin) {
         placeInfo = placeData
         lblPlaceName.text = placeData.name
-        var arrNames = placeData.address2.split(separator: ",")
-        guard arrNames.count >= 1 else {
-            lblPlaceAddr.text = placeData.address1
-            return
+        if placeData.address1 != "" {
+            var arrNames = placeData.address2.split(separator: ",")
+            guard arrNames.count >= 1 else {
+                lblPlaceAddr.text = placeData.address1
+                return
+            }
+            let cityName = String(arrNames[0]).trimmingCharacters(in: CharacterSet.whitespaces)
+            lblPlaceAddr.text = placeData.address1 + ", " + cityName
+        } else {
+            General.shared.updateAddress(label: lblPlaceAddr, place: placeData, full: false)
         }
-        let cityName = String(arrNames[0]).trimmingCharacters(in: CharacterSet.whitespaces)
-        lblPlaceName.text = placeData.name
-        lblPlaceAddr.text = placeData.address1 + ", " + cityName
         arrImgURL.removeAll(keepingCapacity: true)
         arrImgURL = Array(placeData.imageURLs.prefix(4))
         clctViewImages.reloadData()

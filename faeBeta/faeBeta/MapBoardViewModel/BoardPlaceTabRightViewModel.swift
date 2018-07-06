@@ -28,7 +28,7 @@ class BoardPlaceTabRightViewModel {
     
     var category = "" {
         didSet {
-            if oldValue != category {
+            if oldValue != category || category == "All Places" {
                 places.removeAll(keepingCapacity: true)
                 if category == "All Places" {
                     getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
@@ -163,7 +163,7 @@ class BoardPlaceTabRightViewModel {
             fetchMoreDataStatus?(true, "No more data")
             return
         }
-        loaded = false
+        
         fetchMoreDataStatus?(false, "")
         Key.shared.radius_board = 100000
         let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
@@ -181,7 +181,6 @@ class BoardPlaceTabRightViewModel {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
                 guard let `self` = self else { return }
-                self.loaded = true
                 guard status / 100 == 2 else {
                     self.fetchMoreDataStatus?(true, "Network error!")
                     return

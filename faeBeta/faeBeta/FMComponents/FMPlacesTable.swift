@@ -790,9 +790,11 @@ class FMPlaceResultBarCell: UITableViewCell {
     
     public func setValueForPlace(_ placeInfo: PlacePin) {
         lblItemName.text = placeInfo.name
-        var addr = placeInfo.address1 == "" ? "" : placeInfo.address1 + ", "
-        addr += placeInfo.address2
-        lblItemAddr.text = addr
+        if placeInfo.address1 != "" {
+            lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
+        } else {
+            General.shared.updateAddress(label: lblItemAddr, place: placeInfo)
+        }
         imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
         // TODO: Yue - Hours update
