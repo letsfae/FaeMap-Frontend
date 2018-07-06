@@ -2979,7 +2979,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         mapRect.size.width = map_width / 3
         mapRect.size.height = map_height / 8
         let annos = faeMapView.annotations(in: mapRect)
-        guard annos.count == 0 else { return }
+        var userAnnoFound = false
+        for anno in annos {
+            if anno is MKUserLocation {
+                userAnnoFound = true
+                break
+            }
+        }
+        guard (annos.count == 0 && !userAnnoFound) || (annos.count == 1 && userAnnoFound) else { return }
         numberOfAreasWithNoPins += 1
         joshprint("no annos found in area \(number)");
         guard point_centers.count == 24 else { return }
