@@ -1061,7 +1061,9 @@ extension FaeMapViewController {
         showOrHideRefreshIcon(show: true, animated: true)
         removePlaceAnnotations(with: pinsFromSearch, forced: true, instantly: true) {
             self.pinsFromSearch.removeAll(keepingCapacity: true)
-            self.addPlaceAnnotations(with: self.faePlacePins, forced: true, instantly: true)
+            self.addPlaceAnnotations(with: self.faePlacePins, forced: true, instantly: true) {
+                self.mapView(self.faeMapView, regionDidChangeAnimated: false)
+            }
         }
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
     }
