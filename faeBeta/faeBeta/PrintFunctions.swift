@@ -8,20 +8,24 @@
 
 import Foundation
 
+var joshDebug: Bool = true
+var vickyDebug: Bool = false
+var felixDebug: Bool = false
+
 func joshprint(_ items: Any...) {
-    if Key.shared.joshDebug {
+    if joshDebug {
         print(items)
     }
 }
 
 func vickyprint(_ items: Any...) {
-    if Key.shared.vickyDebug {
+    if vickyDebug {
         print(items)
     }
 }
 
 func felixprint(_ items: Any...) {
-    if Key.shared.felixDebug {
+    if felixDebug {
         print(items)
     }
 }
