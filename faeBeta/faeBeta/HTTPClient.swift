@@ -583,6 +583,7 @@ func utf8Decode(_ inputString: String) -> String {
 func networkErrorHandling(error: Error, method: String, subUrl: String) {
     let urlWithSpaces = " " + subUrl + " "
     if let error = error as? AFError {
+        
         switch error {
         case .invalidURL(let url):
             print(method + urlWithSpaces + "Invalid URL: \(url) - \(error.localizedDescription)")
