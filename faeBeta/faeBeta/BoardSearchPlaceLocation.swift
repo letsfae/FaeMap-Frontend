@@ -46,9 +46,11 @@ extension MapBoardViewController: SelectLocationDelegate {
         searchVC.changeLocBarText = { [unowned self] (locText, shouldChangeStyle) in
             if shouldChangeStyle {
                 self.lblCurtLoc.attributedText = locText.faeSearchBarAttributedText()
+                self.imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
             } else {
                 self.lblCurtLoc.attributedText = nil
                 self.lblCurtLoc.text = locText
+                self.imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
             }
         }
         //searchVC.searchedPlaces = viewModelPlaces.places
@@ -59,13 +61,6 @@ extension MapBoardViewController: SelectLocationDelegate {
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = searchText
-        lblCurtLoc.attributedText = Key.shared.selectedSearchedCity_board?.faeSearchBarAttributedText()
-        if Key.shared.selectedSearchedCity_board != "Current Location" {
-            imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
-        } else {
-            imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-        }
-        
         let location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         viewModelPlaces.searchByCategories(content: searchText, source: "name", latitude: location.latitude, longitude: location.longitude)
         updateLocationInViewModel(updatePlaces: false)
@@ -74,12 +69,6 @@ extension MapBoardViewController: SelectLocationDelegate {
     func jumpToCategory(category: String) {
         btnClearSearchRes.isHidden = false
         lblSearchContent.text = category
-        lblCurtLoc.attributedText = Key.shared.selectedSearchedCity_board?.faeSearchBarAttributedText()
-        if Key.shared.selectedSearchedCity_board != "Current Location" {
-            imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
-        } else {
-            imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-        }
         tblPlaceRight.scrollToTop(animated: false)
         viewModelPlaces.category = category
         viewModelPlaces.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate

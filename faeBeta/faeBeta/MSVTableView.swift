@@ -118,17 +118,18 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             } else {
                 // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
-                schLocationBar.txtSchField.text = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                let locText = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                schLocationBar.txtSchField.text = locText
                 switch previousVC {
                 case .map:
-                    Key.shared.selectedSearchedCity_map = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                    Key.shared.selectedSearchedCity_map = locText
                 case .board:
-                    Key.shared.selectedSearchedCity_board = indexPath.row == 0 ? "Current Location" : "Current Map View"
-                    changeLocBarText?(geobytesCityData[0], false)
+                    Key.shared.selectedSearchedCity_board = locText
+                    changeLocBarText?(locText, false)
                 case .chat:
-                    Key.shared.selectedSearchedCity_chat = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                    Key.shared.selectedSearchedCity_chat = locText
                 }
-                strPreviousFixedOptionSelection = indexPath.row == 0 ? "Current Location" : "Current Map View"
+                strPreviousFixedOptionSelection = locText
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
                 schLocationBar.btnClose.isHidden = true
