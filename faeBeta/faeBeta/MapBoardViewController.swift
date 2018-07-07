@@ -368,7 +368,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         tblRightActivityIndicator = faeBeta.createActivityIndicator(large: false)
         tblRightActivityIndicator.color = .lightGray
         tblRightActivityIndicator.center = CGPoint(x: screenWidth / 2, y: footViewHeight / 2)
-        tblRightActivityIndicator.startAnimating()
+//        tblRightActivityIndicator.startAnimating()
         footView.addSubview(tblRightActivityIndicator)
         lblRightFetchMoreDataMessage = FaeLabel(CGRect(x: 0, y: 0, width: screenWidth, height: footViewHeight), .center, .medium, 15, UIColor._146146146())
         footView.addSubview(lblRightFetchMoreDataMessage)

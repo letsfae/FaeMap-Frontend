@@ -11,16 +11,21 @@ import SwiftyJSON
 import Alamofire
 
 class BoardPlaceTabRightViewModel {
+    var update: Bool = true
     var location: CLLocationCoordinate2D = LocManager.shared.curtLoc.coordinate {
         didSet {
 //            let from = CLLocation(latitude: oldValue.latitude, longitude: oldValue.longitude)
 //            let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
 //            if to.distance(from: from) > 282 {
-            places.removeAll(keepingCapacity: true)
-            if category == "All Places" {
-                getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
+//            places.removeAll(keepingCapacity: true)
+            if update {
+                if category == "All Places" {
+                    getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
+                } else {
+                    searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
+                }
             } else {
-                searchByCategories(content: category, latitude: location.latitude, longitude: location.longitude)
+                update = true
             }
 //            }
         }
@@ -29,7 +34,7 @@ class BoardPlaceTabRightViewModel {
     var category = "" {
         didSet {
             if oldValue != category || category == "All Places" {
-                places.removeAll(keepingCapacity: true)
+                //                places.removeAll(keepingCapacity: true)
                 if category == "All Places" {
                     getPlaceInfo(latitude: location.latitude, longitude: location.longitude)
                 } else {
@@ -84,11 +89,12 @@ class BoardPlaceTabRightViewModel {
     private func getPlaceInfo(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var places: [PlacePin] = []
         loaded = false
+        Key.shared.radius_board = 100000
         
         let placesAgent = FaeMap()
         placesAgent.whereKey("geo_latitude", value: "\(latitude)")
         placesAgent.whereKey("geo_longitude", value: "\(longitude)")
-        placesAgent.whereKey("radius", value: "100000")
+        placesAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
         placesAgent.whereKey("type", value: "place")
         placesAgent.whereKey("max_count", value: "30")
         placesAgent.getMapPins { [weak self] (status: Int, message: Any?) in
@@ -131,7 +137,7 @@ class BoardPlaceTabRightViewModel {
         searchAgent.whereKey("source", value: source)
         searchAgent.whereKey("type", value: "place")
         searchAgent.whereKey("size", value: "30")
-        searchAgent.whereKey("radius", value: "100000")
+        searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
         searchAgent.whereKey("offset", value: "0")
         searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": latitude,
@@ -158,7 +164,10 @@ class BoardPlaceTabRightViewModel {
     }
     
     func fetchMoreSearchedPlaces() {
+        fetchMoreDataStatus?(true, "")
+//        vickyprint("fetch \(dataOffset)")
         guard loaded else { return }
+        guard dataOffset >= 30 else { return }
         guard dataOffset % 30 == 0 else {
             fetchMoreDataStatus?(true, "No more data")
             return
