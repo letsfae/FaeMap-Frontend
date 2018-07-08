@@ -607,6 +607,7 @@ extension FaeInputBar {
         //let wrapView = UIStackWrapView()
         //wrapView.addSubview(view)
         performLayout(false) {
+            self.topStackView.arrangedSubviews.first?.removeFromSuperview()
             self.topStackView.addArrangedSubview(view)
             self.topStackView.sizeToFit()
             self.topStackView.layoutIfNeeded()

@@ -100,10 +100,11 @@ class General: NSObject {
         }
     }
     
-    func updateAddress(label: UILabel, place: PlacePin, full: Bool = true) {
+    func updateAddress(label: UILabel, place: PlacePin, full: Bool = true, complete: ((String) -> Void)? = nil) {
         if full {
             if let addressFromCache = addressCache.object(forKey: place.id as AnyObject) as? String {
                 label.text = addressFromCache
+                complete?(addressFromCache)
                 return
             }
             
@@ -111,6 +112,7 @@ class General: NSObject {
             convertCoordinateToAddress(coordinate: place.coordinate) { (result) in
                 if let error = result as? Error {
                     print(error.localizedDescription)
+                    complete?("")
                     return
                 }
                 if let address = result as? String {
@@ -118,12 +120,14 @@ class General: NSObject {
                         label.text = address
                     }
                     self.addressCache.setObject(address as AnyObject, forKey: place.id as AnyObject)
+                    complete?(address)
                     return
                 }
             }
         } else {
             if let addressFromCache = addressCache.object(forKey: "\(place.id)exp" as AnyObject) as? String {
                 label.text = addressFromCache
+                complete?(addressFromCache)
                 return
             }
             
@@ -131,6 +135,7 @@ class General: NSObject {
             convertCoordinateToAddress(coordinate: place.coordinate, full: full) { (result) in
                 if let error = result as? Error {
                     print(error.localizedDescription)
+                    complete?("")
                     return
                 }
                 if let address = result as? String {
@@ -138,6 +143,7 @@ class General: NSObject {
                         label.text = address
                     }
                     self.addressCache.setObject(address as AnyObject, forKey: "\(place.id)exp" as AnyObject)
+                    complete?(address)
                     return
                 }
             }
