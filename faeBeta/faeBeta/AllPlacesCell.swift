@@ -77,7 +77,7 @@ class AllPlacesCell: UITableViewCell {
         
         imgPlaceIcon.backgroundColor = ._210210210()
         imgPlaceIcon.image = nil
-        imgPlaceIcon.sd_setImage(with: URL(string: place.imageURL), placeholderImage: nil, options: []) { [weak self] (img, err, cacheType, _) in
+        imgPlaceIcon.sd_setImage(with: URL(string: place.imageURL), placeholderImage: nil, options: []) { [weak self] (img, err, _, _) in
             if img == nil || err != nil {
                 self?.imgPlaceIcon.image = Key.shared.defaultPlace
             }

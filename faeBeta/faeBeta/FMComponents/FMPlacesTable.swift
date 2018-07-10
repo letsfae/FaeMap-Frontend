@@ -213,9 +213,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         var groupPlaces = [PlacePin]()
         for i in 0..<places.count {
             let place = places[i]
-            if numbered {
-                place.name = "\(start+i+1). " + place.name
-            }
+            place.indexInTable = start + i + 1
+//            if numbered {
+//                place.name = "\(start+i+1). " + place.name
+//            }
             groupPlaces.append(place)
             if groupPlaces.count % 20 == 0 {
                 self.allPlaces.append(groupPlaces)
@@ -333,9 +334,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         var groupPlaces = [PlacePin]()
         for i in 0..<places.count {
             let place = places[i]
-            if numbered {
-                place.name = "\(i+1). " + place.name
-            }
+//            if numbered {
+//                place.name = "\(i+1). " + place.name
+//            }
+            place.indexInTable = i + 1
             groupPlaces.append(place)
             if groupPlaces.count % 20 == 0 {
                 self.allPlaces.append(groupPlaces)
@@ -783,6 +785,7 @@ class FMPlaceResultBarCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         imgSavedItem.image = nil
+        imgSavedItem.sd_cancelCurrentImageLoad()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -790,13 +793,16 @@ class FMPlaceResultBarCell: UITableViewCell {
     }
     
     public func setValueForPlace(_ placeInfo: PlacePin) {
-        lblItemName.text = placeInfo.name
+        if placeInfo.indexInTable == 0 {
+            lblItemName.text = placeInfo.name
+        } else {
+            lblItemName.text = "\(placeInfo.indexInTable). " + placeInfo.name
+        }
         if placeInfo.address1 != "" {
             lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         } else {
             General.shared.updateAddress(label: lblItemAddr, place: placeInfo)
         }
-        imgSavedItem.backgroundColor = .white
         lblPrice.text = placeInfo.price
         // TODO: Yue - Hours update
         let hoursToday = placeInfo.hoursToday
@@ -857,13 +863,20 @@ class FMPlaceResultBarCell: UITableViewCell {
         } else {
             lblHours.text = nil
         }*/
-        General.shared.downloadImageForView(url: placeInfo.imageURL, imgPic: imgSavedItem)
+        imgSavedItem.backgroundColor = ._210210210()
+        imgSavedItem.image = nil
+        imgSavedItem.sd_setImage(with: URL(string: placeInfo.imageURL), placeholderImage: nil, options: []) { [weak self] (img, err, _, _) in
+            if img == nil || err != nil {
+                self?.imgSavedItem.image = Key.shared.defaultPlace
+            }
+        }
     }
     
     private func loadContent() {
         imgSavedItem = UIImageView()
         imgSavedItem.layer.cornerRadius = 5
         imgSavedItem.clipsToBounds = true
+        imgSavedItem.contentMode = .scaleAspectFill
         addSubview(imgSavedItem)
         addConstraintsWithFormat("H:|-12-[v0(66)]", options: [], views: imgSavedItem)
         addConstraintsWithFormat("V:|-12-[v0(66)]", options: [], views: imgSavedItem)

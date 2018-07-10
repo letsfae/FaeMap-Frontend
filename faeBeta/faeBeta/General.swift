@@ -335,4 +335,25 @@ class General: NSObject {
             }
         }
     }
+    
+    public func renewSelfLocation() {
+        DispatchQueue.global(qos: .default).async {
+            guard CLLocationManager.locationServicesEnabled() else { return }
+            switch CLLocationManager.authorizationStatus() {
+            case .notDetermined, .restricted, .denied:
+                break
+            case .authorizedAlways, .authorizedWhenInUse:
+                let mapAgent = FaeMap()
+                mapAgent.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
+                mapAgent.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
+                mapAgent.renewCoordinate {(status: Int, message: Any?) in
+                    if status / 100 == 2 {
+                        // print("Successfully renew self position")
+                    } else {
+                        print("[renewSelfLocation] fail")
+                    }
+                }
+            }
+        }
+    }
 }

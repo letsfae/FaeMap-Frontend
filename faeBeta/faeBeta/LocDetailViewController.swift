@@ -21,14 +21,9 @@ import SwiftyJSON
         So, no need to check saved_status in back end
 */
 
-protocol LocDetailDelegate: class {
-    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool)
-}
-
 class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
-    weak var locationDelegate: LocDetailDelegate?
     
     public var coordinate: CLLocationCoordinate2D!
     
@@ -238,19 +233,9 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     
     @objc private func handleMapTap() {
         hideAddCollectionView()
-        
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-            ctrler.boolFromMap = false
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        locationDelegate = Key.shared.FMVCtrler
-        locationDelegate?.jumpToViewLocation(coordinate: coordinate, created: boolCreated)
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
+        let vc = LocViewMapController()
+        vc.coordinate = self.coordinate
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     private func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
