@@ -57,12 +57,13 @@ class BoardPlaceTabLeftViewModel {
     private func searchRecommend(latitude: CLLocationDegrees, longitude: CLLocationDegrees, _ completion: @escaping () -> Void) {
         let realmCategory = realm.filterMyCatDict()
         vickyprint(realmCategory)
-        if realmCategory.isEmpty {
+        if realmCategory.isEmpty || realmCategory.first!.weight < 0.1 {
             completion()
             return
         }
         var recommendPlaces = [PlacePin]()
-        let count = realmCategory.count > 5 ? 5 : realmCategory.count
+        var recommendSet = Set<PlacePin>()
+        let count = min(5, realmCategory.count)
         for idx in 0..<count {
             let content = realmCategory[idx].name
             // check whether it belongs to class_one
@@ -73,7 +74,7 @@ class BoardPlaceTabLeftViewModel {
             FaeSearch.shared.whereKey("size", value: "15")
             FaeSearch.shared.whereKey("radius", value: "100000")
             FaeSearch.shared.whereKey("offset", value: "0")
-            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+//            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
                                                           "longitude": longitude])
             FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -94,9 +95,9 @@ class BoardPlaceTabLeftViewModel {
                     continue
                 }
                 let recommend = recommendJson.map( { PlacePin(json: $0) } )
-                recommendPlaces.append(contentsOf: recommend)
-                if recommendPlaces.count >= 15 {
-                    recommendPlaces = Array(recommendPlaces.prefix(15))
+                recommendSet = recommendSet.union(recommend)
+                if recommendSet.count >= 15 {
+                    recommendPlaces = Array(recommendSet.prefix(15))
                     break
                 }
             }

@@ -130,6 +130,10 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         if let uiviewPeopleFilter = uiviewPeopleNearyFilter {
             uiviewPeopleFilter.unit = Key.shared.measurementUnits == "imperial" ? " mi" : " km"
         }
+        
+        if uiviewPlaceHeader != nil {
+            uiviewPlaceHeader.getShortcutMenu()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
