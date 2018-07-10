@@ -54,9 +54,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var lblNoResult: UILabel!
     var activityIndicatorNoResult: UIActivityIndicatorView!
     
-    // Requests
-    var placeRequest: DataRequest?
-    
     // Data
     var arrPlaceNames: [String] = []
     enum SearchBarType {
@@ -86,10 +83,18 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var flagAddrFetched: Bool = false
     var isCategorySearching: Bool = false
     
+    // DataRequests Control
+    var searchRequest: DataRequest?
+    var citySearchRequest: DataRequest?
+    var cityDetailRequest: DataRequest?
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._241241241()
+        if previousVC == .board {
+            fixedLocOptions.removeLast()
+        }
         loadSearchBar()
         loadPlaceBtns()
         loadTable()
@@ -101,6 +106,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cancelAllRequests()
     }
     
     // MARK: - Process data about shortcut menu
@@ -186,15 +196,24 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
                 schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
                 cityToSearch = selectedCity
             }
+            if Key.shared.searchSource_map.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
+            }
         case .board:
             if let selectedCity = Key.shared.selectedSearchedCity_board {
                 schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
                 cityToSearch = selectedCity
             }
+            if Key.shared.searchSource_board.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
+            }
         case .chat:
             if let selectedCity = Key.shared.selectedSearchedCity_chat {
                 schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
                 cityToSearch = selectedCity
+            }
+            if Key.shared.searchSource_chat.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
             }
         }
         
@@ -248,7 +267,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             btnCategories[i].contentMode = .scaleAspectFit
             btnCategories[i].layer.masksToBounds = true
             btnCategories[i].tag = i
-            btnCategories[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
+            btnCategories[i].addTarget(self, action: #selector(self.actionSearchByCategories(_:)), for: .touchUpInside)
             
             lblCategories[i].textAlignment = .center
             lblCategories[i].textColor = UIColor._138138138()
@@ -317,16 +336,23 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiview.layer.shadowOpacity = 0.6
     }
     
+    private func cancelAllRequests() {
+        searchRequest?.cancel()
+        citySearchRequest?.cancel()
+        cityDetailRequest?.cancel()
+        addressCompleter.cancel()
+    }
+    
     // MARK: - Actions
     @objc private func backToMap(_ sender: UIButton) {
-        placeRequest?.cancel()
+        cancelAllRequests()
         navigationController?.popViewController(animated: false)
     }
     
-    @objc func searchByCategories(_ sender: UIButton) {
+    @objc func actionSearchByCategories(_ sender: UIButton) {
         let content = arrPlaceNames[sender.tag]
         Category.shared.visitCategory(category: content)
-        
+        sendBackLocationText()
         if previousVC == .board {
             delegate?.jumpToCategory?(category: content)
             navigationController?.popViewController(animated: false)

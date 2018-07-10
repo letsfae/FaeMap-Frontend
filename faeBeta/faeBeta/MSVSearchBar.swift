@@ -222,14 +222,15 @@ extension MapSearchViewController {
         switch searchBar {
         case schPlaceBar:
             joshprint("[schPlaceBar] clicked")
-            searchBar.txtSchField.resignFirstResponder()
-            if searchBar.txtSchField.text == "" {
+            schPlaceBar.txtSchField.resignFirstResponder()
+            if schPlaceBar.txtSchField.text == "" {
                 
             } else {
+                sendBackLocationText()
                 if flagPlaceFetched {
-                    delegate?.jumpToPlaces?(searchText: searchBar.txtSchField.text!, places: searchedPlaces)
+                    delegate?.jumpToPlaces?(searchText: schPlaceBar.txtSchField.text!, places: searchedPlaces)
                 } else {
-                    delegate?.continueSearching?(searchText: searchBar.txtSchField.text!)
+                    delegate?.continueSearching?(searchText: schPlaceBar.txtSchField.text!)
                 }
                 navigationController?.popViewController(animated: false)
             }
@@ -242,7 +243,6 @@ extension MapSearchViewController {
                     Key.shared.selectedSearchedCity_map = geobytesCityData[0]
                 case .board:
                     Key.shared.selectedSearchedCity_board = geobytesCityData[0]
-                    changeLocBarText?(geobytesCityData[0], true)
                 case .chat:
                     Key.shared.selectedSearchedCity_chat = geobytesCityData[0]
                 }

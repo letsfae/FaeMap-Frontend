@@ -11,6 +11,12 @@ import SwiftyJSON
 
 extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
+    func sendBackLocationText() {
+        guard previousVC == .board else { return }
+        guard let locText = Key.shared.selectedSearchedCity_board else { return }
+        changeLocBarText?(locText, locText != "Current Location")
+    }
+    
     func loadAddressCompleter() {
         addressCompleter.delegate = self
     }
@@ -52,7 +58,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     // Look for coordinate
     func lookUpForCoordinate(cityData: String) {
         activityIndicatorLocationSearch.startAnimating()
-        CitySearcher.shared.cityDetail(cityData) { [weak self] (status, location) in
+        cityDetailRequest = CitySearcher.shared.cityDetail(cityData) { [weak self] (status, location) in
             self?.activityIndicatorLocationSearch.stopAnimating()
             guard let `self` = self else { return }
             guard status / 100 == 2 else {
@@ -90,7 +96,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         case .chat:
             Key.shared.selectedSearchedCity_chat = nil
         }
-        CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
+        citySearchRequest = CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
             self?.activityIndicatorLocationSearch.stopAnimating()
             guard let `self` = self else { return }
             self.geobytesCityData.removeAll()
@@ -216,7 +222,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         searchAgent.whereKey("sort", value: sort)
         searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                  "longitude": locationToSearch.longitude])
-        placeRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+        searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
             //joshprint("places fetched")
             guard let `self` = self else { return }
             self.flagPlaceFetched = true

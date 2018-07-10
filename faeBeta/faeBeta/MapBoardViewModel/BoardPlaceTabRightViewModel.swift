@@ -144,7 +144,7 @@ class BoardPlaceTabRightViewModel {
         searchAgent.whereKey("offset", value: "0")
         searchAgent.whereKey("sort", value: sort)
         searchAgent.whereKey("location", value: ["latitude": latitude,
-                                                      "longitude": longitude])
+                                                 "longitude": longitude])
         searchRequest?.cancel()
         searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
             guard let `self` = self else { return }

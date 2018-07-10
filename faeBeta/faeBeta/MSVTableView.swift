@@ -80,7 +80,6 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     vc.place = selectedPlace
                     navigationController?.pushViewController(vc, animated: true)
                 }
-                
             default:
                 // address
                 let address = searchedAddresses[indexPath.row]
@@ -107,7 +106,6 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     Key.shared.selectedSearchedCity_map = geobytesCityData[indexPath.row]
                 case .board:
                     Key.shared.selectedSearchedCity_board = geobytesCityData[indexPath.row]
-                    changeLocBarText?(geobytesCityData[indexPath.row], true)
                 case .chat:
                     Key.shared.selectedSearchedCity_chat = geobytesCityData[indexPath.row]
                 }
