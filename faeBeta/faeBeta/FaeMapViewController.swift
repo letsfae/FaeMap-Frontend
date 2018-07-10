@@ -2043,12 +2043,13 @@ extension FaeMapViewController: MapSearchDelegate {
             tblPlaceResult.currentGroupOfPlaces = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
             tblPlaceResult.loading(current: places[0])
             let pinsToAdd = tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
-            if modeCollection == .on {
-                pinsFromCollection = pinsToAdd
-            } else {
-                pinsFromSearch = pinsToAdd
-            }
-            removePlaceUserPins({
+            let pinsToRemove = faePlacePins + pinsFromSearch + pinsFromCollection
+            removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: true) {
+                if self.modeCollection == .on {
+                    self.pinsFromCollection = pinsToAdd
+                } else {
+                    self.pinsFromSearch = pinsToAdd
+                }
                 self.addPlaceAnnotations(with: pinsToAdd, forced: true, instantly: true, {
                     self.showOrHideTableResultsExpandingIndicator(show: true, animated: true)
                     self.goTo(annotation: nil, place: first, animated: true)
@@ -2056,7 +2057,8 @@ extension FaeMapViewController: MapSearchDelegate {
                 faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
                                            places: self.tblPlaceResult.currentGroupOfPlaces,
                                            edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
-            }, nil)
+            }
+            removeUserPins()
             placeClusterManager.maxZoomLevelForClustering = 0
         } else {
             searchState = .map
