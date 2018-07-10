@@ -22,6 +22,8 @@ class LocViewMapController: BasicMapController {
         faeMapView.singleTap.isEnabled = false
         faeMapView.doubleTap.isEnabled = false
         faeMapView.longPress.isEnabled = false
+        let edgeView = LeftMarginToEnableNavGestureView()
+        view.addSubview(edgeView)
         fullyLoaded = true
     }
     
@@ -53,6 +55,13 @@ class LocViewMapController: BasicMapController {
         view.addSubview(uiviewLocationBar)
         // single pin loading, so disable its user interaction
         uiviewLocationBar.isUserInteractionEnabled = false
+        guard let coor = coordinate else {
+            return
+        }
+        let locToLoad = CLLocation(latitude: coor.latitude, longitude: coor.longitude)
+        uiviewLocationBar.updateLocationInfo(location: locToLoad) { (_, _) in
+            
+        }
     }
     
 }

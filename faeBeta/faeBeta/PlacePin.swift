@@ -32,6 +32,7 @@ class PlacePin: NSObject, FaePin {
     //var hours = [String: [String]]()
     var memo: String = ""
     var hoursJson: JSON!
+    var indexInTable: Int = 0
     lazy var hours: [String: [String]] = {
         var val = [String: [String]]()
         for (key, subJson) in hoursJson {

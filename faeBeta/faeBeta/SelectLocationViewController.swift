@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 import SwiftyJSON
-//import CCHMapClusterController
+import Alamofire
 
 // An enum type to return different geo -> address
 enum SelectLoctionMode {
@@ -58,9 +58,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             }
         }
     }
-    private var placeAdderQueue: OperationQueue = {
+    private var placePinFetchQueue: OperationQueue = {
         var queue = OperationQueue()
-        queue.name = "adder queue"
+        queue.name = "placePinFetchQueue_select_location"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
@@ -92,6 +92,26 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     public var strShownLoc: String = "Loading......"
     private var strRawLoc_board: String = ""
     private var strRawLoc_explore: String = ""
+    
+    // Place Pin Control
+    private var placePinRequests = [Int: DataRequest]()
+    private var rawPlaceJSONs = [JSON]()
+    private var placeFetchesCount = 0 {
+        didSet {
+            guard placeFetchesCount == 24 else { return }
+            doneFetchingAreaOfData()
+        }
+    }
+    private var mapViewPanningFetchesCount = 0 {
+        didSet {
+            guard mapViewPanningFetchesCount == numberOfAreasWithNoPins else { return }
+            doneFetchingAreaOfData()
+        }
+    }
+    private var numberOfAreasWithNoPins = 48
+    private var time_start: DispatchTime!
+    var point_centers = [CGPoint]()
+    var coordinates = [CLLocationCoordinate2D]()
     
     // Location Pin Control
     private var selectedLocation: FaePinAnnotation? {
@@ -164,6 +184,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadPinIcon()
         let edgeView = LeftMarginToEnableNavGestureView()
         view.addSubview(edgeView)
+        
+        initScreenPointCenters()
+        
         fullyLoaded = true
         mapView(faeMapView, regionDidChangeAnimated: true)
     }
@@ -318,6 +341,15 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                 self.mapView(self.faeMapView, regionDidChangeAnimated: true)
             }
         }
+        btnZoom.enableClusterManager = { [weak self] (enabled, isForcedRefresh) in
+            guard let `self` = self else { return }
+            self.placeClusterManager.canUpdate = enabled
+            if let shouldRefresh = isForcedRefresh {
+                self.placeClusterManager.isForcedRefresh = shouldRefresh
+                self.placeClusterManager.manuallyCallRegionDidChange()
+                self.placeClusterManager.isForcedRefresh = false
+            }
+        }
         
         faeMapView.compassOffset = 73 + device_offset_bot - device_offset_bot_main //134
         faeMapView.layoutSubviews()
@@ -450,26 +482,24 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        guard previousVC == .board || previousVC == .explore else { return }
-        guard btnSelect != nil else { return }
-        btnSelect.lblDistance.textColor = UIColor._255160160()
-        btnSelect.isUserInteractionEnabled = false
+        switch previousVC {
+        case .board, .explore:
+            guard btnSelect != nil else { return }
+            btnSelect.lblDistance.textColor = UIColor._255160160()
+            btnSelect.isUserInteractionEnabled = false
+        case .chat:
+            cancelPlacePinsFetch()
+        }
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         guard fullyLoaded else { return }
         
         chosenLocation = mapView.centerCoordinate
-//        switch previousVC {
-//        case .board:
-//            LocManager.shared.locToSearch_board = mapView.centerCoordinate
-//        case .explore:
-//            LocManager.shared.locToSearch_explore = mapView.centerCoordinate
-//        case .chat:
-//            LocManager.shared.locToSearch_chat = mapView.centerCoordinate
-//        }
         
-        calculateDistanceOffset()
+        if !isLoadingMapCenterCityInfoDisabled {
+            fetchAreaDataWhenRegionDidChange()
+        }
         
         if searchState == .multipleSearch && tblPlaceResult.altitude == 0 {
             tblPlaceResult.altitude = mapView.camera.altitude
@@ -483,31 +513,6 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         switch mode {
         case .full:
             break
-            /*
-            guard !isGeoCoding else { return }
-            guard !isLoadingMapCenterCityInfoDisabled else { return }
-            guard previousVC == .chat else { return }
-            isGeoCoding = true
-            btnSelect.indicatorStartAnimating(isOn: true)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                General.shared.getAddress(location: location) { [weak self] (status, address) in
-                    guard let `self` = self else { return }
-                    guard status != 400 else {
-                        DispatchQueue.main.async {
-                            self.lblSearchContent.text = "Querying for location too fast!"
-                        }
-                        self.btnSelect.indicatorStartAnimating(isOn: false)
-                        self.isGeoCoding = false
-                        return
-                    }
-                    guard let addr = address as? String else { return }
-                    DispatchQueue.main.async {
-                        //self.lblSearchContent.text = addr
-                        self.routeAddress = RouteAddress(name: addr, coordinate: location.coordinate)
-                    }
-                }
-            }
-             */
         case .part:
             // .chat or .explore
             guard !isGeoCoding else { return }
@@ -676,7 +681,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
                     guard let sPlace = selectedPlace else { continue }
                     if faeBeta.coordinateEqual(pin.coordinate, sPlace.coordinate) {
                         found = true
-                        anView.assignImage(pin.icon)
+                        let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
+                        anView.assignImage(icon)
                     }
                 }
                 if !found {
@@ -780,81 +786,79 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     }
     
     private func updatePlacePins() {
-        guard previousVC == .chat else { return }
-        let coorDistance = faeBeta.cameraDiagonalDistance(mapView: faeMapView)
-        fetchPlacePins(radius: coorDistance)
+        
     }
     
     private func fetchPlacePins(radius: Int) {
         guard previousVC == .chat else { return }
-        
-        func getDelay(prevTime: DispatchTime) -> Double {
-            let standardInterval: Double = 1
-            let nowTime = DispatchTime.now()
-            let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
-            var delay: Double = 0
-            if timeDiff / Double(NSEC_PER_SEC) < standardInterval {
-                delay = standardInterval - timeDiff / Double(NSEC_PER_SEC)
-            } else {
-                delay = timeDiff / Double(NSEC_PER_SEC) - standardInterval
-            }
-            return delay
-        }
-        
-        guard PLACE_FETCH_ENABLE else {
-            return
-        }
-        
-        guard boolCanUpdatePlaces else {
-            return
-        }
-        boolCanUpdatePlaces = false
-        
-        let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
-        let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
-        FaeMap.shared.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
-        FaeMap.shared.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
-        FaeMap.shared.whereKey("radius", value: "\(radius)")
-        FaeMap.shared.whereKey("type", value: "place")
-        FaeMap.shared.whereKey("max_count", value: "1000")
-        FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
-            guard let `self` = self else { return }
-            guard status / 100 == 2 else {
-                self.boolCanUpdatePlaces = true
-                return
-            }
-            guard message != nil else {
-                self.boolCanUpdatePlaces = true
-                return
-            }
-            let mapPlaceJSON = JSON(message!)
-            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
-                self.boolCanUpdatePlaces = true
-                return
-            }
-            guard mapPlaceJsonArray.count > 0 else {
-                self.boolCanUpdatePlaces = true
-                return
-            }
-            
-            self.placeAdderQueue.cancelAllOperations()
-            let adder = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
-            adder.completionBlock = {
-                DispatchQueue.main.async {
-                    if adder.isCancelled {
-                        return
-                    }
-                    guard self.PLACE_FETCH_ENABLE else { return }
-                    guard self.searchState == .map else { return }
-                    self.placeClusterManager.addAnnotations(adder.placePins, withCompletionHandler: {
-                        self.setPlacePins = self.setPlacePins.union(Set(adder.ids))
-                        self.faePlacePins += adder.placePins
-                    })
-                }
-            }
-            self.placeAdderQueue.addOperation(adder)
-            self.boolCanUpdatePlaces = true
-        }
+        startFetchingAreaData()
+//        func getDelay(prevTime: DispatchTime) -> Double {
+//            let standardInterval: Double = 1
+//            let nowTime = DispatchTime.now()
+//            let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
+//            var delay: Double = 0
+//            if timeDiff / Double(NSEC_PER_SEC) < standardInterval {
+//                delay = standardInterval - timeDiff / Double(NSEC_PER_SEC)
+//            } else {
+//                delay = timeDiff / Double(NSEC_PER_SEC) - standardInterval
+//            }
+//            return delay
+//        }
+//
+//        guard PLACE_FETCH_ENABLE else {
+//            return
+//        }
+//
+//        guard boolCanUpdatePlaces else {
+//            return
+//        }
+//        boolCanUpdatePlaces = false
+//
+//        let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
+//        let mapCenterCoordinate = faeMapView.convert(mapCenter, toCoordinateFrom: nil)
+//        FaeMap.shared.whereKey("geo_latitude", value: "\(mapCenterCoordinate.latitude)")
+//        FaeMap.shared.whereKey("geo_longitude", value: "\(mapCenterCoordinate.longitude)")
+//        FaeMap.shared.whereKey("radius", value: "\(radius)")
+//        FaeMap.shared.whereKey("type", value: "place")
+//        FaeMap.shared.whereKey("max_count", value: "1000")
+//        FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
+//            guard let `self` = self else { return }
+//            guard status / 100 == 2 else {
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//            guard message != nil else {
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//            let mapPlaceJSON = JSON(message!)
+//            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//            guard mapPlaceJsonArray.count > 0 else {
+//                self.boolCanUpdatePlaces = true
+//                return
+//            }
+//
+//            self.placePinFetchQueue.cancelAllOperations()
+//            let adder = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
+//            adder.completionBlock = {
+//                DispatchQueue.main.async {
+//                    if adder.isCancelled {
+//                        return
+//                    }
+//                    guard self.PLACE_FETCH_ENABLE else { return }
+//                    guard self.searchState == .map else { return }
+//                    self.placeClusterManager.addAnnotations(adder.placePins, withCompletionHandler: {
+//                        self.setPlacePins = self.setPlacePins.union(Set(adder.ids))
+//                        self.faePlacePins += adder.placePins
+//                    })
+//                }
+//            }
+//            self.placePinFetchQueue.addOperation(adder)
+//            self.boolCanUpdatePlaces = true
+//        }
     }
     
     // MARK: - Location Pin Managements
@@ -1207,7 +1211,10 @@ extension SelectLocationViewController {
     
     private func cancelPlacePinsFetch() {
         FaeMap.shared.placePinsRequest?.cancel()
-        //placePinFetchQueue.cancelAllOperations()
+        for (_, request) in placePinRequests {
+            request.cancel()
+        }
+        placePinFetchQueue.cancelAllOperations()
     }
     
     private func addPlaceAnnotations(with annos: [FaePinAnnotation], forced: Bool, instantly: Bool, _ completion: (() -> ())? = nil) {
@@ -1402,31 +1409,6 @@ extension SelectLocationViewController: MapSearchDelegate {
         createLocationPin(location)
     }
     
-    private func calculateDistanceOffset() {
-        DispatchQueue.global(qos: .userInitiated).async {
-            let curtMapCenter = self.faeMapView.camera.centerCoordinate
-            let point_a = MKMapPointForCoordinate(self.prevMapCenter)
-            let point_b = MKMapPointForCoordinate(curtMapCenter)
-            let distance = MKMetersBetweenMapPoints(point_a, point_b)
-            guard distance >= self.screenWidthInMeters() else { return }
-            self.prevMapCenter = curtMapCenter
-            DispatchQueue.main.async {
-                self.updatePlacePins()
-            }
-        }
-    }
-    
-    private func screenWidthInMeters() -> CLLocationDistance {
-        let cgpoint_a = CGPoint(x: 0, y: 0)
-        let cgpoint_b = CGPoint(x: screenWidth, y: 0)
-        let coor_a = faeMapView.convert(cgpoint_a, toCoordinateFrom: nil)
-        let coor_b = faeMapView.convert(cgpoint_b, toCoordinateFrom: nil)
-        let point_a = MKMapPointForCoordinate(coor_a)
-        let point_b = MKMapPointForCoordinate(coor_b)
-        let distance = MKMetersBetweenMapPoints(point_a, point_b)
-        return distance * 0.6
-    }
-    
 }
 
 extension SelectLocationViewController: MapAction {
@@ -1461,5 +1443,135 @@ extension SelectLocationViewController: MapAction {
         }
         uiviewLocationBar.hide()
         deselectAllPlaceAnnos()
+    }
+}
+
+extension SelectLocationViewController {
+    
+    func initScreenPointCenters() {
+        for i in [1,3,5,7,9,11,13,15] {
+            for j in [1,3,5] {
+                let point = CGPoint(x: screenWidth / 6 * CGFloat(j), y: screenHeight / 16 * CGFloat(i))
+                point_centers.append(point)
+            }
+        }
+    }
+    
+    func startFetchingAreaData() {
+        time_start = DispatchTime.now()
+        guard PLACE_FETCH_ENABLE else {
+            return
+        }
+        
+        guard boolCanUpdatePlaces else {
+            return
+        }
+        boolCanUpdatePlaces = false
+        placeFetchesCount = 0
+        General.shared.renewSelfLocation()
+        rawPlaceJSONs.removeAll()
+        coordinates.removeAll(keepingCapacity: true)
+        var count = 0
+        for point in point_centers {
+            let coordinate = faeMapView.convert(point, toCoordinateFrom: nil)
+            coordinates.append(coordinate)
+            fetchPlacePinsPartly(center: coordinate, number: count)
+            count += 1
+        }
+    }
+    
+    func doneFetchingAreaOfData() {
+        self.placePinFetchQueue.cancelAllOperations()
+        let fetcher = PlacePinFetcher(cluster: placeClusterManager, arrPlaceJSON: rawPlaceJSONs, idSet: setPlacePins)
+        fetcher.completionBlock = {
+            DispatchQueue.main.async { [unowned self] in
+                if fetcher.isCancelled {
+                    //joshprint("[fetchPlacePins] operation cancelled")
+                    return
+                }
+                guard self.PLACE_FETCH_ENABLE else { return }
+                guard self.searchState == .map else { return }
+                //joshprint("[fetchPlacePins] fetched")
+                self.addPlaceAnnotations(with: fetcher.placePins, forced: false, instantly: false, {
+                    self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
+                    self.faePlacePins += fetcher.placePins
+                })
+            }
+        }
+        self.placePinFetchQueue.addOperation(fetcher)
+    }
+    
+    func fetchAreaDataWhenRegionDidChange() {
+        guard PLACE_FETCH_ENABLE else { return }
+        mapViewPanningFetchesCount = 0
+        numberOfAreasWithNoPins = 0
+        General.shared.renewSelfLocation()
+        rawPlaceJSONs.removeAll()
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now()) {
+            for i in 0...23 {
+                self.fetchDataInCertainMapRect(number: i)
+            }
+        }
+    }
+    
+    func fetchPlacePinsPartly(center: CLLocationCoordinate2D, number: Int) {
+        let radius = calculateRadius(mapView: faeMapView)
+        let placeAgent = FaeMap()
+        placeAgent.whereKey("geo_latitude", value: "\(center.latitude)")
+        placeAgent.whereKey("geo_longitude", value: "\(center.longitude)")
+        placeAgent.whereKey("radius", value: "\(radius)")
+        placeAgent.whereKey("type", value: "place")
+        placeAgent.whereKey("max_count", value: "15")
+        placePinRequests[number] = placeAgent.getMapPins { [unowned self] (status, message) in
+            joshprint("No.\(number) fetched")
+            guard status / 100 == 2 else {
+                self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
+                return
+            }
+            guard message != nil else {
+                self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
+                return
+            }
+            let mapPlaceJSON = JSON(message!)
+            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
+                self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
+                return
+            }
+            guard mapPlaceJsonArray.count > 0 else {
+                self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
+                return
+            }
+            self.rawPlaceJSONs += mapPlaceJsonArray
+            self.placeFetchesCount += 1
+            self.mapViewPanningFetchesCount += 1
+        }
+    }
+    
+    func fetchDataInCertainMapRect(number: Int) {
+        var mapRect = faeMapView.visibleMapRect
+        let map_width = mapRect.size.width
+        let map_height = mapRect.size.height
+        mapRect.origin.x += Double(number % 3) * (map_width / 3)
+        mapRect.origin.y += Double(number / 3) * (map_height / 8)
+        mapRect.size.width = map_width / 3
+        mapRect.size.height = map_height / 8
+        let annos = faeMapView.annotations(in: mapRect)
+        var userAnnoFound = false
+        for anno in annos {
+            if anno is MKUserLocation {
+                userAnnoFound = true
+                break
+            }
+        }
+        guard (annos.count == 0 && !userAnnoFound) || (annos.count == 1 && userAnnoFound) else { return }
+        numberOfAreasWithNoPins += 1
+        joshprint("no annos found in area \(number)");
+        guard point_centers.count == 24 else { return }
+        let coordinate = faeMapView.convert(point_centers[number], toCoordinateFrom: nil)
+        fetchPlacePinsPartly(center: coordinate, number: number)
     }
 }

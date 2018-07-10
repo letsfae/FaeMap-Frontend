@@ -90,7 +90,7 @@ class BoardPlaceTabRightViewModel {
         var places: [PlacePin] = []
         loaded = false
         Key.shared.radius_board = 100000
-        
+        dataOffset = 0
         let placesAgent = FaeMap()
         placesAgent.whereKey("geo_latitude", value: "\(latitude)")
         placesAgent.whereKey("geo_longitude", value: "\(longitude)")
@@ -98,21 +98,22 @@ class BoardPlaceTabRightViewModel {
         placesAgent.whereKey("type", value: "place")
         placesAgent.whereKey("max_count", value: "30")
         placesAgent.getMapPins { [weak self] (status: Int, message: Any?) in
-            self?.loaded = true
+            guard let `self` = self else { return }
+            self.loaded = true
             if status / 100 != 2 || message == nil {
                 print("[loadMBPlaceInfo] status/100 != 2")
-                self?.places = []
+                self.places = []
                 return
             }
             let placeInfoJSON = JSON(message!)
             guard let placeInfo = placeInfoJSON.array else {
                 print("[loadMBPlaceInfo] fail to parse mapboard place info")
-                self?.places = []
+                self.places = []
                 return
             }
             if placeInfo.count <= 0 {
                 print("[loadMBPlaceInfo] array is nil")
-                self?.places = []
+                self.places = []
                 return
             }
             
@@ -121,7 +122,8 @@ class BoardPlaceTabRightViewModel {
                 places.append(placeData)
             }
 //            self.places.sort { $0.dis < $1.dis }
-            self?.places = places
+            self.dataOffset += places.count
+            self.places = places
         }
     }
     
@@ -163,7 +165,7 @@ class BoardPlaceTabRightViewModel {
         }
     }
     
-    func fetchMoreSearchedPlaces() {
+    func fetchMoreAllPlaces() {
         fetchMoreDataStatus?(true, "")
 //        vickyprint("fetch \(dataOffset)")
         guard loaded else { return }
@@ -172,7 +174,53 @@ class BoardPlaceTabRightViewModel {
             fetchMoreDataStatus?(true, "No more data")
             return
         }
-        
+        fetchMoreDataStatus?(false, "")
+        Key.shared.radius_board = 100000
+        let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+        let placesAgent = FaeMap()
+        placesAgent.whereKey("geo_latitude", value: "\(locToSearch.latitude)")
+        placesAgent.whereKey("geo_longitude", value: "\(locToSearch.longitude)")
+        placesAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        placesAgent.whereKey("type", value: "place")
+        placesAgent.whereKey("max_count", value: "30")
+        placesAgent.whereKey("offset", value: "\(dataOffset)")
+        searchRequest?.cancel()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.searchRequest = placesAgent.getMapPins { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
+                guard status / 100 == 2 else {
+                    self.fetchMoreDataStatus?(true, "Network error!")
+                    return
+                }
+                guard message != nil else {
+                    self.fetchMoreDataStatus?(true, "Network error!")
+                    return
+                }
+                let placeInfoJSON = JSON(message!)
+                guard let placeInfo = placeInfoJSON.array else {
+                    self.fetchMoreDataStatus?(true, "No more data")
+                    return
+                }
+                let searchPlaces = placeInfo.map({ PlacePin(json: $0) })
+                guard searchPlaces.count > 0 else {
+                    self.fetchMoreDataStatus?(true, "No more data")
+                    return
+                }
+                self.dataOffset += searchPlaces.count
+                self.places += searchPlaces
+            }
+        }
+    }
+    
+    func fetchMoreSearchedPlaces() {
+        fetchMoreDataStatus?(true, "")
+        //        vickyprint("fetch \(dataOffset)")
+        guard loaded else { return }
+        guard dataOffset >= 30 else { return }
+        guard dataOffset % 30 == 0 else {
+            fetchMoreDataStatus?(true, "No more data")
+            return
+        }
         fetchMoreDataStatus?(false, "")
         Key.shared.radius_board = 100000
         let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate

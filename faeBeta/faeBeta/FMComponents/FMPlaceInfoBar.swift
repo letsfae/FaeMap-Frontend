@@ -563,7 +563,11 @@ class PlaceView: UIView {
     }
     
     func setValueForPlace(placeInfo: PlacePin) {
-        lblName.text = placeInfo.name
+        if placeInfo.indexInTable == 0 {
+            lblName.text = placeInfo.name
+        } else {
+            lblName.text = "\(placeInfo.indexInTable). " + placeInfo.name
+        }
         if placeInfo.address1 != "" {
             lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         } else {
