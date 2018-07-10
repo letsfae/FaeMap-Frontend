@@ -22,11 +22,7 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
     
     alamoFireManager.request(URL, headers: headers)
         .responseJSON { response in
-            if response.response != nil {
-                guard let statusCode = response.response?.statusCode else {
-                    completion(-500, "", nil)
-                    return
-                }
+            if let statusCode = response.response?.statusCode {
                 if let JSON = response.response?.allHeaderFields {
                     guard var etag = JSON["Etag"] as? String else {
                         completion(statusCode, "", nil)
@@ -38,7 +34,11 @@ func getImage(fileID: Int, type: Int, isChatRoom: Bool, _ authentication: [Strin
                     completion(statusCode, "", nil)
                 }
             } else {
-                completion(-500, "", nil)
+                if case let .failure(error) = response.result {
+                    completion(error._code, error.localizedDescription, nil)
+                } else {
+                    completion(NSURLErrorBadServerResponse, "[GET image with id-\(fileID)]", nil)
+                }
             }
     }
 }

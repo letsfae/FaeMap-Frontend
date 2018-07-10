@@ -695,7 +695,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             }
 
             for pin in col["pins"].arrayValue {
-                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin["pin_id"].intValue)", Key.shared.user_id, pin["pin_id"].intValue, pin["added_at"].stringValue])
+                let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(colId)_\(pin["pin_id"].intValue)", Key.shared.user_id, colId, pin["pin_id"].intValue, pin["added_at"].stringValue])
 
                 try! realm.write {
                     realm.add(collectedPin, update: true)

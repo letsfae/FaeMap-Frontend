@@ -54,7 +54,7 @@ class RealmCollection: Object {
         dateformatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
         let added_at = dateformatter.string(from: curtDate)
         
-        let pin = CollectedPin(value: ["\(Key.shared.user_id)_\(pin_id)", Key.shared.user_id, pin_id, added_at])
+        let pin = CollectedPin(value: ["\(Key.shared.user_id)_\(collection_id)_\(pin_id)", Key.shared.user_id, collection_id, pin_id, added_at])
         
         let realm  = try! Realm()
         guard let col = realm.filterCollection(id: collection_id) else {
@@ -120,6 +120,7 @@ extension Realm {
 class CollectedPin: Object {
     @objc dynamic var primary_key: String = ""
     @objc dynamic var user_id: Int = 0
+    @objc dynamic var collection_id: Int = 0
     @objc dynamic var pin_id: Int = 0
     @objc dynamic var added_at: String = ""
     

@@ -19,7 +19,7 @@
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@""];
     NSDictionary *textAttributes = @{@"NSFontAttributeName": [UIFont fontWithName:@"AvenirNext-Regular"
-                                                                             size:16.0f],
+                                                                             size:17.5f],
                                      @"NSForegroundColorAttributeName": isOutGoing ? [UIColor whiteColor] : [UIColor _2499090]
                                      };
     int first = 0;
@@ -41,7 +41,7 @@
                         
                         NSTextAttachment *textAttachment = [[NSTextAttachment alloc] init];
                         textAttachment.image = [UIImage imageNamed:name];
-                        textAttachment.bounds = CGRectMake(0, -5, 21.5, 21);
+                        textAttachment.bounds = CGRectMake(0, -5, 23.5, 23);
                         
                         NSAttributedString *attrStringWithImage = [NSAttributedString attributedStringWithAttachment:textAttachment];
                         
@@ -71,7 +71,7 @@
     
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@""];
     NSDictionary *textAttributes = @{@"NSFontAttributeName": [UIFont fontWithName:@"AvenirNext-Regular"
-                                                                             size:16.0f]};
+                                                                             size:17.5f]};
     int first = 0;
     for (int i = 0; i < [string length] ; i++) {
         

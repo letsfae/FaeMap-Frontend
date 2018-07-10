@@ -178,11 +178,17 @@ extension ChatViewController {
                     let player = AVPlayer(url: videoURL)
                     let playerController = AVPlayerViewController()
                     playerController.player = player
+                    playerController.modalPresentationStyle = .currentContext
                     //boolGoToFullContent = true
                     boolIsDisappearing = true
                     present(playerController, animated: true) {
                         player.play()
                     }
+                    /*let player = AVPlayer(url: videoURL)
+                    let playerLayer = AVPlayerLayer(player: player)
+                    playerLayer.frame = view.bounds
+                    view.layer.addSublayer(playerLayer)
+                    player.play()*/
                 }
             }
         case "[Location]":
@@ -327,7 +333,8 @@ extension ChatViewController: NameCardDelegate {
     func reportUser(id: Int) {
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
-        present(reportPinVC, animated: true, completion: nil)
+        let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!
+        rootViewController.present(reportPinVC, animated: true, completion: nil)
     }
     
     func openAddFriendPage(userId: Int, status: FriendStatus) {
@@ -336,6 +343,7 @@ extension ChatViewController: NameCardDelegate {
         addFriendVC.userId = userId
         addFriendVC.statusMode = status
         addFriendVC.modalPresentationStyle = .overCurrentContext
-        present(addFriendVC, animated: false)
+        let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!
+        rootViewController.present(addFriendVC, animated: false)
     }    
 }

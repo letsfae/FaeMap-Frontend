@@ -221,11 +221,6 @@ class NewChatShareController: UIViewController  {
         boolShared = true
         navigationLeftItemTapped()
         for index in arrIntSelected {
-            let vcChat = ChatViewController()
-            let login_user_id = String(Key.shared.user_id)
-            vcChat.arrUserIDs.append(login_user_id)
-            vcChat.arrUserIDs.append(arrFriends[index].userID)
-            vcChat.strChatId = arrFriends[index].userID
             var type = ""
             var text = ""
             var media: Data?
@@ -235,21 +230,69 @@ class NewChatShareController: UIViewController  {
                 let arrLocationInfo = locationDetail.split(separator: ",")
                 text = "{\"latitude\":\"\(arrLocationInfo[0])\", \"longitude\":\"\(arrLocationInfo[1])\", \"address1\":\"\(arrLocationInfo[2])\", \"address2\":\"\(arrLocationInfo[3]),\(arrLocationInfo[4])\", \"address3\":\"\(arrLocationInfo[5])\", \"comment\":\"\"}"
                 media = RealmChat.compressImageToData(locationSnapImage!)
-                vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
+                //vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
+                storeMessageToRealm(with: arrFriends[index].userID, type: type, text: text, media: media)
             case .collection:
                 type = "[Collection]"
                 text = "{\"id\":\"\(collectionDetail!.collection_id)\", \"name\":\"\(collectionDetail!.name)\", \"count\":\"\(collectionDetail!.count)\", \"creator\":\"\(collectionDetail!.user_id)\"}"
-                vcChat.storeChatMessageToRealm(type: type, text: text)
+                //vcChat.storeChatMessageToRealm(type: type, text: text)
+                storeMessageToRealm(with: arrFriends[index].userID, type: type, text: text, media: media)
             case .place:
                 type = "[Place]"
-                text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1), \(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
-                downloadImage(URL: placeDetail!.imageURL) { (rawData) in
-                    guard let data = rawData else { return }
-                    media = data
-                    vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
+                if let place = placeDetail, place.address1 == "" {
+                    General.shared.updateAddress(label: UILabel(), place: place) { [weak self] address in
+                        guard let `self` = self else { return }
+                        text = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(address)\", \"imageURL\":\"\(place.imageURL)\"}"
+                        downloadImage(URL: place.imageURL) { (rawData) in
+                            guard let data = rawData else { return }
+                            media = data
+                            //vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
+                            self.storeMessageToRealm(with: self.arrFriends[index].userID, type: type, text: text, media: media)
+                        }
+                    }
+                } else {
+                    text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1), \(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
+                    downloadImage(URL: placeDetail!.imageURL) { [weak self] (rawData) in
+                        guard let `self` = self else { return }
+                        guard let data = rawData else { return }
+                        media = data
+                        //vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
+                        self.storeMessageToRealm(with: self.arrFriends[index].userID, type: type, text: text, media: media)
+                    }
                 }
             default: break
             }
+        }
+    }
+    
+    func storeMessageToRealm(with userID: String, type: String, text: String, media: Data? = nil) {
+        let login_user_id = String(Key.shared.user_id)
+        let realm = try! Realm()
+        let messages = realm.filterAllMessages(0, userID)
+        let newMessage = RealmMessage()
+        var newIndex = 0
+        if messages.count > 0 {
+            newIndex = messages.last!.index + 1
+        }
+        newMessage.setPrimaryKeyInfo(login_user_id, 0, userID, newIndex)
+        let selfUser = realm.filterUser(id: login_user_id)!
+        let shareToUser = realm.filterUser(id: userID)!
+        newMessage.sender = selfUser
+        newMessage.members.append(selfUser)
+        newMessage.members.append(shareToUser)
+        newMessage.created_at = RealmChat.dateConverter(date: Date())
+        newMessage.type = type
+        newMessage.text = text
+        if media != nil {
+            newMessage.media = media! as NSData
+        }
+        let recentRealm = RealmRecentMessage()
+        recentRealm.created_at = newMessage.created_at
+        recentRealm.unread_count = 0
+        recentRealm.setPrimaryKeyInfo(login_user_id, 0, userID)
+        try! realm.write {
+            realm.add(newMessage)
+            realm.add(recentRealm, update: true)
         }
     }
     

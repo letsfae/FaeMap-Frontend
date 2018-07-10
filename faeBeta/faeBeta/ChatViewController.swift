@@ -77,6 +77,7 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         if !isFirstLayout {
             //scrollToBottom(animated: false)
         }
+        //collectionView.becomeFirstResponder()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -97,9 +98,10 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     
     override func viewDidLayoutSubviews() {
         if isFirstLayout {
-            isFirstLayout = false
+            defer { isFirstLayout = false }
             addKeyboardObservers()
-            collectionViewBottomInset = 86
+            //collectionViewBottomInset = 86
+            collectionViewBottomInset = keyboardOffsetFrame.height
             let collectionViewContentHeight = collectionView.collectionViewLayout.collectionViewContentSize.height
             collectionView.setContentOffset(CGPoint(x: collectionView.contentOffset.x, y: collectionViewContentHeight), animated: false)
         }
@@ -288,8 +290,15 @@ extension ChatViewController: FaeInputBarDelegate, FullAlbumSelectionDelegate, S
                 let locDetail = "{\"latitude\":\"\(location.coordinate.latitude)\", \"longitude\":\"\(location.coordinate.longitude)\", \"address1\":\"\(pinView.lblLine1.text!)\", \"address2\":\"\(pinView.lblLine2.text!)\", \"address3\":\"\(pinView.lblLine3.text!)\", \"comment\":\"\(text)\"}"
                 storeChatMessageToRealm(type: "[Location]", text: locDetail, media: pinView.getImageData())
             } else if let place = pinView.placeData {
-                let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(text)\"}"
-                storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: pinView.getImageData())
+                if place.address1 == "" {
+                    General.shared.updateAddress(label: UILabel(), place: place) { [weak self] address in
+                        let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(address)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(text)\"}"
+                        self?.storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: pinView.getImageData())
+                    }
+                } else {
+                    let placeDetail = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(place.address1),\(place.address2)\", \"imageURL\":\"\(place.imageURL)\", \"comment\":\"\(text)\"}"
+                    storeChatMessageToRealm(type: "[Place]", text: placeDetail, media: pinView.getImageData())
+                }
             }
         } else {
             storeChatMessageToRealm(type: "text", text: text)

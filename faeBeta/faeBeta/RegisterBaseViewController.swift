@@ -138,8 +138,10 @@ extension RegisterBaseViewController {
     func shouldShowActivityIndicator(_ show: Bool) {
         if show {
             activityIndicator.startAnimating()
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = false
         } else {
             activityIndicator.stopAnimating()
+            navigationController?.interactivePopGestureRecognizer?.isEnabled = true
         }
         view.isUserInteractionEnabled = !show
     }
