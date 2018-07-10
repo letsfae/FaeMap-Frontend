@@ -88,7 +88,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         initPlaceRelatedData()
         
-        print("placeId \(place.id)")
+        print("placeId \(place.id), categoryID \(place.category_icon_id)")
         
         updateCategoryDictionary()
     }
