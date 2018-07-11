@@ -16,9 +16,11 @@ class GuestModeView: UIView {
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: frame)
-        self.frame = CGRect(x: 62, y: 155, w: 290, h: 380)
+        self.frame = CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight)
         loadGuestMode()
         self.layer.zPosition = 3000
+        addShadow(view: self, opa: 0.5, offset: CGSize.zero, radius: 3)
+        alpha = 0
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -26,10 +28,18 @@ class GuestModeView: UIView {
     }
     
     private func loadGuestMode() {
+        let btnDimBack = UIButton(frame: self.frame)
+        btnDimBack.backgroundColor = .lightGray
+        btnDimBack.alpha = 0.5
+        addSubview(btnDimBack)
+        btnDimBack.addTarget(self, action: #selector(actionDismiss), for: .touchUpInside)
+        
         let uiviewGuestMode = UIView(frame: CGRect(x: 0, y: 0, w: 290, h: 380))
         uiviewGuestMode.backgroundColor = UIColor.white
         uiviewGuestMode.layer.cornerRadius = 16 * screenWidthFactor
         addSubview(uiviewGuestMode)
+        uiviewGuestMode.center.x = screenWidth / 2
+        uiviewGuestMode.center.y = screenHeight / 2
         
         let lblGuestModeTitle = UILabel(frame: CGRect(x: 73, y: 27, w: 144, h: 44))
         lblGuestModeTitle.text = "You are currently in\n Guest Mode!"
@@ -45,6 +55,8 @@ class GuestModeView: UIView {
         
         let btnGuestModeLogIn = UIButton(frame: CGRect(x: 40, y: 263, w: 210, h: 40))
         btnGuestModeLogIn.setTitle("Log In", for: .normal)
+        btnGuestModeLogIn.setTitleColor(.white, for: .normal)
+        btnGuestModeLogIn.setTitleColor(.lightGray, for: .highlighted)
         btnGuestModeLogIn.layer.cornerRadius = 20 * screenWidthFactor
         btnGuestModeLogIn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
         btnGuestModeLogIn.backgroundColor = UIColor._2499090()
@@ -54,8 +66,8 @@ class GuestModeView: UIView {
         let btnGuestModeCreateAccount = UIButton(frame: CGRect(x: 40, y: 315, w: 210, h: 40))
         btnGuestModeCreateAccount.setTitle("Create a Fae Count", for: .normal)
         btnGuestModeCreateAccount.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
-        btnGuestModeCreateAccount.setTitleColor(UIColor._2499090(), for: .normal)
-        // buttonGuestCreateCount.titleLabel?.textColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0) 改变不了button title的颜色
+        btnGuestModeCreateAccount.setTitleColor(._2499090(), for: .normal)
+        btnGuestModeCreateAccount.setTitleColor(.lightGray, for: .highlighted)
         btnGuestModeCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnGuestModeCreateAccount.layer.cornerRadius = 20 * screenWidthFactor
         btnGuestModeCreateAccount.backgroundColor = UIColor.white
@@ -64,11 +76,32 @@ class GuestModeView: UIView {
         uiviewGuestMode.addSubview(btnGuestModeCreateAccount)
     }
     
+    @objc private func actionDismiss(_ sender: UIButton) {
+        print("actionDismiss")
+        dismissGuestMode?()
+    }
+    
     @objc private func actionGuestLogin(_ sender: UIButton) {
         print("guest log in")
+        guestLogin?()
     }
     
     @objc private func actionGuestCreateAccount(_ sender: UIButton) {
         print("Create an account")
+        guestRegister?()
+    }
+    
+    func show() {
+        UIView.animate(withDuration: 0.3) {
+            self.alpha = 1
+        }
+    }
+    
+    func hide(_ completion: @escaping () -> Void) {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.alpha = 0
+        }) { (_) in
+            completion()
+        }
     }
 }

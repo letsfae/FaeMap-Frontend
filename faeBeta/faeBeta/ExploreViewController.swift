@@ -71,6 +71,9 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private var USE_TEST_PLACE = false
     
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -415,6 +418,10 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
     }
     
     @objc private func actionSave(_ sender: UIButton) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         uiviewSavedList.show()
     }
     
@@ -991,6 +998,36 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         self.coordinate = address.coordinate
         self.showWaves()
         search(category: Key.shared.lastCategory_explore, indexPath: Key.shared.selectedTypeIdx_explore)
+    }
+    
+}
+
+extension ExploreViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            self?.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
     }
     
 }

@@ -271,9 +271,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
-        initScreenPointCenters()
-        
         fullyLoaded = true
+        initScreenPointCenters()
     }
     
     deinit {
@@ -315,7 +314,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             uiviewCollectionbarShadow.isHidden = modeLocation == .off
             uiviewSchbarShadow.isHidden = modeLocation != .off
-            if modeLocation != .off {
+            if modeLocation != .off || Key.shared.is_guest {
                 Key.shared.onlineStatus = 5
                 lblCollectionTitle.attributedText = nil
                 lblCollectionTitle.text = "View Location"
@@ -377,7 +376,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             
             btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
             Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
-            if mapMode == .routing || mapMode == .selecting {
+            if mapMode == .routing || mapMode == .selecting || Key.shared.is_guest {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
             } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
@@ -389,7 +388,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func getUserStatus() {
-        guard !Key.shared.is_guest else { return }
+        guard !Key.shared.is_guest else {
+            Key.shared.onlineStatus = 5
+            return
+        }
         guard let user_status = FaeCoreData.shared.readByKey("userStatus") as? Int else { return }
         Key.shared.onlineStatus = user_status
     }
@@ -1103,6 +1105,10 @@ extension FaeMapViewController {
     }
     
     @objc private func actionChatWindowShow(_ sender: UIButton) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         btnZoom.tapToSmallMode()
         uiviewNameCard.hide() {
             self.faeMapView.mapGesture(isOn: true)
@@ -1347,7 +1353,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 selfAnView = anView
             }
             anView.changeAvatar()
-            if Key.shared.onlineStatus == 5 {
+            if Key.shared.onlineStatus == 5 || Key.shared.is_guest {
                 anView.invisibleOn()
             }
             return anView
@@ -1628,6 +1634,9 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         uiviewDropUpMenu = FMDropUpMenu()
         uiviewDropUpMenu.layer.zPosition = 601
         uiviewDropUpMenu.delegate = self
+        uiviewDropUpMenu.collectionBtnBlock = { [unowned self] in
+            self.loadGuestMode()
+        }
         view.addSubview(uiviewDropUpMenu)
         let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
         panGesture_menu.require(toFail: uiviewDropUpMenu.swipeGes)
@@ -2613,6 +2622,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 navigationController?.pushViewController(vc, animated: true)
             }
         case .collect:
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             uiviewSavedList.show()
             selectedLocAnno?.optionsToNormal()
             uiviewSavedList.tableMode = mode
@@ -2633,6 +2646,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 routingPlace(place)
             }
         case .share:
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             if modeLocCreating == .on {
                 selectedLocAnno?.optionsToNormal()
                 selectedLocAnno?.hideButtons()
@@ -2793,6 +2810,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 point_centers.append(point)
             }
         }
+        mapView(faeMapView, regionDidChangeAnimated: false)
     }
     
     func startFetchingAreaData() {
@@ -3138,8 +3156,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
             }
         }
         
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
-        
+        if !Key.shared.is_guest {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+        }
         removeAllRoutes()
         btnDistIndicator.hide()
         uiviewChooseLocs.hide()
@@ -3610,20 +3629,27 @@ extension FaeMapViewController {
     private func loadGuestMode() {
         uiviewGuestMode = GuestModeView()
         view.addSubview(uiviewGuestMode)
-        uiviewGuestMode.dismissGuestMode = {
-            
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [unowned self] in
+            self.removeGuestMode()
         }
-        uiviewGuestMode.guestLogin = {
-            
+        uiviewGuestMode.guestLogin = { [unowned self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
         }
-        uiviewGuestMode.guestRegister = {
-            
+        uiviewGuestMode.guestRegister = { [unowned self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
         }
     }
     
     private func removeGuestMode() {
         guard uiviewGuestMode != nil else { return }
-        uiviewGuestMode.removeFromSuperview()
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
     }
     
 }

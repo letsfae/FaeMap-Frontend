@@ -50,6 +50,9 @@ class AllPlacesMapController: BasicMapController {
     
     static var isBackToLastPlaceDetailVCEnabled: Bool = true
     
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -309,6 +312,7 @@ class AllPlacesMapController: BasicMapController {
     }
     
     private func deselectAllLocAnnos() {
+        guard enterMode == .location else { return }
         uiviewLocationBar.hide()
         uiviewPinActionDisplay.hide()
         uiviewSavedList.arrListSavedThisPin.removeAll()
@@ -443,6 +447,11 @@ extension AllPlacesMapController: PlacePinAnnotationDelegate {
                 
             }
         case .collect:
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                uiviewPinActionDisplay.hide()
+                return
+            }
             uiviewSavedList.show()
             uiviewSavedList.tableMode = mode
             uiviewSavedList.tblAddCollection.reloadData()
@@ -461,6 +470,11 @@ extension AllPlacesMapController: PlacePinAnnotationDelegate {
                 
             }
         case .share:
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                uiviewPinActionDisplay.hide()
+                return
+            }
             guard let placeData = selectedPlace?.pinInfo as? PlacePin else { return }
             selectedPlaceAnno?.hideButtons()
             let vcSharePlace = NewChatShareController(friendListMode: .place)
@@ -591,4 +605,34 @@ extension AllPlacesMapController: MapAction {
         deselectAllPlaceAnnos(full: true)
         deselectAllLocAnnos()
     }
+}
+
+extension AllPlacesMapController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            self?.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
+    }
+    
 }

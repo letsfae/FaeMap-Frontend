@@ -75,6 +75,9 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     public var enterMode: EnterPlaceLocDetailMode!
     public var boolCreated: Bool = false
     
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -348,6 +351,10 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     }
     
     @objc private func saveThisPin() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         print("locDetail \(locationId)")
         func showCollections() {
             uiviewSavedList.tableMode = .location
@@ -382,6 +389,10 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     }
     
     @objc private func shareThisPin() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let vcShareLoc = NewChatShareController(friendListMode: .location)
         AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { [weak self] (snapShotImage) in
             guard let `self` = self else { return }
@@ -518,3 +529,34 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
 //        delegateSeeAll?.jumpToAllPlaces(places: viewModelNearby)
     }
 }
+
+extension LocDetailViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            self?.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
+    }
+    
+}
+

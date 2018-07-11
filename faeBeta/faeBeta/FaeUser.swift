@@ -486,13 +486,14 @@ class FaeUser: NSObject {
                 let messageJSON = JSON(mes)
                 let str = messageJSON["token"].stringValue
                 let session = messageJSON["session_id"].intValue
-                let authentication = "\(-1)\(str):\(session)"
+                let authentication = "\(-1):\(str):\(session)"
                 
                 let utf8str = authentication.data(using: String.Encoding.utf8)
                 let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
                 let encode = "FAE " + base64Encoded
                 Key.shared.userTokenEncode_guest = encode
                 Key.shared.is_guest = true
+                print("guest token:", encode)
                 completion(status, message)
             } else {
                 completion(status, message)

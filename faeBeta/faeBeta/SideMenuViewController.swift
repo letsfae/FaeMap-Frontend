@@ -55,11 +55,15 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
     private var end: CGFloat = 0
     private var percent: Double = 0
     public var displayName = ""
+    private var panGes: UIPanGestureRecognizer!
     // End of pan gesture var
     
     var activityIndicator: UIActivityIndicatorView!
     private var tableSelections: TableSelctions = .none
     private var fullLoaded = false
+    
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -71,8 +75,8 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
         fullLoaded = true
         DispatchQueue.main.async {
             self.loadLeftWindow()
-            let draggingGesture = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
-            self.view.addGestureRecognizer(draggingGesture)
+            self.panGes = UIPanGestureRecognizer(target: self, action: #selector(self.panActionCommentPinDetailDrag(_:)))
+            self.view.addGestureRecognizer(self.panGes)
             self.loadUserInfo()
             self.loadActivityIndicator()
             UIView.animate(withDuration: 0.3, animations: {
@@ -139,6 +143,9 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
         lblNickName.center.x = 145
         lblNickName.textAlignment = .center
         uiviewLeftWindow.addSubview(lblNickName)
+        if Key.shared.is_guest {
+            lblNickName.text = "Guest"
+        }
         
         imgLeftSlideMiddle = UIImageView(frame: CGRect(x: 0, y: 152, width: 290, height: 108))
         imgLeftSlideMiddle.image = #imageLiteral(resourceName: "leftMenuCloud")
@@ -197,19 +204,39 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
             actionCloseMenu(btnBackground)
         } else if indexPath.row == 1 {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             tableSelections = .goInvisible
             cell.switchRight.setOn(!cell.switchRight.isOn, animated: true)
             invisibleSwitch(cell.switchRight)
         } else if indexPath.row == 2 {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             tableSelections = .contacts
             actionCloseMenu(btnBackground)
         } else if indexPath.row == 3 {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             tableSelections = .collections
             actionCloseMenu(btnBackground)
         } else if indexPath.row == 4 {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             tableSelections = .moodAvatar
             actionCloseMenu(btnBackground)
         } else if indexPath.row == 5 {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             tableSelections = .settings
             actionCloseMenu(btnBackground)
         }
@@ -307,6 +334,10 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     @objc func actionAvatarClick() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         SetAvatar.addUserImage(vc: self, type: "sideMenu")
     }
     
@@ -315,6 +346,11 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
         actionCloseMenu(btnBackground)
     }
     @objc func invisibleSwitch(_ sender: UISwitch) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            sender.setOn(true, animated: true)
+            return
+        }
         if sender.isOn {
             FaeUser.shared.whereKey("status", value: "5")
             FaeUser.shared.setSelfStatus({ status, _ in
@@ -406,4 +442,36 @@ extension SideMenuViewController: UIImagePickerControllerDelegate, UINavigationC
             self.imgAvatar.image = image
         }
     }
+}
+
+extension SideMenuViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        panGes.isEnabled = false
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            self?.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        panGes.isEnabled = true
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
+    }
+    
 }
