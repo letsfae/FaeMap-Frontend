@@ -211,15 +211,13 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         joshprint("Radius:", radius)
         flagPlaceFetched = false
         let searchAgent = FaeSearch()
-        let sort = source == "name" ? [["_score": "desc"], ["geo_location": "asc"]] : [["geo_location": "asc"]]
-        
         searchAgent.whereKey("content", value: content)
         searchAgent.whereKey("source", value: source)
         searchAgent.whereKey("type", value: "place")
         searchAgent.whereKey("size", value: "20")
         searchAgent.whereKey("radius", value: "\(radius)")
         searchAgent.whereKey("offset", value: "0")
-        searchAgent.whereKey("sort", value: sort)
+        searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                  "longitude": locationToSearch.longitude])
         searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in

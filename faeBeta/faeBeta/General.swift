@@ -101,51 +101,29 @@ class General: NSObject {
     }
     
     func updateAddress(label: UILabel, place: PlacePin, full: Bool = true, complete: ((String) -> Void)? = nil) {
-        if full {
-            if let addressFromCache = addressCache.object(forKey: place.id as AnyObject) as? String {
-                label.text = addressFromCache
-                complete?(addressFromCache)
+        let key = full ? "\(place.id)" : "\(place.id)exp"
+        
+        if let addressFromCache = addressCache.object(forKey: key as AnyObject) as? String {
+            label.text = addressFromCache
+            complete?(addressFromCache)
+            return
+        }
+        
+        label.text = "loading..."
+        convertCoordinateToAddress(coordinate: place.coordinate, full: full) { (result) in
+            if let error = result as? Error {
+                label.text = place.address2
+                print(error.localizedDescription)
+                complete?("")
                 return
             }
-            
-            label.text = place.address2
-            convertCoordinateToAddress(coordinate: place.coordinate) { (result) in
-                if let error = result as? Error {
-                    print(error.localizedDescription)
-                    complete?("")
-                    return
+            if let address = result as? String {
+                DispatchQueue.main.async {
+                    label.text = address
                 }
-                if let address = result as? String {
-                    DispatchQueue.main.async {
-                        label.text = address
-                    }
-                    self.addressCache.setObject(address as AnyObject, forKey: place.id as AnyObject)
-                    complete?(address)
-                    return
-                }
-            }
-        } else {
-            if let addressFromCache = addressCache.object(forKey: "\(place.id)exp" as AnyObject) as? String {
-                label.text = addressFromCache
-                complete?(addressFromCache)
+                self.addressCache.setObject(address as AnyObject, forKey: key as AnyObject)
+                complete?(address)
                 return
-            }
-            
-            label.text = place.address2
-            convertCoordinateToAddress(coordinate: place.coordinate, full: full) { (result) in
-                if let error = result as? Error {
-                    print(error.localizedDescription)
-                    complete?("")
-                    return
-                }
-                if let address = result as? String {
-                    DispatchQueue.main.async {
-                        label.text = address
-                    }
-                    self.addressCache.setObject(address as AnyObject, forKey: "\(place.id)exp" as AnyObject)
-                    complete?(address)
-                    return
-                }
             }
         }
     }
@@ -153,6 +131,7 @@ class General: NSObject {
     private func convertCoordinateToAddress(coordinate: CLLocationCoordinate2D, full: Bool = true, completion: @escaping (Any?) -> Void) {
         
         let geocoder = GMSGeocoder()
+        geocoder.accessibilityLanguage = "en-US"
         geocoder.reverseGeocodeCoordinate(coordinate) { (response, error) in
             if let err = error {
                 print(err.localizedDescription)

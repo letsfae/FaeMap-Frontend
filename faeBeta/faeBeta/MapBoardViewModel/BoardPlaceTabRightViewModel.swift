@@ -129,7 +129,6 @@ class BoardPlaceTabRightViewModel {
     
     func searchByCategories(content: String, source: String = "categories", latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         var places: [PlacePin] = []
-        let sort = source == "name" ? [["_score": "desc"], ["geo_location": "asc"]] : [["geo_location": "asc"]]
         loaded = false
         Key.shared.searchContent_board = content
         Key.shared.searchSource_board = source
@@ -142,7 +141,7 @@ class BoardPlaceTabRightViewModel {
         searchAgent.whereKey("size", value: "30")
         searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
         searchAgent.whereKey("offset", value: "0")
-        searchAgent.whereKey("sort", value: sort)
+        searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": latitude,
                                                  "longitude": longitude])
         searchRequest?.cancel()
@@ -232,7 +231,7 @@ class BoardPlaceTabRightViewModel {
         searchAgent.whereKey("size", value: "30")
         searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
         searchAgent.whereKey("offset", value: "\(dataOffset)")
-        searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+        searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locToSearch.latitude,
                                                  "longitude": locToSearch.longitude])
         searchRequest?.cancel()

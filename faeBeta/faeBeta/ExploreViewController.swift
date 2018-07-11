@@ -849,7 +849,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "500000")
             searchAgent.whereKey("offset", value: "0")
-            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                      "longitude": locationToSearch.longitude])
             self.requests[category] = searchAgent.search { [weak self] (status: Int, message: Any?) in

@@ -83,7 +83,7 @@ extension MapBoardViewController: SelectLocationDelegate {
             locationChanged = true
         }
         
-        if fromCategory || Category.shared.categories[searchText] != nil {
+        if fromCategory {
             let categoryChanged = searchText != viewModelPlaces.category
 //            vickyprint("searchText \(searchText) viewModelPlaces.category \(viewModelPlaces.category)")
 //            vickyprint("categoryChanged \(categoryChanged) locationChanged \(locationChanged)")

@@ -53,15 +53,122 @@ class Category {
     let base: Double = 1.0, factor: Double = 0.5
     var level1 = "", level2 = "", level3 = "", level4 = ""
     let shortcutMenu = ["Restaurant", "Bar", "Pizza Place", "Coffee Shop", "Park", "Hotel", "Fast Food Restaurant", "Beer Bar", "Cosmetics Shop", "Gym / Fitness Center", "Grocery Store", "Pharmacy"]
+    var class12 = [String: Set<String>]()
+    var class23 = [String: Set<String>]()
+    var class34 = [String: Set<String>]()
+    var class4 = Set<String>()
     
     init() {
+        parseCategoriesCSV()
+        
         let myDict = realm.filterMyCatDict()
         if myDict.isEmpty {
             writeDefault()
         }
+        
         buildTree()
         // print tree
 //        vickyprint(root.description)
+        
+    }
+    
+    private func parseCategoriesCSV() {
+        func cleanRows(file: String)->String{
+            var cleanFile = file
+            cleanFile = cleanFile.replacingOccurrences(of: "\r", with: "\n")
+            cleanFile = cleanFile.replacingOccurrences(of: "\n\n", with: "\n")
+            return cleanFile
+        }
+        
+        guard let filepath = Bundle.main.path(forResource: "Categories", ofType: "csv") else {
+            print("Categories.csv File does not exist")
+            return
+        }
+        
+        do {
+            var data = try String(contentsOfFile: filepath, encoding: String.Encoding.utf8)
+            data = cleanRows(file: data)
+            let rows = data.components(separatedBy: "\n")
+            
+            for rowIdx in 0..<rows.count {
+                if rowIdx == 0 {
+                    continue
+                }
+                let cols = rows[rowIdx].components(separatedBy: ",")
+                if cols.count != 8 {
+                    print("Format Error: cols \(cols)")
+                    continue
+                }
+                
+                let class_1 = cols[0].trimmingCharacters(in: .whitespaces)
+                let class_2 = cols[2].trimmingCharacters(in: .whitespaces)
+                let class_3 = cols[4].trimmingCharacters(in: .whitespaces)
+                let class_4 = cols[6].trimmingCharacters(in: .whitespaces)
+                
+                if class_1 == "" {
+                    continue
+                }
+                if class12[class_1] == nil {
+                    class12[class_1] = Set<String>()
+                }
+                if class_2 == "" {
+                    continue
+                }
+                
+                class12[class_1]!.insert(class_2)
+                
+                
+                if class23[class_2] == nil {
+                    class23[class_2] = Set<String>()
+                }
+                if class_3 == "" {
+                    continue
+                }
+                
+                class23[class_2]!.insert(class_3)
+                
+                if class34[class_3] == nil {
+                    class34[class_3] = Set<String>()
+                }
+                
+                if class_4 == "" {
+                    continue
+                }
+                class34[class_3]!.insert(class_4)
+                
+                class4.insert(class_4)
+                
+            }
+            
+//            print("class12 \(class12)")
+//            print("data \(data)")
+            
+//            for (key, val) in class12 {
+//                if class1_to_2[key] == nil {
+//                    print("class12 \(key)")
+//                } else {
+//                    let sub1 = val.subtracting(class1_to_2[key]!)
+//                    let sub2 = class1_to_2[key]!.subtracting(val)
+//                    print("class12 \(key) \(sub1) \(sub2)")
+//                }
+//            }
+            
+//            for (key, val) in class23 {
+//                if class2_to_3[key] == nil {
+//                    print("class23 \(key)")
+//                } else {
+//                    let sub1 = val.subtracting(class2_to_3[key]!)
+//                    let sub2 = class2_to_3[key]!.subtracting(val)
+//                    print("class23 \(key) \(sub1) \(sub2)")
+//                }
+//            }
+            
+        } catch let err as NSError {
+            print("File Read Error for file \(filepath). Error: \(err)")
+            return
+        }
+        
+        
     }
     
     private func writeDefault() {
@@ -104,7 +211,7 @@ class Category {
 //        vickyprint(realmCategory)
     }
     
-    func buildTree() {
+    private func buildTree() {
         for (class1, class2_set) in class1_to_2 {
             let class1_node = Node(class1)
             level1_set.insert(class1_node)
@@ -130,7 +237,7 @@ class Category {
         }
     }
     
-    func searchNode(_ level: Set<Node>, _ value: String) -> Node? {
+    private func searchNode(_ level: Set<Node>, _ value: String) -> Node? {
         for node in level {
             if node.value == value {
                 return node

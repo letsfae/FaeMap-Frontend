@@ -120,7 +120,7 @@ class BoardPlaceTabLeftViewModel {
             FaeSearch.shared.whereKey("size", value: "15")
             FaeSearch.shared.whereKey("radius", value: "100000")
             FaeSearch.shared.whereKey("offset", value: "0")
-            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+            FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
                                                           "longitude": longitude])
             FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)

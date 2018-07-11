@@ -1311,7 +1311,7 @@ extension SelectLocationViewController: MapSearchDelegate {
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "\(Key.shared.radius_chat)")
             searchAgent.whereKey("offset", value: "0")
-            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                      "longitude": locationToSearch.longitude])
             searchAgent.search { [unowned self] (status: Int, message: Any?) in

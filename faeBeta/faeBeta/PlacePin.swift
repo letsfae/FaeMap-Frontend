@@ -57,20 +57,6 @@ class PlacePin: NSObject, FaePin {
         return val
     }()
     
-    lazy var address: String = {
-        var res_addr = ""
-//        General.shared.getAddress(location: loc_coordinate) { (status, address) in
-//            guard status != 400 else {
-//                return
-//            }
-//            if let addr = address as? String {
-//                print("placepin \(addr)")
-//                res_addr = addr
-//            }
-//        }
-        return res_addr
-    }()
-    
     init(json: JSON) {
         id = json["place_id"].intValue
         name = json["name"].stringValue
@@ -143,20 +129,6 @@ class PlacePin: NSObject, FaePin {
         super.init()
     }
     
-    func getAddress(json: JSON) -> String {
-        var res_address: String = ""
-        General.shared.getAddress(location: CLLocation(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)) { (status, address) in
-            //                guard let `self` = self else { return }
-            guard status != 400 else {
-                return
-            }
-            if let addr = address as? String {
-                res_address = addr
-            }
-        }
-        return res_address
-    }
-    
     private func processHours(day: String, hour: JSON) -> [String: [String]] {
         var dayDict = [String: [String]]()
         
@@ -170,7 +142,7 @@ class PlacePin: NSObject, FaePin {
                     dayDict[d] = list
                 } else if hour.array != nil {
                     for h in hour.arrayValue {
-                        if h != "" && h.stringValue != "" {
+                        if h != "" && h.stringValue != "" && h.stringValue != "None" {
                             list.append(h.stringValue)
                             dayDict[d] = list
                         }
@@ -190,7 +162,7 @@ class PlacePin: NSObject, FaePin {
                         dayDict[d] = list
                     } else if hour.array != nil {
                         for h in hour.arrayValue {
-                            if h != "" && h.stringValue != "" {
+                            if h != "" && h.stringValue != "" && h.stringValue != "None" {
                                 list.append(h.stringValue)
                                 dayDict[d] = list
                             }
