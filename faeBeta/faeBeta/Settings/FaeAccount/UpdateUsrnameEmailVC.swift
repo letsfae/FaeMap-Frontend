@@ -261,6 +261,9 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     
     @objc private func actionYes(_ sender: UIButton) {
         animationHideView()
+        let vc = SetUpdateAccountViewController()
+        vc.enterMode = .password
+        vc.pswdEnterMode = .other
     }
 
     @objc private func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
