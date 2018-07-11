@@ -170,6 +170,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var uiviewLocationBar: FMLocationInfoBar!
     private var locationPinClusterManager: CCHMapClusterController!
     
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
+    
     // Chat
     private let faeChat = FaeChat()
     private let faePush = FaePush()
@@ -386,11 +389,13 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func getUserStatus() {
+        guard !Key.shared.is_guest else { return }
         guard let user_status = FaeCoreData.shared.readByKey("userStatus") as? Int else { return }
         Key.shared.onlineStatus = user_status
     }
 
     private func updateSelfInfo() {
+        guard !Key.shared.is_guest else { return }
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
             updateNickName.getSelfNamecard { [unowned self] (status: Int, message: Any?) in
@@ -412,6 +417,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func checkDisplayNameExisitency() {
+        guard !Key.shared.is_guest else { return }
         faeMapView.showsUserLocation = false
         getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
@@ -431,6 +437,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func loadUserSettingsFromCloud() {
+        guard !Key.shared.is_guest else { return }
         FaeUser.shared.getUserSettings { (status, message) in
             guard status / 100 == 2 else { return }
             guard let results = message else { return }
@@ -443,6 +450,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func isUserLoggedIn() {
+        guard !Key.shared.is_guest else { return }
         FaeCoreData.shared.readLogInfo()
         if Key.shared.is_Login == false {
             jumpToWelcomeView(animated: false)
@@ -450,6 +458,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func updateGenderAge() {
+        guard !Key.shared.is_guest else { return }
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
@@ -465,6 +474,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(fetchUserPins), userInfo: nil, repeats: true)
+        guard !Key.shared.is_guest else { return }
         timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(syncMessagesFromServer), userInfo: nil, repeats: true)
     }
     
@@ -706,6 +716,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func initUserDataFromServer() {
+        guard !Key.shared.is_guest else { return }
         storeRealmCollectionFromServer()
         ContactsViewController.loadFriendsList()
         ContactsViewController.loadReceivedFriendRequests()
@@ -715,6 +726,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc private func syncMessagesFromServer() {
         //faeChat.getMessageFromServer()
         //self.faeChat.getMessageFromServer()
+        guard !Key.shared.is_guest else { return }
         faePush.getSync { [unowned self] (status, message) in
             if status / 2 == 100 {
                 let messageJSON = JSON(message!)
@@ -3326,58 +3338,6 @@ extension FaeMapViewController {
     }
 }
 
-// MARK: - Guest Mode
-
-extension FaeMapViewController {
-    
-    private func guestMode() {
-        let uiViewGuestMode = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
-        uiViewGuestMode.backgroundColor = UIColor.white
-        uiViewGuestMode.layer.cornerRadius = 16 * screenWidthFactor
-        self.view.addSubview(uiViewGuestMode)
-        
-        let labelTitleGuest = UILabel(frame: CGRect(x: 73, y: 27, w: 144, h: 44))
-        labelTitleGuest.text = "You are currently in\n Guest Mode!"
-        labelTitleGuest.numberOfLines = 0
-        labelTitleGuest.textAlignment = .center
-        labelTitleGuest.textColor = UIColor._898989()
-        labelTitleGuest.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenWidthFactor)
-        uiViewGuestMode.addSubview(labelTitleGuest)
-        
-        let imageAvatarGuest = UIImageView(frame: CGRect(x: 55, y: 101, w: 180, h: 139))
-        imageAvatarGuest.image = UIImage(named: "GuestMode")
-        uiViewGuestMode.addSubview(imageAvatarGuest)
-        
-        let buttonGuestLogIn = UIButton(frame: CGRect(x: 40, y: 263, w: 210, h: 40))
-        buttonGuestLogIn.setTitle("Log In", for: .normal)
-        buttonGuestLogIn.layer.cornerRadius = 20 * screenWidthFactor
-        buttonGuestLogIn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
-        buttonGuestLogIn.backgroundColor = UIColor._2499090()
-        buttonGuestLogIn.addTarget(self, action: #selector(buttonGuestLogInClicked(_:)), for: .touchUpInside)
-        uiViewGuestMode.addSubview(buttonGuestLogIn)
-        
-        let buttonGuestCreateCount = UIButton(frame: CGRect(x: 40, y: 315, w: 210, h: 40))
-        buttonGuestCreateCount.setTitle("Create a Fae Count", for: .normal)
-        buttonGuestCreateCount.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
-        buttonGuestCreateCount.setTitleColor(UIColor._2499090(), for: .normal)
-        // buttonGuestCreateCount.titleLabel?.textColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0) 改变不了button title的颜色
-        buttonGuestCreateCount.layer.borderColor = UIColor._2499090().cgColor
-        buttonGuestCreateCount.layer.cornerRadius = 20 * screenWidthFactor
-        buttonGuestCreateCount.backgroundColor = UIColor.white
-        buttonGuestCreateCount.layer.borderWidth = 2.5
-        buttonGuestCreateCount.addTarget(self, action: #selector(buttonGuestCreateCountClicked(_:)), for: .touchUpInside)
-        uiViewGuestMode.addSubview(buttonGuestCreateCount)
-    }
-    
-    @objc private func buttonGuestLogInClicked(_ sender: UIButton) {
-        print("guest log in")
-    }
-    
-    @objc private func buttonGuestCreateCountClicked(_ sender: UIButton) {
-        print("Create an account")
-    }
-}
-
 // MARK: - Location Pin
 
 extension FaeMapViewController {
@@ -3643,4 +3603,27 @@ extension FaeMapViewController: MapAction {
         uiviewDropUpMenu.hide()
         btnDropUpMenu.isSelected = false
     }
+}
+
+extension FaeMapViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.dismissGuestMode = {
+            
+        }
+        uiviewGuestMode.guestLogin = {
+            
+        }
+        uiviewGuestMode.guestRegister = {
+            
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.removeFromSuperview()
+    }
+    
 }

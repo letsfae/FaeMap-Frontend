@@ -78,6 +78,7 @@
 		50909F8120D9825C00FB1887 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50909F8020D9825C00FB1887 /* Defaults.swift */; };
 		50995E341FA644D20079E820 /* MSVSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50995E331FA644D20079E820 /* MSVSearchBar.swift */; };
 		50A12D551F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */; };
+		50A9150220F57EB4002A085F /* GuestModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9150120F57EB4002A085F /* GuestModeView.swift */; };
 		50A9A5CA20AE2A2B00ACF689 /* AllPlacesMapController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */; };
 		50A9DCE820169DEB00A721CC /* LaunchLoadingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */; };
 		50A9FBB220BDD3D900171ADB /* MapPinCollections.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A9FBB020BDD3D900171ADB /* MapPinCollections.swift */; };
@@ -453,6 +454,7 @@
 		50909F8020D9825C00FB1887 /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		50995E331FA644D20079E820 /* MSVSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MSVSearchBar.swift; sourceTree = "<group>"; };
 		50A12D541F44CE83005821CB /* FMPlaceActionBtn+FMDistIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FMPlaceActionBtn+FMDistIndicator.swift"; sourceTree = "<group>"; };
+		50A9150120F57EB4002A085F /* GuestModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuestModeView.swift; sourceTree = "<group>"; };
 		50A9A5C920AE2A2B00ACF689 /* AllPlacesMapController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllPlacesMapController.swift; sourceTree = "<group>"; };
 		50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchLoadingController.swift; sourceTree = "<group>"; };
 		50A9FBB020BDD3D900171ADB /* MapPinCollections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPinCollections.swift; sourceTree = "<group>"; };
@@ -933,6 +935,14 @@
 			name = MapBoardViewModels;
 			sourceTree = "<group>";
 		};
+		50A9150020F57EA0002A085F /* GuestMode */ = {
+			isa = PBXGroup;
+			children = (
+				50A9150120F57EB4002A085F /* GuestModeView.swift */,
+			);
+			name = GuestMode;
+			sourceTree = "<group>";
+		};
 		50B45C611FAAFDF2001B5EE8 /* PlugIns */ = {
 			isa = PBXGroup;
 			children = (
@@ -1275,6 +1285,7 @@
 		B0A2AC971CE3A3C7002E0C9D /* faeBeta */ = {
 			isa = PBXGroup;
 			children = (
+				50A9150020F57EA0002A085F /* GuestMode */,
 				86239F661D9726DD00ACF789 /* faeBeta.entitlements */,
 				B0A2AC981CE3A3C7002E0C9D /* AppDelegate.swift */,
 				50A9DCE720169DEB00A721CC /* LaunchLoadingController.swift */,
@@ -2285,6 +2296,7 @@
 				B064EF1F1D6E363F00C078F5 /* WelcomeImageContainerViewController.swift in Sources */,
 				B39C1E411F6DD6F70075CF59 /* CountryCodeCell.swift in Sources */,
 				9FD16C1E206BC9720005ED86 /* BlockListVC.swift in Sources */,
+				50A9150220F57EB4002A085F /* GuestModeView.swift in Sources */,
 				DC74CE221DA831B9001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.m in Sources */,
 				B0CFC9A61CED344200EC356A /* HTTPClient.swift in Sources */,
 				B0714E181D62534A00356705 /* LogInViewController.swift in Sources */,

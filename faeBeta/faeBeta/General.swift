@@ -363,6 +363,7 @@ class General: NSObject {
     }
     
     public func renewSelfLocation() {
+        guard !Key.shared.is_guest else { return }
         DispatchQueue.global(qos: .default).async {
             guard CLLocationManager.locationServicesEnabled() else { return }
             switch CLLocationManager.authorizationStatus() {

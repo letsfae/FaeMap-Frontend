@@ -30,6 +30,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         setupImageContainerPageViewController()
         setupBottomPart()
         addObservers()
+        view.bringSubview(toFront: btnLookAround)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,6 +92,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLookAround.center.x = screenWidth / 2
         btnLookAround.setTitle("Look Around", for: .normal)
         btnLookAround.setTitleColor(UIColor._2499090(), for: .normal)
+        btnLookAround.setTitleColor(UIColor.lightGray, for: .highlighted)
         btnLookAround.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16)
         btnLookAround.addTarget(self, action: #selector(actionLookAround(_:)), for: .touchUpInside)
         view.insertSubview(btnLookAround, at: 0)
@@ -179,8 +181,23 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     }
     
     @objc private func actionLookAround(_ sender: UIButton) {
-        //        let vc = ()
-        //        navigationController?.pushViewController(vc, animated: true)
+        let userAgent = FaeUser()
+        userAgent.loginAsGuest { [weak self] (status, message) in
+            guard let `self` = self else { return }
+            guard status / 100 == 2 else {
+                showAlert(title: "Login As Guest Failed", message: "please try again later", viewCtrler: self)
+                return
+            }
+            if let result = message as? String {
+                if result == "no message" {
+                    showAlert(title: "Login As Guest Failed", message: "please try again later", viewCtrler: self)
+                    return
+                }
+            }
+            let vcRoot = InitialPageController()
+            Key.shared.navOpenMode = .mapFirst
+            self.navigationController?.setViewControllers([vcRoot], animated: false)
+        }
     }
 
     // MARK: - UIPageViewController delegate & dataSource
