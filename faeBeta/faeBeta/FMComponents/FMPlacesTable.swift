@@ -170,14 +170,13 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         guard self.dataOffset % 20 == 0 else { return }
         let searchAgent = FaeSearch()
-        let sort = searchSource == "name" ? [["_score": "desc"], ["geo_location": "asc"]] : [["geo_location": "asc"]]
         searchAgent.whereKey("content", value: searchContent)
         searchAgent.whereKey("source", value: searchSource)
         searchAgent.whereKey("type", value: "place")
         searchAgent.whereKey("size", value: "20")
         searchAgent.whereKey("radius", value: "\(radius)")
         searchAgent.whereKey("offset", value: "\(dataOffset)")
-        searchAgent.whereKey("sort", value: sort)
+        searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                  "longitude": locationToSearch.longitude])
         request = searchAgent.search { [weak self] (status: Int, message: Any?) in

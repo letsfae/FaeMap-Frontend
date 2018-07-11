@@ -131,6 +131,7 @@ class General: NSObject {
     private func convertCoordinateToAddress(coordinate: CLLocationCoordinate2D, full: Bool = true, completion: @escaping (Any?) -> Void) {
         
         let geocoder = GMSGeocoder()
+        geocoder.accessibilityLanguage = "en-US"
         geocoder.reverseGeocodeCoordinate(coordinate) { (response, error) in
             if let err = error {
                 print(err.localizedDescription)
