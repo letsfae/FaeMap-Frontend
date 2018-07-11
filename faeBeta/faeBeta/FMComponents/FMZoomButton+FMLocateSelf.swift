@@ -21,7 +21,7 @@ class FMZoomButton: UIButton {
     private var gesLongPress: UILongPressGestureRecognizer!
     private var gesPan: UIPanGestureRecognizer!
     private var prevRotation: CLLocationDirection!
-    
+    var enableClusterManager: ((Bool, Bool?) -> ())?
     var disableMapViewDidChange: ((Bool) -> ())?
     
     override init(frame: CGRect = .zero) {
@@ -46,24 +46,13 @@ class FMZoomButton: UIButton {
             prevRegion = mapView.region
             prevRotation = mapView.camera.heading
             guard prevRegion != nil else { return }
-            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = false
-            Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
+            enableClusterManager?(false, nil)
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             disableMapViewDidChange?(false)
             smallMode()
             if Key.shared.autoCycle {
-                Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
-                Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
-                
-                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
-                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
-                
-                Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-                Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
-                
-                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
-                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
+                enableClusterManager?(true, multiplier > 0)
             }
         } else if sender.state == .changed {
             let point = sender.location(in: self)
@@ -79,28 +68,12 @@ class FMZoomButton: UIButton {
             prevRegion = mapView.region
             prevRotation = mapView.camera.heading
             guard prevRegion != nil else { return }
-            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = false
-            Key.shared.FMVCtrler?.userClusterManager.canUpdate = false
+            enableClusterManager?(false, nil)
             prev_y = sender.location(in: self).y
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
-            // previous version before 05/29/18
-//            Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
-//            Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
-//            Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-//            Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
             disableMapViewDidChange?(false)
             if Key.shared.autoCycle {
-                Key.shared.FMVCtrler?.placeClusterManager.canUpdate = true
-                Key.shared.FMVCtrler?.userClusterManager.canUpdate = true
-                
-                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = multiplier > 0
-                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = multiplier > 0
-                
-                Key.shared.FMVCtrler?.placeClusterManager.manuallyCallRegionDidChange()
-                Key.shared.FMVCtrler?.userClusterManager.manuallyCallRegionDidChange()
-                
-                Key.shared.FMVCtrler?.placeClusterManager.isForcedRefresh = false
-                Key.shared.FMVCtrler?.userClusterManager.isForcedRefresh = false
+                enableClusterManager?(true, multiplier > 0)
             }
         } else if sender.state == .changed {
             let point = sender.location(in: self)

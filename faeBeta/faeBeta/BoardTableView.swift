@@ -127,6 +127,8 @@ extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
             if indexPath.row == viewModelPlaces.numberOfPlaces - 1 {
                 if viewModelPlaces.category != "All Places" {
                     viewModelPlaces.fetchMoreSearchedPlaces()
+                } else {
+                    viewModelPlaces.fetchMoreAllPlaces()
                 }
             }
         default:

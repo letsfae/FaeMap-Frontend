@@ -192,14 +192,6 @@ extension ChatViewController {
                 }
             }
         case "[Location]":
-            var arrControllers = navigationController?.viewControllers
-            if let controller = Key.shared.FMVCtrler {
-                controller.arrCtrlers = arrControllers!
-                controller.boolFromMap = false
-            }
-            while !(arrControllers?.last is InitialPageController) {
-                arrControllers?.removeLast()
-            }
             guard let strLocDetail = realmMessage.text.replacingOccurrences(of: "\\", with: "").data(using: .utf8) else { return }
             var jsonLocDetail: JSON!
             do {
@@ -207,11 +199,11 @@ extension ChatViewController {
             } catch {
                 print("JSON Error: \(error)")
             }
-            //let vcLocDetail = LocDetailViewController()
             let coordinate = CLLocationCoordinate2D(latitude: Double(jsonLocDetail["latitude"].stringValue)!, longitude: Double(jsonLocDetail["longitude"].stringValue)!)
-            mapDelegate?.jumpToViewLocation(coordinate: coordinate, created: false)
             boolIsDisappearing = true
-            navigationController?.setViewControllers(arrControllers!, animated: true)
+            let vc = LocViewMapController()
+            vc.coordinate = coordinate
+            navigationController?.pushViewController(vc, animated: false)
             
             // TODO: capital first letter
             /*self.vcLocDetail.strLocName = jsonLocDetail["address1"].stringValue

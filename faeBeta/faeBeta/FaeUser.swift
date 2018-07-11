@@ -476,4 +476,29 @@ class FaeUser: NSObject {
         }
     }
     
+    func loginAsGuest(_ completion: @escaping (Int, Any?) -> Void) {
+        getFromURL("guest_authentication", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
+            if status / 100 == 2 {
+                guard let mes = message else {
+                    completion(status, "no message")
+                    return
+                }
+                let messageJSON = JSON(mes)
+                let str = messageJSON["token"].stringValue
+                let session = messageJSON["session_id"].intValue
+                let authentication = "\(-1):\(str):\(session)"
+                
+                let utf8str = authentication.data(using: String.Encoding.utf8)
+                let base64Encoded = utf8str!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+                let encode = "FAE " + base64Encoded
+                Key.shared.userTokenEncode_guest = encode
+                Key.shared.is_guest = true
+                print("guest token:", encode)
+                completion(status, message)
+            } else {
+                completion(status, message)
+            }
+        }
+    }
+    
 }

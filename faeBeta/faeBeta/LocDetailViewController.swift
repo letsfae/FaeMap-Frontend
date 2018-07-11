@@ -21,14 +21,9 @@ import SwiftyJSON
         So, no need to check saved_status in back end
 */
 
-protocol LocDetailDelegate: class {
-    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool)
-}
-
 class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKMapViewDelegate, AfterAddedToListDelegate {
     
     weak var delegate: MapSearchDelegate?
-    weak var locationDelegate: LocDetailDelegate?
     
     public var coordinate: CLLocationCoordinate2D!
     
@@ -79,6 +74,9 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     public var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
     public var boolCreated: Bool = false
+    
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -238,19 +236,9 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     
     @objc private func handleMapTap() {
         hideAddCollectionView()
-        
-        var arrCtrlers = navigationController?.viewControllers
-        if let ctrler = Key.shared.FMVCtrler {
-            ctrler.arrCtrlers = arrCtrlers!
-            ctrler.boolFromMap = false
-        }
-        while !(arrCtrlers?.last is InitialPageController) {
-            arrCtrlers?.removeLast()
-        }
-        locationDelegate = Key.shared.FMVCtrler
-        locationDelegate?.jumpToViewLocation(coordinate: coordinate, created: boolCreated)
-        Key.shared.initialCtrler?.goToFaeMap(animated: false)
-        navigationController?.setViewControllers(arrCtrlers!, animated: false)
+        let vc = LocViewMapController()
+        vc.coordinate = self.coordinate
+        navigationController?.pushViewController(vc, animated: false)
     }
     
     private func getRelatedPlaces(lat: String, long: String, radius: Int, isSimilar: Bool, completion:@escaping ([PlacePin]) -> Void) {
@@ -363,6 +351,10 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     }
     
     @objc private func saveThisPin() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         print("locDetail \(locationId)")
         func showCollections() {
             uiviewSavedList.tableMode = .location
@@ -397,6 +389,10 @@ class LocDetailViewController: UIViewController, AddPinToCollectionDelegate, MKM
     }
     
     @objc private func shareThisPin() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let vcShareLoc = NewChatShareController(friendListMode: .location)
         AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { [weak self] (snapShotImage) in
             guard let `self` = self else { return }
@@ -533,3 +529,34 @@ extension LocDetailViewController: UICollectionViewDelegate, UICollectionViewDat
 //        delegateSeeAll?.jumpToAllPlaces(places: viewModelNearby)
     }
 }
+
+extension LocDetailViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            self?.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
+    }
+    
+}
+

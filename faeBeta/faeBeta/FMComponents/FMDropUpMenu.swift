@@ -28,6 +28,7 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     private var btnCollection: UIButton!
     private var btnOptions: UIButton!
+    var collectionBtnBlock: (() -> ())?
     
     var sizeFrom: CGFloat = 0 // Pan gesture var
     var sizeTo: CGFloat = 0 // Pan gesture var
@@ -518,6 +519,10 @@ class FMDropUpMenu: UIView, UIScrollViewDelegate, UITableViewDataSource, UITable
     
     @objc func actionMapActions(_ sender: UIButton) {
         if sender == btnCollection {
+            if Key.shared.is_guest {
+                collectionBtnBlock?()
+                return
+            }
             mode = .off
         } else {
             mode = .on

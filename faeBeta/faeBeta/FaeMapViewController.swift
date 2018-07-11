@@ -41,7 +41,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var timerUserPin: Timer? // timer to renew update user pins
     private var userPinFetchQueue: OperationQueue = {
         var queue = OperationQueue()
-        queue.name = "userPinFetchQueue"
+        queue.name = "userPinFetchQueue_map"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
@@ -51,7 +51,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var PLACE_ANIMATED = true
     private var placePinFetchQueue: OperationQueue = {
         var queue = OperationQueue()
-        queue.name = "placePinFetchQueue"
+        queue.name = "placePinFetchQueue_map"
         queue.maxConcurrentOperationCount = 1
         return queue
     }()
@@ -103,7 +103,6 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var firstSelectPlace = true
     
     // Place Pin Control
-    private var placePinOPQueue: OperationQueue!
     private var placePinRequests = [Int: DataRequest]()
     private var rawPlaceJSONs = [JSON]()
     private var placeFetchesCount = 0 {
@@ -112,7 +111,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             doneFetchingAreaOfData()
         }
     }
+    private var mapViewPanningFetchesCount = 0 {
+        didSet {
+            guard mapViewPanningFetchesCount == numberOfAreasWithNoPins else { return }
+            doneFetchingAreaOfData()
+        }
+    }
+    private var numberOfAreasWithNoPins = 48
     private var time_start: DispatchTime!
+    var point_centers = [CGPoint]()
+    var coordinates = [CLLocationCoordinate2D]()
     
     // Results from Search
     private var btnTapToShowResultTbl: FMTableExpandButton!
@@ -161,6 +169,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var selectedLocAnno: LocPinAnnotationView?
     private var uiviewLocationBar: FMLocationInfoBar!
     private var locationPinClusterManager: CCHMapClusterController!
+    
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
     
     // Chat
     private let faeChat = FaeChat()
@@ -261,6 +272,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(firstUpdateLocation), name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
         
         fullyLoaded = true
+        initScreenPointCenters()
     }
     
     deinit {
@@ -271,7 +283,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         reloadMapChat()
-        renewSelfLocation()
+        General.shared.renewSelfLocation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -302,7 +314,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             guard fullyLoaded else { return }
             uiviewCollectionbarShadow.isHidden = modeLocation == .off
             uiviewSchbarShadow.isHidden = modeLocation != .off
-            if modeLocation != .off {
+            if modeLocation != .off || Key.shared.is_guest {
                 Key.shared.onlineStatus = 5
                 lblCollectionTitle.attributedText = nil
                 lblCollectionTitle.text = "View Location"
@@ -364,7 +376,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             
             btnMainMapSearch.isHidden = mapMode == .routing || mapMode == .selecting
             Key.shared.onlineStatus = mapMode == .routing || mapMode == .selecting ? 5 : 1
-            if mapMode == .routing || mapMode == .selecting {
+            if mapMode == .routing || mapMode == .selecting || Key.shared.is_guest {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_on"), object: nil)
             } else {
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
@@ -376,11 +388,16 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func getUserStatus() {
+        guard !Key.shared.is_guest else {
+            Key.shared.onlineStatus = 5
+            return
+        }
         guard let user_status = FaeCoreData.shared.readByKey("userStatus") as? Int else { return }
         Key.shared.onlineStatus = user_status
     }
 
     private func updateSelfInfo() {
+        guard !Key.shared.is_guest else { return }
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
             updateNickName.getSelfNamecard { [unowned self] (status: Int, message: Any?) in
@@ -402,6 +419,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func checkDisplayNameExisitency() {
+        guard !Key.shared.is_guest else { return }
         faeMapView.showsUserLocation = false
         getFromURL("users/name_card", parameter: nil, authentication: Key.shared.headerAuthentication()) { status, result in
             guard status / 100 == 2 else { return }
@@ -421,6 +439,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func loadUserSettingsFromCloud() {
+        guard !Key.shared.is_guest else { return }
         FaeUser.shared.getUserSettings { (status, message) in
             guard status / 100 == 2 else { return }
             guard let results = message else { return }
@@ -433,6 +452,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func isUserLoggedIn() {
+        guard !Key.shared.is_guest else { return }
         FaeCoreData.shared.readLogInfo()
         if Key.shared.is_Login == false {
             jumpToWelcomeView(animated: false)
@@ -440,6 +460,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func updateGenderAge() {
+        guard !Key.shared.is_guest else { return }
         let updateGenderAge = FaeUser()
         updateGenderAge.whereKey("show_gender", value: "true")
         updateGenderAge.whereKey("show_age", value: "true")
@@ -455,6 +476,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private func timerSetup() {
         invalidateAllTimer()
         timerUserPin = Timer.scheduledTimer(timeInterval: 120, target: self, selector: #selector(fetchUserPins), userInfo: nil, repeats: true)
+        guard !Key.shared.is_guest else { return }
         timerLoadMessages = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(syncMessagesFromServer), userInfo: nil, repeats: true)
     }
     
@@ -696,6 +718,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     private func initUserDataFromServer() {
+        guard !Key.shared.is_guest else { return }
         storeRealmCollectionFromServer()
         ContactsViewController.loadFriendsList()
         ContactsViewController.loadReceivedFriendRequests()
@@ -705,6 +728,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     @objc private func syncMessagesFromServer() {
         //faeChat.getMessageFromServer()
         //self.faeChat.getMessageFromServer()
+        guard !Key.shared.is_guest else { return }
         faePush.getSync { [unowned self] (status, message) in
             if status / 2 == 100 {
                 let messageJSON = JSON(message!)
@@ -893,6 +917,18 @@ extension FaeMapViewController {
                 self.mapView(self.faeMapView, regionDidChangeAnimated: true)
             }
         }
+        btnZoom.enableClusterManager = { [weak self] (enabled, isForcedRefresh) in
+            guard let `self` = self else { return }
+            self.placeClusterManager.canUpdate = enabled
+            if let shouldRefresh = isForcedRefresh {
+                self.placeClusterManager.isForcedRefresh = shouldRefresh
+                self.placeClusterManager.manuallyCallRegionDidChange()
+                self.placeClusterManager.isForcedRefresh = false
+                self.userClusterManager.isForcedRefresh = true
+                self.userClusterManager.manuallyCallRegionDidChange()
+                self.userClusterManager.isForcedRefresh = false
+            }
+        }
         view.addSubview(btnZoom)
         
         // Click to locate the current location
@@ -981,26 +1017,6 @@ extension FaeMapViewController {
 
 extension FaeMapViewController {
     
-    private func renewSelfLocation() {
-        DispatchQueue.global(qos: .default).async {
-            guard CLLocationManager.locationServicesEnabled() else { return }
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined, .restricted, .denied:
-                break
-            case .authorizedAlways, .authorizedWhenInUse:
-                FaeMap.shared.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
-                FaeMap.shared.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
-                FaeMap.shared.renewCoordinate {(status: Int, message: Any?) in
-                    if status / 100 == 2 {
-                        // print("Successfully renew self position")
-                    } else {
-                        print("[renewSelfLocation] fail")
-                    }
-                }
-            }
-        }
-    }
-    
     @objc private func actionMainScreenSearch(_ sender: UIButton) {
         btnZoom.tapToSmallMode()
         uiviewNameCard.hide() {
@@ -1045,7 +1061,9 @@ extension FaeMapViewController {
         showOrHideRefreshIcon(show: true, animated: true)
         removePlaceAnnotations(with: pinsFromSearch, forced: true, instantly: true) {
             self.pinsFromSearch.removeAll(keepingCapacity: true)
-            self.addPlaceAnnotations(with: self.faePlacePins, forced: true, instantly: true)
+            self.addPlaceAnnotations(with: self.faePlacePins, forced: true, instantly: true) {
+                self.mapView(self.faeMapView, regionDidChangeAnimated: false)
+            }
         }
         userClusterManager.addAnnotations(faeUserPins, withCompletionHandler: nil)
     }
@@ -1087,6 +1105,10 @@ extension FaeMapViewController {
     }
     
     @objc private func actionChatWindowShow(_ sender: UIButton) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         btnZoom.tapToSmallMode()
         uiviewNameCard.hide() {
             self.faeMapView.mapGesture(isOn: true)
@@ -1178,7 +1200,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 } else {
                     anView.alpha = 0
                     anView.imgIcon.frame = CGRect(x: 20, y: 46, width: 0, height: 0)
-                    let delay: Double = Double(arc4random_uniform(50)) / 100 // Delay 0-1 seconds, randomly
+                    let delay: Double = Double.random(min: 0, max: 0.5)// Delay 0-1 seconds, randomly
                     DispatchQueue.main.async {
                         UIView.animate(withDuration: 0.75, delay: delay, usingSpringWithDamping: 0.4, initialSpringVelocity: 0, options: .curveEaseOut, animations: {
                             anView.imgIcon.frame = CGRect(x: -8, y: -5, width: 56, height: 56)
@@ -1255,7 +1277,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                     guard let sPlace = selectedPlace else { continue }
                     if faeBeta.coordinateEqual(pin.coordinate, sPlace.coordinate) {
                         found = true
-                        anView.assignImage(pin.icon)
+                        let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
+                        anView.assignImage(icon)
                     }
                 }
                 if !found {
@@ -1304,6 +1327,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard boolPreventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
         } else if view is SelfAnnotationView {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             boolCanOpenPin = false
             faeMapView.mapGesture(isOn: false)
             uiviewNameCard.userId = Key.shared.user_id
@@ -1330,7 +1357,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 selfAnView = anView
             }
             anView.changeAvatar()
-            if Key.shared.onlineStatus == 5 {
+            if Key.shared.onlineStatus == 5 || Key.shared.is_guest {
                 anView.invisibleOn()
             }
             return anView
@@ -1370,12 +1397,18 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         }
     }
     
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        cancelPlacePinsFetch()
+    }
+    
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        
+        guard fullyLoaded else { return }
         Key.shared.lastChosenLoc = mapView.centerCoordinate
         
         if AUTO_REFRESH {
-            calculateDistanceOffset()
+            if !isLoadingMapCenterCityInfoDisabled {
+                fetchAreaDataWhenRegionDidChange()
+            }
         }
         
         if searchState == .multipleSearch && tblPlaceResult.altitude == 0 {
@@ -1529,7 +1562,7 @@ extension FaeMapViewController: SideMenuDelegate, ButtonFinishClickedDelegate {
     // sideMenuDelegate
     func userInvisible(isOn: Bool) {
         if !isOn {
-            renewSelfLocation()
+            General.shared.renewSelfLocation()
             return
         }
         if Key.shared.onlineStatus == 5 {
@@ -1605,6 +1638,9 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         uiviewDropUpMenu = FMDropUpMenu()
         uiviewDropUpMenu.layer.zPosition = 601
         uiviewDropUpMenu.delegate = self
+        uiviewDropUpMenu.collectionBtnBlock = { [unowned self] in
+            self.loadGuestMode()
+        }
         view.addSubview(uiviewDropUpMenu)
         let panGesture_menu = UIPanGestureRecognizer(target: self, action: #selector(self.panGesMenuDragging(_:)))
         panGesture_menu.require(toFail: uiviewDropUpMenu.swipeGes)
@@ -1895,6 +1931,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
 // MARK: - Name Card
 
 extension FaeMapViewController: NameCardDelegate {
+    
     private func loadNameCard() {
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.delegate = self
@@ -1904,6 +1941,10 @@ extension FaeMapViewController: NameCardDelegate {
     
     // MARK: NameCardDelegate
     func openAddFriendPage(userId: Int, status: FriendStatus) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
         addFriendVC.userId = userId
@@ -1913,12 +1954,20 @@ extension FaeMapViewController: NameCardDelegate {
     }
     
     func reportUser(id: Int) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
         present(reportPinVC, animated: true, completion: nil)
     }
     
     func openFaeUsrInfo() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = uiviewNameCard.userId
         uiviewNameCard.hide() {
@@ -1928,6 +1977,10 @@ extension FaeMapViewController: NameCardDelegate {
     }
     
     func chatUser(id: Int) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let vcChat = ChatViewController()
         vcChat.arrUserIDs.append("\(Key.shared.user_id)")
         vcChat.arrUserIDs.append("\(id)")
@@ -1971,7 +2024,7 @@ extension FaeMapViewController: MapSearchDelegate {
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "\(Key.shared.radius_map)")
             searchAgent.whereKey("offset", value: "0")
-            searchAgent.whereKey("sort", value: [["geo_location": "asc"]])
+            searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                           "longitude": locationToSearch.longitude])
             searchAgent.search { [unowned self] (status: Int, message: Any?) in
@@ -2032,12 +2085,13 @@ extension FaeMapViewController: MapSearchDelegate {
             tblPlaceResult.currentGroupOfPlaces = tblPlaceResult.updatePlacesArray(places: places, numbered: isNumbered)
             tblPlaceResult.loading(current: places[0])
             let pinsToAdd = tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
-            if modeCollection == .on {
-                pinsFromCollection = pinsToAdd
-            } else {
-                pinsFromSearch = pinsToAdd
-            }
-            removePlaceUserPins({
+            let pinsToRemove = faePlacePins + pinsFromSearch + pinsFromCollection
+            removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: true) {
+                if self.modeCollection == .on {
+                    self.pinsFromCollection = pinsToAdd
+                } else {
+                    self.pinsFromSearch = pinsToAdd
+                }
                 self.addPlaceAnnotations(with: pinsToAdd, forced: true, instantly: true, {
                     self.showOrHideTableResultsExpandingIndicator(show: true, animated: true)
                     self.goTo(annotation: nil, place: first, animated: true)
@@ -2045,7 +2099,8 @@ extension FaeMapViewController: MapSearchDelegate {
                 faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
                                            places: self.tblPlaceResult.currentGroupOfPlaces,
                                            edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
-            }, nil)
+            }
+            removeUserPins()
             placeClusterManager.maxZoomLevelForClustering = 0
         } else {
             searchState = .map
@@ -2319,7 +2374,7 @@ extension FaeMapViewController {
 //        let coorDistance = cameraDiagonalDistance(mapView: faeMapView)
         let coorDistance = Int(faeMapView.region.span.latitudeDelta * 222090)
         boolCanUpdateUsers = false
-        renewSelfLocation()
+        General.shared.renewSelfLocation()
         let locToFetch = faeMapView.centerCoordinate
         let userAgent = FaeMap()
         userAgent.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
@@ -2588,6 +2643,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 navigationController?.pushViewController(vc, animated: true)
             }
         case .collect:
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             uiviewSavedList.show()
             selectedLocAnno?.optionsToNormal()
             uiviewSavedList.tableMode = mode
@@ -2608,6 +2667,10 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 routingPlace(place)
             }
         case .share:
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             if modeLocCreating == .on {
                 selectedLocAnno?.optionsToNormal()
                 selectedLocAnno?.hideButtons()
@@ -2739,94 +2802,6 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
     
     private func fetchPlacePins() {
         startFetchingAreaData()
-        
-        /*
-        func getDelay(prevTime: DispatchTime) -> Double {
-            let standardInterval: Double = 1
-            let nowTime = DispatchTime.now()
-            let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
-            var delay: Double = 0
-            if timeDiff / Double(NSEC_PER_SEC) < standardInterval {
-                delay = standardInterval - timeDiff / Double(NSEC_PER_SEC)
-            } else {
-                delay = timeDiff / Double(NSEC_PER_SEC) - standardInterval
-            }
-            return delay
-        }
-        
-        func stopIconSpin(delay: Double) {
-            boolCanUpdatePlaces = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-                self.btnRefreshIcon.stopIconSpin()
-            })
-        }
-        
-        renewSelfLocation()
-        let time_start = DispatchTime.now()
-        
-        guard PLACE_FETCH_ENABLE else {
-            stopIconSpin(delay: getDelay(prevTime: time_start))
-            return
-        }
-        
-        guard boolCanUpdatePlaces else {
-            stopIconSpin(delay: getDelay(prevTime: time_start))
-            return
-        }
-        boolCanUpdatePlaces = false
-        let radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-        let locToFetch = faeMapView.centerCoordinate
-        let placeAgent = FaeMap()
-        placeAgent.whereKey("geo_latitude", value: "\(locToFetch.latitude)")
-        placeAgent.whereKey("geo_longitude", value: "\(locToFetch.longitude)")
-        placeAgent.whereKey("radius", value: "\(radius)")
-        placeAgent.whereKey("type", value: "place")
-        placeAgent.whereKey("max_count", value: "1000")
-        placeAgent.getPlacePins { [unowned self] (status, message) in
-            guard status / 100 == 2 else {
-                stopIconSpin(delay: getDelay(prevTime: time_start))
-                //joshprint("[fetchPlacePins] status", status)
-                return
-            }
-            guard message != nil else {
-                stopIconSpin(delay: getDelay(prevTime: time_start))
-                //joshprint("[fetchPlacePins] request cancelled")
-                return
-            }
-            let mapPlaceJSON = JSON(message!)
-            guard let mapPlaceJsonArray = mapPlaceJSON.array else {
-                stopIconSpin(delay: getDelay(prevTime: time_start))
-                //joshprint("[fetchPlacePins] no valid json")
-                return
-            }
-            guard mapPlaceJsonArray.count > 0 else {
-                stopIconSpin(delay: getDelay(prevTime: time_start))
-                //joshprint("[fetchPlacePins] no result")
-                return
-            }
-            self.placePinFetchQueue.cancelAllOperations()
-            let fetcher = PlacePinFetcher(cluster: self.placeClusterManager, arrPlaceJSON: mapPlaceJsonArray, idSet: self.setPlacePins)
-            fetcher.completionBlock = {
-                DispatchQueue.main.async { [unowned self] in
-                    if fetcher.isCancelled {
-                        //joshprint("[fetchPlacePins] operation cancelled")
-                        stopIconSpin(delay: getDelay(prevTime: time_start))
-                        return
-                    }
-                    guard self.PLACE_FETCH_ENABLE else { return }
-                    guard self.modeCollection == .off else { return }
-                    guard self.searchState == .map else { return }
-                    //joshprint("[fetchPlacePins] fetched")
-                    self.addPlaceAnnotations(with: fetcher.placePins, forced: false, instantly: false, {
-                        self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
-                        self.faePlacePins += fetcher.placePins
-                    })
-                }
-            }
-            self.placePinFetchQueue.addOperation(fetcher)
-            stopIconSpin(delay: getDelay(prevTime: time_start))
-        }
-        */
     }
     
     func stopIconSpin(delay: Double) {
@@ -2849,6 +2824,16 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         return delay
     }
     
+    func initScreenPointCenters() {
+        for i in [1,3,5,7,9,11,13,15] {
+            for j in [1,3,5] {
+                let point = CGPoint(x: screenWidth / 6 * CGFloat(j), y: screenHeight / 16 * CGFloat(i))
+                point_centers.append(point)
+            }
+        }
+        mapView(faeMapView, regionDidChangeAnimated: false)
+    }
+    
     func startFetchingAreaData() {
         time_start = DispatchTime.now()
         guard PLACE_FETCH_ENABLE else {
@@ -2862,20 +2847,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         }
         boolCanUpdatePlaces = false
         placeFetchesCount = 0
-        renewSelfLocation()
-        var point_centers = [CGPoint]()
-        var coordinates = [CLLocationCoordinate2D]()
-        for i in [1,3,5,7,9,11,13,15] {
-            for j in [1,3,5] {
-                let point = CGPoint(x: screenWidth / 6 * CGFloat(j), y: screenHeight / 16 * CGFloat(i))
-                point_centers.append(point)
-            }
-        }
+        General.shared.renewSelfLocation()
+        rawPlaceJSONs.removeAll()
+        coordinates.removeAll(keepingCapacity: true)
         var count = 0
         for point in point_centers {
             let coordinate = faeMapView.convert(point, toCoordinateFrom: nil)
             coordinates.append(coordinate)
-            fetchPlacePinsOneEightPart(center: coordinate, number: count)
+            fetchPlacePinsPartly(center: coordinate, number: count)
             count += 1
         }
     }
@@ -2903,7 +2882,20 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         self.placePinFetchQueue.addOperation(fetcher)
     }
     
-    func fetchPlacePinsOneEightPart(center: CLLocationCoordinate2D, number: Int) {
+    func fetchAreaDataWhenRegionDidChange() {
+        guard PLACE_FETCH_ENABLE else { return }
+        mapViewPanningFetchesCount = 0
+        numberOfAreasWithNoPins = 0
+        General.shared.renewSelfLocation()
+        rawPlaceJSONs.removeAll()
+        DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now()) {
+            for i in 0...23 {
+                self.fetchDataInCertainMapRect(number: i)
+            }
+        }
+    }
+    
+    func fetchPlacePinsPartly(center: CLLocationCoordinate2D, number: Int) {
         let radius = calculateRadius(mapView: faeMapView)
         let placeAgent = FaeMap()
         placeAgent.whereKey("geo_latitude", value: "\(center.latitude)")
@@ -2915,24 +2907,53 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             joshprint("No.\(number) fetched")
             guard status / 100 == 2 else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             guard message != nil else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             let mapPlaceJSON = JSON(message!)
             guard let mapPlaceJsonArray = mapPlaceJSON.array else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             guard mapPlaceJsonArray.count > 0 else {
                 self.placeFetchesCount += 1
+                self.mapViewPanningFetchesCount += 1
                 return
             }
             self.rawPlaceJSONs += mapPlaceJsonArray
             self.placeFetchesCount += 1
+            self.mapViewPanningFetchesCount += 1
         }
+    }
+    
+    func fetchDataInCertainMapRect(number: Int) {
+        var mapRect = faeMapView.visibleMapRect
+        let map_width = mapRect.size.width
+        let map_height = mapRect.size.height
+        mapRect.origin.x += Double(number % 3) * (map_width / 3)
+        mapRect.origin.y += Double(number / 3) * (map_height / 8)
+        mapRect.size.width = map_width / 3
+        mapRect.size.height = map_height / 8
+        let annos = faeMapView.annotations(in: mapRect)
+        var userAnnoFound = false
+        for anno in annos {
+            if anno is MKUserLocation {
+                userAnnoFound = true
+                break
+            }
+        }
+        guard (annos.count == 0 && !userAnnoFound) || (annos.count == 1 && userAnnoFound) else { return }
+        numberOfAreasWithNoPins += 1
+        joshprint("no annos found in area \(number)");
+        guard point_centers.count == 24 else { return }
+        let coordinate = faeMapView.convert(point_centers[number], toCoordinateFrom: nil)
+        fetchPlacePinsPartly(center: coordinate, number: number)
     }
     
     /*
@@ -3156,8 +3177,9 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
             }
         }
         
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
-        
+        if !Key.shared.is_guest {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "invisibleMode_off"), object: nil)
+        }
         removeAllRoutes()
         btnDistIndicator.hide()
         uiviewChooseLocs.hide()
@@ -3356,78 +3378,9 @@ extension FaeMapViewController {
     }
 }
 
-// MARK: - Guest Mode
-
-extension FaeMapViewController {
-    
-    private func guestMode() {
-        let uiViewGuestMode = UIView(frame: CGRect(x: 62, y: 155, w: 290, h: 380))
-        uiViewGuestMode.backgroundColor = UIColor.white
-        uiViewGuestMode.layer.cornerRadius = 16 * screenWidthFactor
-        self.view.addSubview(uiViewGuestMode)
-        
-        let labelTitleGuest = UILabel(frame: CGRect(x: 73, y: 27, w: 144, h: 44))
-        labelTitleGuest.text = "You are currently in\n Guest Mode!"
-        labelTitleGuest.numberOfLines = 0
-        labelTitleGuest.textAlignment = .center
-        labelTitleGuest.textColor = UIColor._898989()
-        labelTitleGuest.font = UIFont(name: "AvenirNext-Medium", size: 16 * screenWidthFactor)
-        uiViewGuestMode.addSubview(labelTitleGuest)
-        
-        let imageAvatarGuest = UIImageView(frame: CGRect(x: 55, y: 101, w: 180, h: 139))
-        imageAvatarGuest.image = UIImage(named: "GuestMode")
-        uiViewGuestMode.addSubview(imageAvatarGuest)
-        
-        let buttonGuestLogIn = UIButton(frame: CGRect(x: 40, y: 263, w: 210, h: 40))
-        buttonGuestLogIn.setTitle("Log In", for: .normal)
-        buttonGuestLogIn.layer.cornerRadius = 20 * screenWidthFactor
-        buttonGuestLogIn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
-        buttonGuestLogIn.backgroundColor = UIColor._2499090()
-        buttonGuestLogIn.addTarget(self, action: #selector(buttonGuestLogInClicked(_:)), for: .touchUpInside)
-        uiViewGuestMode.addSubview(buttonGuestLogIn)
-        
-        let buttonGuestCreateCount = UIButton(frame: CGRect(x: 40, y: 315, w: 210, h: 40))
-        buttonGuestCreateCount.setTitle("Create a Fae Count", for: .normal)
-        buttonGuestCreateCount.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
-        buttonGuestCreateCount.setTitleColor(UIColor._2499090(), for: .normal)
-        // buttonGuestCreateCount.titleLabel?.textColor = UIColor(red: 249/255, green: 90/255, blue: 90/255, alpha: 1.0) 改变不了button title的颜色
-        buttonGuestCreateCount.layer.borderColor = UIColor._2499090().cgColor
-        buttonGuestCreateCount.layer.cornerRadius = 20 * screenWidthFactor
-        buttonGuestCreateCount.backgroundColor = UIColor.white
-        buttonGuestCreateCount.layer.borderWidth = 2.5
-        buttonGuestCreateCount.addTarget(self, action: #selector(buttonGuestCreateCountClicked(_:)), for: .touchUpInside)
-        uiViewGuestMode.addSubview(buttonGuestCreateCount)
-    }
-    
-    @objc private func buttonGuestLogInClicked(_ sender: UIButton) {
-        print("guest log in")
-    }
-    
-    @objc private func buttonGuestCreateCountClicked(_ sender: UIButton) {
-        print("Create an account")
-    }
-}
-
 // MARK: - Location Pin
 
-extension FaeMapViewController: LocDetailDelegate {
-    
-    // MARK: - LocDetailDelegate
-    func jumpToViewLocation(coordinate: CLLocationCoordinate2D, created: Bool) {
-        if !created {
-            createLocationPin(coordinate: coordinate)
-            modeLocation = .on_create
-        } else {
-            selectedLocAnno?.hideButtons(animated: false)
-            selectedLocation?.icon = #imageLiteral(resourceName: "icon_destination")
-            selectedLocAnno?.assignImage(#imageLiteral(resourceName: "icon_destination"))
-            modeLocation = .on
-        }
-        removePlaceUserPins()
-        animateMainItems(show: true, animated: boolFromMap)
-        btnBackFromCollection.removeTarget(nil, action: nil, for: .touchUpInside)
-        btnBackFromCollection.addTarget(self, action: #selector(actionBackToLocDetail), for: .touchUpInside)
-    }
+extension FaeMapViewController {
     
     @objc private func actionBackToLocDetail() {
         animateMainItems(show: false, animated: boolFromMap)
@@ -3690,4 +3643,34 @@ extension FaeMapViewController: MapAction {
         uiviewDropUpMenu.hide()
         btnDropUpMenu.isSelected = false
     }
+}
+
+extension FaeMapViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [unowned self] in
+            self.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [unowned self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [unowned self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
+    }
+    
 }

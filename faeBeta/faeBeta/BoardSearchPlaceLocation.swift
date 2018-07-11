@@ -43,39 +43,64 @@ extension MapBoardViewController: SelectLocationDelegate {
         if let text = locToSearchTextRaw {
             searchVC.strSearchedLocation = text
         }
+        searchVC.changeLocBarText = { [unowned self] (locText, shouldChangeStyle) in
+            if shouldChangeStyle {
+                self.lblCurtLoc.attributedText = locText.faeSearchBarAttributedText()
+                self.imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
+            } else {
+                self.lblCurtLoc.attributedText = nil
+                self.lblCurtLoc.text = locText
+                self.imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
+            }
+        }
         //searchVC.searchedPlaces = viewModelPlaces.places
         navigationController?.pushViewController(searchVC, animated: false)
     }
     
     // MARK: - MapSearchDelegate
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
-        btnClearSearchRes.isHidden = false
-        lblSearchContent.text = searchText
-        lblCurtLoc.attributedText = Key.shared.selectedSearchedCity_board?.faeSearchBarAttributedText()
-        if Key.shared.selectedSearchedCity_board != "Current Location" {
-            imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
-        } else {
-            imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-        }
-        
-        let location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
-        viewModelPlaces.searchByCategories(content: searchText, source: "name", latitude: location.latitude, longitude: location.longitude)
-        updateLocationInViewModel(updatePlaces: false)
+        updateSearchRes(searchText: searchText, fromCategory: false)
     }
     
     func jumpToCategory(category: String) {
+        updateSearchRes(searchText: category)
+    }
+    
+    // check whether category and location changed, then get corresponding response
+    private func updateSearchRes(searchText: String, fromCategory: Bool = true) {
+        // update UI first
         btnClearSearchRes.isHidden = false
-        lblSearchContent.text = category
-        lblCurtLoc.attributedText = Key.shared.selectedSearchedCity_board?.faeSearchBarAttributedText()
-        if Key.shared.selectedSearchedCity_board != "Current Location" {
-            imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
-        } else {
-            imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
-        }
+        lblSearchContent.text = searchText
         tblPlaceRight.scrollToTop(animated: false)
-        viewModelPlaces.category = category
-        viewModelPlaces.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
-        updateLocationInViewModel(updatePlaces: false)
+        
+        // check whether category and location changed
+        var locationChanged = false
+        let location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+        let from = CLLocation(latitude: viewModelPlaces.location.latitude, longitude: viewModelPlaces.location.longitude)
+        let to = CLLocation(latitude: location.latitude, longitude: location.longitude)
+//        vickyprint("distance \(to.distance(from: from))")
+        if to.distance(from: from) > 100 {
+            locationChanged = true
+        }
+        
+        if fromCategory {
+            let categoryChanged = searchText != viewModelPlaces.category
+//            vickyprint("searchText \(searchText) viewModelPlaces.category \(viewModelPlaces.category)")
+//            vickyprint("categoryChanged \(categoryChanged) locationChanged \(locationChanged)")
+            if categoryChanged && locationChanged {
+                viewModelPlaces.update = false
+                updateLocationInViewModel(location)
+                viewModelPlaces.category = searchText
+            } else if categoryChanged {
+                viewModelPlaces.category = searchText
+            } else if locationChanged {
+                updateLocationInViewModel(location)
+            }
+        } else {
+            viewModelPlaces.searchByCategories(content: searchText, source: "name", latitude: location.latitude, longitude: location.longitude)
+            viewModelPlaces.update = false
+            updateLocationInViewModel(location)
+        }
     }
     
     // MARK: - SelectLocationDelegate
@@ -90,30 +115,19 @@ extension MapBoardViewController: SelectLocationDelegate {
         }
         imgCurtLoc.image = icon
         
-        updateLocationInViewModel()
+        updateLocationInViewModel(LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate)
         rollUpFilter()
-        
-        if lblSearchContent.text == "All Places" || lblSearchContent.text == "" {
-            //            getMBPlaceInfo(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
-        } else {
-            //            getPlaceInfo(content: lblSearchContent.text!, source: "name")
-        }
-        //        tblMapBoard.reloadData()
     }
     
-    private func updateLocationInViewModel(updateCategory: Bool = true, updatePlaces: Bool = true, updatePeople: Bool = true) {
-        if updateCategory {
-            viewModelCategories.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
-            tblPlaceLeft.scrollToTop(animated: false)
-        }
-        if updatePlaces {
-            viewModelPlaces.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
-            tblPlaceRight.scrollToTop(animated: false)
-        }
-        if updatePeople {
-            viewModelPeople.location = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
-            tblPeople.scrollToTop(animated: false)
-        }
+    private func updateLocationInViewModel(_ location: CLLocationCoordinate2D) {
+        viewModelCategories.location = location
+        tblPlaceLeft.scrollToTop(animated: false)
+
+        viewModelPlaces.location = location
+        tblPlaceRight.scrollToTop(animated: false)
+
+        viewModelPeople.location = location
+        tblPeople.scrollToTop(animated: false)
     }
     
     func sendLocationBack(address: RouteAddress) {

@@ -372,9 +372,6 @@ class RecentViewController: UIViewController, UITableViewDataSource, UITableView
             vcChat.arrUserIDs.append(user.id)
         }
         vcChat.strChatId = latestMessage.chat_id
-        if let controller = Key.shared.FMVCtrler {
-            vcChat.mapDelegate = controller
-        }
         navigationController?.pushViewController(vcChat, animated: true)
         try! realm.write {
             resultRealmRecents[indexPath.row].unread_count = 0

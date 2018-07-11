@@ -14,14 +14,15 @@ class CitySearcher: NSObject {
     
     static let shared = CitySearcher()
     
-    func cityAutoComplete(_ query: String, _ completion: @escaping (Int, Any?) -> Void) {
+    @discardableResult
+    func cityAutoComplete(_ query: String, _ completion: @escaping (Int, Any?) -> Void) -> DataRequest? {
         
         let urlAutoComp = "http://gd.geobytes.com/AutoCompleteCity?&sort=size&q=" + query
         guard let urlString = urlAutoComp.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             completion(-503, "Invalid URL")
-            return
+            return nil
         }
-        Alamofire.request(urlString, method: .get).responseJSON { (message) in
+        let request = Alamofire.request(urlString, method: .get).responseJSON { (message) in
             guard let response = message.response else {
                 completion(-501, "No Response")
                 return
@@ -32,16 +33,18 @@ class CitySearcher: NSObject {
             }
             completion(response.statusCode, value)
         }
+        return request
     }
     
-    func cityDetail(_ query: String, _ completion: @escaping (Int, Any?) -> Void) {
+    @discardableResult
+    func cityDetail(_ query: String, _ completion: @escaping (Int, Any?) -> Void) -> DataRequest? {
         
         let urlAutoComp = "http://gd.geobytes.com/GetCityDetails?fqcn=" + query
         guard let urlString = urlAutoComp.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) else {
             completion(-503, "Invalid URL")
-            return
+            return nil
         }
-        Alamofire.request(urlString, method: .get).responseJSON { (message) in
+        let request = Alamofire.request(urlString, method: .get).responseJSON { (message) in
             guard let response = message.response else {
                 completion(-501, "No Response")
                 return
@@ -59,6 +62,8 @@ class CitySearcher: NSObject {
                 completion(response.statusCode, value)
             }
         }
+        
+        return request
     }
     
 }

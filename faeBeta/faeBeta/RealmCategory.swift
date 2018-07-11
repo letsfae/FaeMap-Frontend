@@ -14,7 +14,7 @@ class RealmCategory: Object {
     @objc dynamic var user_id: Int = 0
     @objc dynamic var name: String = ""
     @objc dynamic var weight: Double = 0.0
-    
+
     override static func primaryKey() -> String {
         return "primary_key"
     }

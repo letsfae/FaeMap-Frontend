@@ -36,7 +36,6 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     var boolJustSentHeart = false // avoid sending heart continuously
     var avatarDictionary: NSMutableDictionary = [:]
     private var playingAudio: JSQAudioMediaItemCustom?
-    weak var mapDelegate: LocDetailDelegate?
     
     override var inputAccessoryView: UIView? {
         return faeInputBar

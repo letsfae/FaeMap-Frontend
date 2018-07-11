@@ -64,6 +64,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
     
+    // Guest Mode
+    private var uiviewGuestMode: GuestModeView!
+    
     // MARK: - Life Cycles
     
     override func viewDidLoad() {
@@ -88,7 +91,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         
         initPlaceRelatedData()
         
-        print("placeId \(place.id)")
+        print("placeId \(place.id), categoryID \(place.category_icon_id)")
         
         updateCategoryDictionary()
     }
@@ -227,7 +230,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -239,7 +242,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -251,7 +254,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -263,7 +266,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -533,6 +536,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc private func saveThisPin() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         func showCollections() {
             uiviewSavedList.tableMode = .place
             //uiviewSavedList.loadCollectionData()
@@ -558,6 +565,10 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     @objc private func shareThisPin() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let vcShareCollection = NewChatShareController(friendListMode: .place)
         vcShareCollection.placeDetail = place
         vcShareCollection.boolFromPlaceDetail = true
@@ -602,16 +613,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     func jumpToPlaceDetail(place: PlacePin) {
-        guard var arrCtrlers = navigationController?.viewControllers else {
-            showAlert(title: "Unexpected Error", message: "please try again", viewCtrler: self)
-            return
-        }
         let vcPlaceDetail = PlaceDetailViewController()
         vcPlaceDetail.place = place
-        arrCtrlers.removeLast()
-        arrCtrlers.append(vcPlaceDetail)
-        
-        navigationController?.setViewControllers(arrCtrlers, animated: true)
+        navigationController?.pushViewController(vcPlaceDetail, animated: true)
     }
     
     // MARK: - AddPintoCollectionDelegate
@@ -1034,4 +1038,34 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
         vcMap.mapCenter = .placeCoordinate
         navigationController?.pushViewController(vcMap, animated: false)
     }
+}
+
+extension PlaceDetailViewController {
+    
+    private func loadGuestMode() {
+        uiviewGuestMode = GuestModeView()
+        view.addSubview(uiviewGuestMode)
+        uiviewGuestMode.show()
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            self?.removeGuestMode()
+        }
+        uiviewGuestMode.guestLogin = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+        uiviewGuestMode.guestRegister = { [weak self] in
+            Key.shared.navOpenMode = .welcomeFirst
+            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+        }
+    }
+    
+    private func removeGuestMode() {
+        guard uiviewGuestMode != nil else { return }
+        uiviewGuestMode.hide {
+            self.uiviewGuestMode.removeFromSuperview()
+        }
+    }
+    
 }

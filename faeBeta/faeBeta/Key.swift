@@ -34,10 +34,6 @@ class Key: NSObject { //  singleton class
     
     static let shared = Key()
     
-    var joshDebug: Bool = false
-    var vickyDebug: Bool = false
-    var felixDebug: Bool = true
-    
     // change this to .production to switch to production mode
     private let server = ServerType.development
     
@@ -61,6 +57,12 @@ class Key: NSObject { //  singleton class
     var disableAge: Bool = false
     
     // MARK: - API Authorizations
+    
+    // guest
+    var userTokenEncode_guest = ""
+    var is_guest: Bool = false
+    
+    // none-guest
     var userToken = ""
     var userTokenEncode = ""
     var session_id: Int = -1
@@ -184,15 +186,19 @@ class Key: NSObject { //  singleton class
             "Accept": Key.shared.headerAccept,
         ]
         if auth {
-            if Key.shared.userTokenEncode != "" {
-                header["Authorization"] = Key.shared.userTokenEncode
-            }
-            else if Key.shared.is_Login && Key.shared.userTokenEncode != "" {
-                header["Authorization"] = Key.shared.userTokenEncode
-            }
-            else if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
-                Key.shared.userTokenEncode = encode
-                header["Authorization"] = Key.shared.userTokenEncode
+            if Key.shared.is_guest {
+                header["Authorization"] = Key.shared.userTokenEncode_guest
+            } else {
+                if Key.shared.userTokenEncode != "" {
+                    header["Authorization"] = Key.shared.userTokenEncode
+                }
+                else if Key.shared.is_Login && Key.shared.userTokenEncode != "" {
+                    header["Authorization"] = Key.shared.userTokenEncode
+                }
+                else if let encode = FaeCoreData.shared.readByKey("userTokenEncode") as? String {
+                    Key.shared.userTokenEncode = encode
+                    header["Authorization"] = Key.shared.userTokenEncode
+                }
             }
         }
         switch type {

@@ -296,6 +296,7 @@ class SelfAnnotationView: MKAnnotationView {
     
     @objc private func invisibleOff() {
         guard Key.shared.onlineStatus != 5 else { return }
+        guard !Key.shared.is_guest else { return }
         LocManager.shared.locManager.stopUpdatingHeading()
         timer?.invalidate()
         timer = nil
@@ -313,10 +314,12 @@ class SelfAnnotationView: MKAnnotationView {
     
     @objc func changeAvatar() {
         guard Key.shared.onlineStatus != 5 else { return }
+        guard !Key.shared.is_guest else { return }
         mapAvatar = Key.shared.userMiniAvatar
     }
     
     @objc private func getSelfAccountInfo() {
+        guard !Key.shared.is_guest else { return }
         let getSelfInfo = FaeUser()
         getSelfInfo.getAccountBasicInfo({ [weak self] (status, message) in
             guard let `self` = self else { return }

@@ -13,16 +13,16 @@ protocol BoardCategorySearchDelegate: class {
 }
 
 class BoardCategorySearchView: UIView, UIScrollViewDelegate {
-    fileprivate var scrollView: UIScrollView!
-    fileprivate var uiviewView1: UIView!
-    fileprivate var uiviewView2: UIView!
-    fileprivate var pageCtrl: UIPageControl!
-    fileprivate var imgCats1: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    fileprivate var arrCatNames1: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
-    fileprivate var imgCats2: [UIImage] = [#imageLiteral(resourceName: "place_result_69"), #imageLiteral(resourceName: "place_result_20"), #imageLiteral(resourceName: "place_result_46"), #imageLiteral(resourceName: "place_result_6"), #imageLiteral(resourceName: "place_result_21"), #imageLiteral(resourceName: "place_result_29")]
-    fileprivate var arrCatNames2: [String] = ["Fast Food", "Beer Bar", "Cosmetics", "Fitness", "Groceries", "Pharmacy"]
-    fileprivate var lblCats: UILabel!
-    fileprivate var btnCats: UIButton!
+    private var scrollView: UIScrollView!
+    private var uiviewView1: UIView!
+    private var uiviewView2: UIView!
+    private var pageCtrl: UIPageControl!
+    
+    private var placeNames = [String]()
+    private var btnCats1 = [UIButton]()
+    private var btnCats2 = [UIButton]()
+    private var lblCats1 = [UILabel]()
+    private var lblCats2 = [UILabel]()
     
     weak var delegate: BoardCategorySearchDelegate?
     
@@ -35,7 +35,7 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         super.init(coder: aDecoder)
     }
     
-    fileprivate func setupUI() {
+    private func setupUI() {
         // set self properties
         backgroundColor = .white
         
@@ -61,8 +61,15 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         uiviewView2 = UIView(frame: CGRect(x: screenWidth, y: 0, width: screenWidth, height: 241))
         scrollView.addSubview(uiviewView1)
         scrollView.addSubview(uiviewView2)
-        loadPlaceHeaderView(uiview: uiviewView1, tag: 0)
-        loadPlaceHeaderView(uiview: uiviewView2, tag: 6)
+        
+        for _ in 0..<6 {
+            btnCats1.append(UIButton(frame: CGRect(x: 60, y: 20, width: 58, height: 58)))
+            lblCats1.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
+            btnCats2.append(UIButton(frame: CGRect(x: 60, y: 20, width: 58, height: 58)))
+            lblCats2.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
+        }
+        loadPlaceHeaderView(uiview: uiviewView1, btnCats: btnCats1, lblCats: lblCats1, tag: 0)
+        loadPlaceHeaderView(uiview: uiviewView2, btnCats: btnCats2, lblCats: lblCats2, tag: 6)
         
         // draw bottom space
         let uiviewBottomSeparator = UIView(frame: CGRect(x: 0, y: 241, width: screenWidth, height: 5))
@@ -70,18 +77,7 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         addSubview(uiviewBottomSeparator)
     }
     
-    fileprivate func loadPlaceHeaderView(uiview: UIView, tag: Int) {
-        var btnCats = [UIButton]()
-        var lblCats = [UILabel]()
-        
-        let imgPlace: [UIImage] = tag == 0 ? imgCats1 : imgCats2
-        let arrCatName: [String] = tag == 0 ? arrCatNames1 : arrCatNames2
-        
-        for _ in 0..<6 {
-            btnCats.append(UIButton(frame: CGRect(x: 60, y: 20, width: 58, height: 58)))
-            lblCats.append(UILabel(frame: CGRect(x: 0, y: 0, width: 80, height: 18)))
-        }
-        
+    private func loadPlaceHeaderView(uiview: UIView, btnCats: [UIButton], lblCats: [UILabel], tag: Int) {
         for i in 0..<6 {
             if i >= 3 {
                 btnCats[i].frame.origin.y = 117
@@ -102,48 +98,55 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
             btnCats[i].layer.cornerRadius = 8.0
             btnCats[i].contentMode = .scaleAspectFit
             btnCats[i].layer.masksToBounds = true
-            btnCats[i].setImage(imgPlace[i], for: .normal)
             btnCats[i].tag = i + tag
             btnCats[i].addTarget(self, action: #selector(search(_:)), for: .touchUpInside)
-            lblCats[i].text = arrCatName[i]
             lblCats[i].textAlignment = .center
             lblCats[i].textColor = UIColor._138138138()
             lblCats[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
         }
+        
+    }
+    
+    private func setButtonsUI() {
+        for i in 0..<12 {
+            let img_id = i < placeNames.count ? Category.shared.categories[placeNames[i]] ?? -1 : -1
+            if img_id == -1 {
+                if i < 6 {
+                    btnCats1[i].setImage(nil, for: .normal)
+                    lblCats1[i].text = ""
+                } else {
+                    btnCats2[i - 6].setImage(nil, for: .normal)
+                    lblCats2[i - 6].text = ""
+                }
+            } else {
+                if i < 6 {
+                    btnCats1[i].setImage(UIImage(named: "place_result_\(img_id)"), for: .normal)
+                    lblCats1[i].text = placeNames[i]
+                } else {
+                    btnCats2[i - 6].setImage(UIImage(named: "place_result_\(img_id)"), for: .normal)
+                    lblCats2[i - 6].text = placeNames[i]
+                }
+            }
+        }
+    }
+    
+    // MARK: - Process data about shortcut menu
+    func getShortcutMenu() {
+        let shortcutCategory = Category.shared.filterShortcutMenu()
+        placeNames = []
+        for idx in 0..<min(12, shortcutCategory.count) {
+            placeNames.append(shortcutCategory[idx].name)
+        }
+        
+        setButtonsUI()
     }
     
     // MARK: - Button actions
     @objc func search(_ sender: UIButton) {
-        var content = ""
-        switch sender.tag {
-        case 0:
-            content = "Restaurants"
-        case 1:
-            content = "Bars"
-        case 2:
-            content = "Shopping"
-        case 3:
-            content = "Coffee"
-        case 4:
-            content = "Parks"
-        case 5:
-            content = "Hotels"
-        case 6:
-            content = "Fast Food"
-        case 7:
-            content = "Beer Bar"
-        case 8:
-            content = "Cosmetics"
-        case 9:
-            content = "Fitness"
-        case 10:
-            content = "Grocery"
-        case 11:
-            content = "Pharmacy"
-        default: break
-        }
-
+        let content = placeNames[sender.tag]
         delegate?.searchByCategories(category: content)
+        
+        Category.shared.visitCategory(category: content)
     }
     
     // MARK: - PageControl actions

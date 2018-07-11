@@ -54,12 +54,8 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var lblNoResult: UILabel!
     var activityIndicatorNoResult: UIActivityIndicatorView!
     
-    // Requests
-    var placeRequest: DataRequest?
-    
     // Data
-    var imgPlaces: [UIImage] = [#imageLiteral(resourceName: "place_result_5"), #imageLiteral(resourceName: "place_result_14"), #imageLiteral(resourceName: "place_result_4"), #imageLiteral(resourceName: "place_result_19"), #imageLiteral(resourceName: "place_result_30"), #imageLiteral(resourceName: "place_result_41")]
-    var arrPlaceNames: [String] = ["Restaurant", "Bars", "Shopping", "Coffee Shop", "Parks", "Hotels"]
+    var arrPlaceNames: [String] = []
     enum SearchBarType {
         case place, location
     }
@@ -73,6 +69,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var addressCompleter = MKLocalSearchCompleter()     // Apple Place Data Getter
     var geobytesCityData = [String]()                   // Geobytes City Data
     var cityToSearch: String = ""
+    var changeLocBarText: ((String, Bool) -> ())?
     
     // iOS Geocoder
     let clgeocoder = CLGeocoder()
@@ -86,10 +83,18 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var flagAddrFetched: Bool = false
     var isCategorySearching: Bool = false
     
+    // DataRequests Control
+    var searchRequest: DataRequest?
+    var citySearchRequest: DataRequest?
+    var cityDetailRequest: DataRequest?
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._241241241()
+        if previousVC == .board {
+            fixedLocOptions.removeLast()
+        }
         loadSearchBar()
         loadPlaceBtns()
         loadTable()
@@ -101,6 +106,22 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        cancelAllRequests()
+    }
+    
+    // MARK: - Process data about shortcut menu
+    func getShortcutMenu() {
+        let shortcutCategory = Category.shared.filterShortcutMenu()
+        arrPlaceNames = []
+        for idx in 0..<min(6, shortcutCategory.count) {
+            arrPlaceNames.append(shortcutCategory[idx].name)
+        }
+        
+        setButtonsUI()
     }
     
     // MARK: - Load UI's
@@ -175,15 +196,24 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
                 schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
                 cityToSearch = selectedCity
             }
+            if Key.shared.searchSource_map.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
+            }
         case .board:
             if let selectedCity = Key.shared.selectedSearchedCity_board {
                 schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
                 cityToSearch = selectedCity
             }
+            if Key.shared.searchSource_board.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
+            }
         case .chat:
             if let selectedCity = Key.shared.selectedSearchedCity_chat {
                 schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
                 cityToSearch = selectedCity
+            }
+            if Key.shared.searchSource_chat.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
             }
         }
         
@@ -236,14 +266,28 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             btnCategories[i].layer.cornerRadius = 8.0
             btnCategories[i].contentMode = .scaleAspectFit
             btnCategories[i].layer.masksToBounds = true
-            btnCategories[i].setImage(imgPlaces[i], for: .normal)
             btnCategories[i].tag = i
-            btnCategories[i].addTarget(self, action: #selector(self.searchByCategories(_:)), for: .touchUpInside)
+            btnCategories[i].addTarget(self, action: #selector(self.actionSearchByCategories(_:)), for: .touchUpInside)
             
-            lblCategories[i].text = arrPlaceNames[i]
             lblCategories[i].textAlignment = .center
             lblCategories[i].textColor = UIColor._138138138()
             lblCategories[i].font = UIFont(name: "AvenirNext-Medium", size: 13)
+        }
+        
+        getShortcutMenu()
+    }
+    
+    private func setButtonsUI() {
+        for i in 0..<6 {
+            
+            let img_id = i < arrPlaceNames.count ? Category.shared.categories[arrPlaceNames[i]] ?? -1 : -1
+            if img_id == -1 {
+                btnCategories[i].setImage(nil, for: .normal)
+                lblCategories[i].text = ""
+            } else {
+                btnCategories[i].setImage(UIImage(named: "place_result_\(img_id)"), for: .normal)
+                lblCategories[i].text = arrPlaceNames[i]
+            }
         }
     }
     
@@ -292,46 +336,29 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiview.layer.shadowOpacity = 0.6
     }
     
+    private func cancelAllRequests() {
+        searchRequest?.cancel()
+        citySearchRequest?.cancel()
+        cityDetailRequest?.cancel()
+        addressCompleter.cancel()
+    }
+    
     // MARK: - Actions
     @objc private func backToMap(_ sender: UIButton) {
-        placeRequest?.cancel()
+        cancelAllRequests()
         navigationController?.popViewController(animated: false)
     }
     
-    @objc func searchByCategories(_ sender: UIButton) {
-        // tag = 0 - Restaurant - arrPlaceNames[0], 1 - Bars - arrPlaceNames[1],
-        // 2 - Shopping - arrPlaceNames[2], 3 - Coffee Shop - arrPlaceNames[3],
-        // 4 - Parks - arrPlaceNames[4], 5 - Hotels - arrPlaceNames[5]
-        var content = ""
-        switch sender.tag {
-        case 0:
-            content = "Restaurant"
-        case 1:
-            content = "Bar"
-        case 2:
-            content = "Shopping"
-        case 3:
-            content = "Coffee"
-        case 4:
-            content = "Park"
-        case 5:
-            content = "Hotel"
-        default: break
-        }
-        
+    @objc func actionSearchByCategories(_ sender: UIButton) {
+        let content = arrPlaceNames[sender.tag]
+        Category.shared.visitCategory(category: content)
+        sendBackLocationText()
         if previousVC == .board {
             delegate?.jumpToCategory?(category: content)
             navigationController?.popViewController(animated: false)
         } else {
             getPlaceInfo(content: content, source: "categories")
         }
-
-//        if catDict[content] == nil {
-//            catDict[content] = 0
-//        } else {
-//            catDict[content] = catDict[content]! + 1;
-//        }
-//        favCategoryCache.setObject(catDict as AnyObject, forKey: Key.shared.user_id as AnyObject)
     }
     
     func activityStatus(isOn: Bool) {

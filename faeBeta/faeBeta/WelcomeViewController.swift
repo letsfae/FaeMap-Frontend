@@ -19,6 +19,7 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
     private var btnLookAround: UIButton!
     private var btnLogin: UIButton!
     private var btnCreateAccount: UIButton!
+    private var activityIndicator: UIActivityIndicatorView!
     
     // MARK: - Life cycle
     override func viewDidLoad() {
@@ -30,6 +31,8 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         setupImageContainerPageViewController()
         setupBottomPart()
         addObservers()
+        
+        view.bringSubview(toFront: btnLookAround)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,9 +94,14 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
         btnLookAround.center.x = screenWidth / 2
         btnLookAround.setTitle("Look Around", for: .normal)
         btnLookAround.setTitleColor(UIColor._2499090(), for: .normal)
+        btnLookAround.setTitleColor(UIColor.lightGray, for: .highlighted)
         btnLookAround.titleLabel?.font = UIFont(name: "AvenirNext-Bold", size: 16)
         btnLookAround.addTarget(self, action: #selector(actionLookAround(_:)), for: .touchUpInside)
         view.insertSubview(btnLookAround, at: 0)
+        activityIndicator = createActivityIndicator(large: false)
+        activityIndicator.center = btnLookAround.center
+        activityIndicator.frame.origin.x = btnLookAround.frame.origin.x - 5
+        view.addSubview(activityIndicator)
         
         // log in button
         btnLogin = UIButton(frame: CGRect(x: 0, y: screenHeight - 156 * screenHeightFactor - device_offset_bot, width: screenWidth - 114 * screenWidthFactor * screenWidthFactor, height: 50 * screenHeightFactor))
@@ -170,17 +178,36 @@ class WelcomeViewController: UIViewController, UIPageViewControllerDataSource, U
                 FaeCoreData.shared.removeByKey("signup_dateofbirth")
                 FaeCoreData.shared.removeByKey("signup_email")
                 let boardRegister = RegisterNameViewController()
-                navigationController?.pushViewController(boardRegister, animated: false)
+                navigationController?.pushViewController(boardRegister, animated: true)
             }
         } else {
             let boardRegister = RegisterNameViewController()
-            navigationController?.pushViewController(boardRegister, animated: false)
+            navigationController?.pushViewController(boardRegister, animated: true)
         }
     }
     
     @objc private func actionLookAround(_ sender: UIButton) {
-        //        let vc = ()
-        //        navigationController?.pushViewController(vc, animated: true)
+        activityIndicator.startAnimating()
+        view.isUserInteractionEnabled = false
+        let userAgent = FaeUser()
+        userAgent.loginAsGuest { [weak self] (status, message) in
+            self?.activityIndicator.stopAnimating()
+            self?.view.isUserInteractionEnabled = true
+            guard let `self` = self else { return }
+            guard status / 100 == 2 else {
+                showAlert(title: "Login As Guest Failed", message: "please try again later", viewCtrler: self)
+                return
+            }
+            if let result = message as? String {
+                if result == "no message" {
+                    showAlert(title: "Login As Guest Failed", message: "please try again later", viewCtrler: self)
+                    return
+                }
+            }
+            let vcRoot = InitialPageController()
+            Key.shared.navOpenMode = .mapFirst
+            self.navigationController?.setViewControllers([vcRoot], animated: false)
+        }
     }
 
     // MARK: - UIPageViewController delegate & dataSource
