@@ -1327,6 +1327,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard boolPreventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
         } else if view is SelfAnnotationView {
+            guard !Key.shared.is_guest else {
+                loadGuestMode()
+                return
+            }
             boolCanOpenPin = false
             faeMapView.mapGesture(isOn: false)
             uiviewNameCard.userId = Key.shared.user_id
@@ -1927,6 +1931,7 @@ extension FaeMapViewController: MapFilterMenuDelegate {
 // MARK: - Name Card
 
 extension FaeMapViewController: NameCardDelegate {
+    
     private func loadNameCard() {
         uiviewNameCard = FMNameCardView()
         uiviewNameCard.delegate = self
@@ -1936,6 +1941,10 @@ extension FaeMapViewController: NameCardDelegate {
     
     // MARK: NameCardDelegate
     func openAddFriendPage(userId: Int, status: FriendStatus) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let addFriendVC = AddFriendFromNameCardViewController()
         addFriendVC.delegate = uiviewNameCard
         addFriendVC.userId = userId
@@ -1945,12 +1954,20 @@ extension FaeMapViewController: NameCardDelegate {
     }
     
     func reportUser(id: Int) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let reportPinVC = ReportViewController()
         reportPinVC.reportType = 0
         present(reportPinVC, animated: true, completion: nil)
     }
     
     func openFaeUsrInfo() {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let fmUsrInfo = FMUserInfo()
         fmUsrInfo.userId = uiviewNameCard.userId
         uiviewNameCard.hide() {
@@ -1960,6 +1977,10 @@ extension FaeMapViewController: NameCardDelegate {
     }
     
     func chatUser(id: Int) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         let vcChat = ChatViewController()
         vcChat.arrUserIDs.append("\(Key.shared.user_id)")
         vcChat.arrUserIDs.append("\(id)")
