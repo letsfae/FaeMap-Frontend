@@ -448,6 +448,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             Key.shared.measurementUnits = resultsJSON["measurement_units"].stringValue
             Key.shared.showNameCardOption = resultsJSON["show_name_card_options"].boolValue
             Key.shared.shadowLocationEffect = resultsJSON["shadow_location_system_effect"].stringValue == "" ? "normal" : resultsJSON["shadow_location_system_effect"].stringValue
+            Key.shared.otherSettings = resultsJSON["others"].stringValue
         }
     }
     

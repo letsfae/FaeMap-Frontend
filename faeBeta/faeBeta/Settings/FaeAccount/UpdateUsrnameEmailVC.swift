@@ -20,6 +20,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     private var btnUpdate: UIButton!
     private var lblHintRed: FaeLabel!
     private var lblHintHead: FaeLabel!
+    private var lblUsrname: FaeLabel!
+    private var lblBelowHint: FaeLabel!
     
     var strEmail: String? = ""
     var strUsername: String? = ""
@@ -46,6 +48,36 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         view.backgroundColor = .white
         loadNavBar()
         loadContent()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if enterMode == .usrname {
+            let attr = [NSAttributedStringKey.foregroundColor: UIColor._155155155()]
+            let attrEmail = [NSAttributedStringKey.foregroundColor: UIColor._898989()]
+            
+            let txt = NSMutableAttributedString()
+            txt.append(NSAttributedString(string: "@", attributes: attr))
+            txt.append(NSAttributedString(string: Key.shared.username, attributes: attrEmail))
+            lblUsrname.attributedText = txt
+            
+            var remainingTimes = "2"
+            if Key.shared.otherSettings != "" {
+                //print(Key.shared.otherSettings)
+                var current = Key.shared.otherSettings.split(separator: ",")
+                if current.count == 2 {
+                    remainingTimes = String(current[0])
+                }
+            }
+            let strHint = "You can change your Username\n2 times per year - \(remainingTimes) left"
+            let attributes = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
+            let strAttributed =  NSMutableAttributedString(string: strHint, attributes: attributes)
+            strAttributed.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._138138138(), range: NSRange(location: 0, length: strHint.count))
+            strAttributed.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._2499090(), range: NSRange(location: strHint.count - 6, length: 6))
+            lblBelowHint.attributedText = strAttributed
+            
+            btnUpdate.isEnabled = remainingTimes != "0"
+            btnUpdate.backgroundColor = btnUpdate.isEnabled ? UIColor._2499090() : UIColor._255160160()
+        }
     }
     
     // MARK: - Set up
@@ -131,28 +163,15 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         btnUpdate.setTitle("Change Username", for: UIControlState())
         lblHint.text = "You can use your Username for Log In,\nAdding People, and Starting Chats."
         
-        let lblUsrname = FaeLabel(CGRect(x: 0, y: 213 * screenHeightFactor, width: screenWidth, height: 30), .center, .regular, 22, UIColor._155155155())
+        lblUsrname = FaeLabel(CGRect(x: 0, y: 213 * screenHeightFactor, width: screenWidth, height: 30), .center, .regular, 22, UIColor._155155155())
         view.addSubview(lblUsrname)
-        let attr = [NSAttributedStringKey.foregroundColor: UIColor._155155155()]
-        let attrEmail = [NSAttributedStringKey.foregroundColor: UIColor._898989()]
         
-        let txt = NSMutableAttributedString()
-        txt.append(NSAttributedString(string: "@", attributes: attr))
-        txt.append(NSAttributedString(string: strUsername!, attributes: attrEmail))
-        lblUsrname.attributedText = txt
-        
-        let lblBelowHint = FaeLabel(CGRect(x: 0, y: screenHeight - 231 * screenHeightFactor, width: screenWidth, height: 36), .center, .regular, 13, UIColor._138138138())
+        lblBelowHint = FaeLabel(CGRect(x: 0, y: screenHeight - 231 * screenHeightFactor, width: screenWidth, height: 36), .center, .regular, 13, UIColor._138138138())
         lblBelowHint.numberOfLines = 0
         view.addSubview(lblBelowHint)
         //lblBelowHint.text = "If you want to change your Username,\nPlease request a Username Reset."
-        let strHint = "You can change your Username\n2 times per year - 2 left"
-        let attributes = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 13)!]
-        let strAttributed =  NSMutableAttributedString(string: strHint, attributes: attributes)
-        strAttributed.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._138138138(), range: NSRange(location: 0, length: strHint.count))
-        strAttributed.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor._2499090(), range: NSRange(location: strHint.count - 6, length: 6))
-        lblBelowHint.attributedText = strAttributed
         
-        loadUserNameShadow()
+        //loadUserNameShadow()
     }
     
     private func loadUserNameShadow() {
@@ -247,6 +266,10 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
             navigationController?.pushViewController(vc, animated: true)
         case .usrname:
             //animationShowView()
+            let vc = SetUpdateAccountViewController()
+            vc.enterMode = .password
+            vc.pswdEnterMode = .other
+            navigationController?.pushViewController(vc, animated: true)
             break
         case .phone:
             let vc = SignInPhoneViewController()
@@ -261,9 +284,10 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
     
     @objc private func actionYes(_ sender: UIButton) {
         animationHideView()
-        let vc = SetUpdateAccountViewController()
+        /*let vc = SetUpdateAccountViewController()
         vc.enterMode = .password
         vc.pswdEnterMode = .other
+        navigationController?.pushViewController(vc, animated: true)*/
     }
 
     @objc private func actionVerifyEmail(_ sender: UITapGestureRecognizer) {
