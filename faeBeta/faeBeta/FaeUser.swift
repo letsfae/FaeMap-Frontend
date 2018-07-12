@@ -493,7 +493,6 @@ class FaeUser: NSObject {
                 let encode = "FAE " + base64Encoded
                 Key.shared.userTokenEncode_guest = encode
                 Key.shared.is_guest = true
-                print("guest token:", encode)
                 completion(status, message)
             } else {
                 completion(status, message)

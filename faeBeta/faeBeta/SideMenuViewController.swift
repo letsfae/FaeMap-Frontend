@@ -455,14 +455,17 @@ extension SideMenuViewController {
             self?.removeGuestMode()
         }
         uiviewGuestMode.guestLogin = { [weak self] in
+            guard let `self` = self else { return }
             Key.shared.navOpenMode = .welcomeFirst
             let viewCtrlers = [WelcomeViewController(), LogInViewController()]
-            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
         }
         uiviewGuestMode.guestRegister = { [weak self] in
+            guard let `self` = self else { return }
+            
             Key.shared.navOpenMode = .welcomeFirst
             let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
-            self?.navigationController?.setViewControllers(viewCtrlers, animated: true)
+            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
         }
     }
     

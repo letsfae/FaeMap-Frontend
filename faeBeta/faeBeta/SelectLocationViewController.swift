@@ -776,7 +776,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         if searchState == .map {
             tblPlaceResult.loadingData(current: cluster)
         } else if searchState == .multipleSearch {
-            tblPlaceResult.loading(current: placePin)
+            tblPlaceResult.loading(current: placePin, isSwitchingPage: !tblPlaceResult.isShrinked)
         }
         btnSelect.lblDistance.textColor = UIColor._2499090()
         btnSelect.isUserInteractionEnabled = true
@@ -1060,7 +1060,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         } else {
             findAnnotation()
             if let placePin = place { // 必须放在最末尾
-                tblPlaceResult.loading(current: placePin)
+                tblPlaceResult.loading(current: placePin, isSwitchingPage: !tblPlaceResult.isShrinked)
             }
         }
     }
