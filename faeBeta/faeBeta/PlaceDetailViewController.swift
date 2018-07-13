@@ -97,6 +97,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     private func updateCategoryDictionary() {
+        guard !Key.shared.is_guest else {
+            return
+        }
         Category.shared.updateCategoryDictionary(place: place)
     }
     

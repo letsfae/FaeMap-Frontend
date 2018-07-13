@@ -67,6 +67,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 }
                 
                 // update Category Dictionary
+                guard !Key.shared.is_guest else {
+                    return
+                }
                 Category.shared.visitCategory(category: selectedCat)
             case 1:
                 // place

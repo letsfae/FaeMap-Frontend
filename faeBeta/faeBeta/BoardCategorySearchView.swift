@@ -146,6 +146,9 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
         let content = placeNames[sender.tag]
         delegate?.searchByCategories(category: content)
         
+        guard !Key.shared.is_guest else {
+            return
+        }
         Category.shared.visitCategory(category: content)
     }
     

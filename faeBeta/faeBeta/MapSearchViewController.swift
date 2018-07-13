@@ -351,7 +351,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     @objc func actionSearchByCategories(_ sender: UIButton) {
         let content = arrPlaceNames[sender.tag]
-        Category.shared.visitCategory(category: content)
+        if !Key.shared.is_guest {
+            Category.shared.visitCategory(category: content)
+        }
+        
         sendBackLocationText()
         if previousVC == .board {
             delegate?.jumpToCategory?(category: content)
