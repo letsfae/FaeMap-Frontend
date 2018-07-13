@@ -169,6 +169,7 @@ class Key: NSObject { //  singleton class
     var showNameCardOption: Bool = true
     var measurementUnits: String = "imperial" // metric
     var shadowLocationEffect: String = "normal" // min, max
+    var otherSettings: String = ""
     
     // MARK: - API Fetching Headers
     var version = "x.faeapp.v1"

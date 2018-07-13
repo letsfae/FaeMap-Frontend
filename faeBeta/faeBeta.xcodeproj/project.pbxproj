@@ -142,6 +142,7 @@
 		9FC92ACB2015547700DD3250 /* StickerCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FC92ACA2015547700DD3250 /* StickerCollection.swift */; };
 		9FCE363E1FB958F1008CE5A1 /* ContactDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCE363D1FB958F1008CE5A1 /* ContactDetailVC.swift */; };
 		9FD16C1E206BC9720005ED86 /* BlockListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FD16C1D206BC9720005ED86 /* BlockListVC.swift */; };
+		9FEFA2F720F7073200367D21 /* NewUsernameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FEFA2F620F7073200367D21 /* NewUsernameVC.swift */; };
 		9FF8F77C20D336FD00C807A8 /* NSLayoutConstraintSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8F77420D336FD00C807A8 /* NSLayoutConstraintSet.swift */; };
 		9FF8F77D20D336FD00C807A8 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8F77520D336FD00C807A8 /* UIView+Extension.swift */; };
 		9FF8F77E20D336FD00C807A8 /* ChatInputBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF8F77620D336FD00C807A8 /* ChatInputBarButton.swift */; };
@@ -530,6 +531,7 @@
 		9FC92ACA2015547700DD3250 /* StickerCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerCollection.swift; sourceTree = "<group>"; };
 		9FCE363D1FB958F1008CE5A1 /* ContactDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailVC.swift; sourceTree = "<group>"; };
 		9FD16C1D206BC9720005ED86 /* BlockListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListVC.swift; sourceTree = "<group>"; };
+		9FEFA2F620F7073200367D21 /* NewUsernameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewUsernameVC.swift; sourceTree = "<group>"; };
 		9FF8F77420D336FD00C807A8 /* NSLayoutConstraintSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSLayoutConstraintSet.swift; path = faeBeta/NSLayoutConstraintSet.swift; sourceTree = SOURCE_ROOT; };
 		9FF8F77520D336FD00C807A8 /* UIView+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Extension.swift"; path = "faeBeta/UIView+Extension.swift"; sourceTree = SOURCE_ROOT; };
 		9FF8F77620D336FD00C807A8 /* ChatInputBarButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChatInputBarButton.swift; path = faeBeta/ChatInputBarButton.swift; sourceTree = SOURCE_ROOT; };
@@ -1084,6 +1086,7 @@
 				B37E5DAA1F83103F008A6B4B /* CloseAccountVC.swift */,
 				B3D106DD1F8891AC00A1725A /* UpdateAccountVC.swift */,
 				B3AE75CC1F897B6500AB7E76 /* UpdateUsrnameEmailVC.swift */,
+				9FEFA2F620F7073200367D21 /* NewUsernameVC.swift */,
 			);
 			path = FaeAccount;
 			sourceTree = "<group>";
@@ -2317,6 +2320,7 @@
 				502F145520CDA6FE00572FD7 /* AfterAddedToListView.swift in Sources */,
 				B8849EC81EEDC0DA00D4588D /* MBAddressLabel.swift in Sources */,
 				B8C46DBE1E63786B00FD7E27 /* PinComment.swift in Sources */,
+				9FEFA2F720F7073200367D21 /* NewUsernameVC.swift in Sources */,
 				B8849EA51EEB143800D4588D /* BoardPeople.swift in Sources */,
 				B0714DF81D62520900356705 /* RegisterNameViewController.swift in Sources */,
 				B37E5DBB1F831040008A6B4B /* Maps&DisplayVC.swift in Sources */,

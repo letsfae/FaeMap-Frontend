@@ -243,21 +243,29 @@ class NewChatShareController: UIViewController  {
                     General.shared.updateAddress(label: UILabel(), place: place) { [weak self] address in
                         guard let `self` = self else { return }
                         text = "{\"id\":\"\(place.id)\", \"name\":\"\(place.name)\", \"address\":\"\(address)\", \"imageURL\":\"\(place.imageURL)\"}"
-                        downloadImage(URL: place.imageURL) { (rawData) in
+                        if place.imageURL != "" {
+                            downloadImage(URL: place.imageURL) { (rawData) in
+                                guard let data = rawData else { return }
+                                media = data
+                                //vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
+                                self.storeMessageToRealm(with: self.arrFriends[index].userID, type: type, text: text, media: media)
+                            }
+                        } else {
+                            self.storeMessageToRealm(with: self.arrFriends[index].userID, type: type, text: text)
+                        }
+                    }
+                } else {
+                    text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1), \(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
+                    if placeDetail!.imageURL != "" {
+                        downloadImage(URL: placeDetail!.imageURL) { [weak self] (rawData) in
+                            guard let `self` = self else { return }
                             guard let data = rawData else { return }
                             media = data
                             //vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
                             self.storeMessageToRealm(with: self.arrFriends[index].userID, type: type, text: text, media: media)
                         }
-                    }
-                } else {
-                    text = "{\"id\":\"\(placeDetail!.id)\", \"name\":\"\(placeDetail!.name)\", \"address\":\"\(placeDetail!.address1), \(placeDetail!.address2)\", \"imageURL\":\"\(placeDetail!.imageURL)\"}"
-                    downloadImage(URL: placeDetail!.imageURL) { [weak self] (rawData) in
-                        guard let `self` = self else { return }
-                        guard let data = rawData else { return }
-                        media = data
-                        //vcChat.storeChatMessageToRealm(type: type, text: text, media: media)
-                        self.storeMessageToRealm(with: self.arrFriends[index].userID, type: type, text: text, media: media)
+                    } else {
+                        storeMessageToRealm(with: arrFriends[index].userID, type: type, text: text)
                     }
                 }
             default: break

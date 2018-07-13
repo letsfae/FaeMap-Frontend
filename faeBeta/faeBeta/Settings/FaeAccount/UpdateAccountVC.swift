@@ -306,11 +306,20 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
             faeUser.whereKey("password", value: textPswd.text!)
             faeUser.verifyPassword({ [unowned self] (status, message) in
                 if status / 100 == 2 {
-                    let vc = SignInSupportNewPassViewController()
-                    vc.enterMode = .oldPswd
-                    vc.oldPassword = self.textPswd.text!
-                    Key.shared.userPassword = self.textPswd.text!
-                    self.navigationController?.pushViewController(vc, animated: true)
+                    if self.pswdEnterMode == .password {
+                        let vc = SignInSupportNewPassViewController()
+                        vc.enterMode = .oldPswd
+                        vc.oldPassword = self.textPswd.text!
+                        Key.shared.userPassword = self.textPswd.text!
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    } else {
+                        let vc = NewUsernameViewController()
+                        if var arrControllers = self.navigationController?.viewControllers {
+                            arrControllers.removeLast()
+                            arrControllers.append(vc)
+                            self.navigationController?.setViewControllers(arrControllers, animated: true)
+                        }
+                    }
                 } else { // TODO: error code undecided
                     // 401-1 wrong password
                     self.lblWrongPswd.isHidden = false

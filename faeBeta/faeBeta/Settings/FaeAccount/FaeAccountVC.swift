@@ -45,6 +45,11 @@ class SetAccountViewController: UIViewController, UITableViewDelegate, UITableVi
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tblAccount.reloadData()
+    }
+    
     // MARK: - Set up
     private func loadResetPswdSucceedPage() {
         uiviewGrayBG = UIView(frame: CGRect(x: 0, y: 0, width: screenWidth, height: screenHeight))

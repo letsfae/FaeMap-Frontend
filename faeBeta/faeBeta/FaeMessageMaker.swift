@@ -254,7 +254,7 @@ class FaeMessageMaker {
         } catch {
             print("JSON Error: \(error)")
         }
-        var snapImage = UIImage(named: "place_result_48")
+        var snapImage = UIImage(named: "default_place")
         if let media = realmMessage.media {
             snapImage = UIImage(data: media as Data)
         }
