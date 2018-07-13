@@ -19,6 +19,8 @@ protocol SideMenuDelegate: class {
     func jumpToContacts()
     func reloadSelfPosition()
     func switchMapMode()
+    func jumpToLogin()
+    func jumpToSignup()
 }
 
 enum TableSelctions {
@@ -30,6 +32,8 @@ enum TableSelctions {
     case collections
     case myActivities
     case settings
+    case guest_login
+    case guest_signup
 }
 
 class SideMenuViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
@@ -327,6 +331,12 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
                 case .settings:
                     self.tableSelections = .none
                     self.delegate?.jumpToSettings()
+                case .guest_login:
+                    self.tableSelections = .none
+                    self.delegate?.jumpToLogin()
+                case .guest_signup:
+                    self.tableSelections = .none
+                    self.delegate?.jumpToSignup()
                 default: break
                 }
             })
@@ -456,16 +466,15 @@ extension SideMenuViewController {
         }
         uiviewGuestMode.guestLogin = { [weak self] in
             guard let `self` = self else { return }
-            Key.shared.navOpenMode = .welcomeFirst
-            let viewCtrlers = [WelcomeViewController(), LogInViewController()]
-            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+            self.tableSelections = .guest_login
+            self.removeGuestMode()
+            self.actionCloseMenu(self.btnBackground)
         }
         uiviewGuestMode.guestRegister = { [weak self] in
             guard let `self` = self else { return }
-            
-            Key.shared.navOpenMode = .welcomeFirst
-            let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
-            self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+            self.tableSelections = .guest_signup
+            self.removeGuestMode()
+            self.actionCloseMenu(self.btnBackground)
         }
     }
     

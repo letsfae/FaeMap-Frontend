@@ -103,6 +103,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var firstSelectPlace = true
     
     // User Pin Control
+    private let userPinAdderQueue: DispatchQueue = DispatchQueue.global(qos: .userInteractive)
+    private var userPinAdderJob: DispatchWorkItem = DispatchWorkItem(block: {})
     private var userPinRequests = [Int: DataRequest]()
     private var rawUserJSONs = [JSON]()
     private var numberOfAreasWithNoUserPin = 48
@@ -1347,7 +1349,6 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             tapUserPin(didSelect: view)
         } else if view is SelfAnnotationView {
             guard !Key.shared.is_guest else {
-                loadGuestMode()
                 return
             }
             boolCanOpenPin = false
@@ -1606,10 +1607,21 @@ extension FaeMapViewController: SideMenuDelegate, ButtonFinishClickedDelegate {
         self.navigationController?.pushViewController(vcContacts, animated: true)
     }
     
-    // sideMenuDelegate
     func jumpToSettings() {
         let vcSettings = SettingsViewController()
         navigationController?.pushViewController(vcSettings, animated: true)
+    }
+    
+    func jumpToLogin() {
+        Key.shared.navOpenMode = .welcomeFirst
+        let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+        self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+    }
+    
+    func jumpToSignup() {
+        Key.shared.navOpenMode = .welcomeFirst
+        let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+        self.navigationController?.setViewControllers(viewCtrlers, animated: true)
     }
     
     func reloadSelfPosition() {
@@ -2517,7 +2529,8 @@ extension FaeMapViewController {
     
     func doneFetchingAreaUserData() {
         var userPins = [FaePinAnnotation]()
-        DispatchQueue.global(qos: .userInitiated).async {
+        userPinAdderJob.cancel()
+        userPinAdderJob = DispatchWorkItem() { [unowned self] in
             for userJson in self.rawUserJSONs {
                 if userJson["user_id"].intValue == Key.shared.user_id {
                     continue
@@ -2551,6 +2564,7 @@ extension FaeMapViewController {
                 self.boolCanUpdateUsers = true
             }
         }
+        userPinAdderQueue.async(execute: userPinAdderJob)
     }
     
     func fetchUserPinsPartly(center: CLLocationCoordinate2D, number: Int) {

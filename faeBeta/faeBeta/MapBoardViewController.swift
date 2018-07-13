@@ -551,6 +551,16 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     }
     
     // MARK: - LeftSlidingMenuDelegate
+    func jumpToLogin() {
+        Key.shared.navOpenMode = .welcomeFirst
+        let viewCtrlers = [WelcomeViewController(), LogInViewController()]
+        self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+    }
+    func jumpToSignup() {
+        Key.shared.navOpenMode = .welcomeFirst
+        let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
+        self.navigationController?.setViewControllers(viewCtrlers, animated: true)
+    }
     func jumpToMoodAvatar() {
         let moodAvatarVC = MoodAvatarViewController()
         navigationController?.pushViewController(moodAvatarVC, animated: true)
