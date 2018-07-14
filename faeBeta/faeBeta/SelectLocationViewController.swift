@@ -37,6 +37,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var btnLocat: FMLocateSelf!
     private var btnZoom: FMZoomButton!
     private var btnSelect: FMDistIndicator!
+    private var btnRefreshIcon: FMRefreshIcon!
     
     // Address parsing & display
     private var lblSearchContent: UILabel!
@@ -182,6 +183,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         loadLocationView()
         loadPlaceDetailTable()
         loadPinIcon()
+        loadRefreshButton()
         let edgeView = LeftMarginToEnableNavGestureView()
         view.addSubview(edgeView)
         
@@ -789,7 +791,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
     }
     
-    private func fetchPlacePins(radius: Int) {
+    private func fetchPlacePins() {
         guard previousVC == .chat else { return }
         startFetchingAreaData()
 //        func getDelay(prevTime: DispatchTime) -> Double {
@@ -1289,7 +1291,7 @@ extension SelectLocationViewController {
 
 extension SelectLocationViewController: MapSearchDelegate {
     
-    func continueSearching(searchText: String) {
+    func continueSearching(searchText: String, zoomToFit: Bool) {
         PLACE_FETCH_ENABLE = false
         cancelPlacePinsFetch()
         updateUI(searchText: searchText)
@@ -1314,7 +1316,8 @@ extension SelectLocationViewController: MapSearchDelegate {
             searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                      "longitude": locationToSearch.longitude])
-            searchAgent.search { [unowned self] (status: Int, message: Any?) in
+            searchAgent.search { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 joshprint("map searched places fetched")
                 if status / 100 != 2 || message == nil {
                     self.tblPlaceResult.changeState(isLoading: false, isNoResult: true)
@@ -1342,10 +1345,13 @@ extension SelectLocationViewController: MapSearchDelegate {
                     }
                     self.PLACE_INSTANT_SHOWUP = false
                 })
-                faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
-                                           places: self.tblPlaceResult.currentGroupOfPlaces,
-                                           edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
+                if zoomToFit {
+                    faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
+                                               places: self.tblPlaceResult.currentGroupOfPlaces,
+                                               edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
+                }
                 self.tblPlaceResult.changeState(isLoading: false, isNoResult: false)
+                self.stopIconSpin(delay: 0)
             }
         }
     }
@@ -1460,10 +1466,11 @@ extension SelectLocationViewController {
     func startFetchingAreaData() {
         time_start = DispatchTime.now()
         guard PLACE_FETCH_ENABLE else {
+            stopIconSpin(delay: getDelay(prevTime: time_start))
             return
         }
-        
         guard boolCanUpdatePlaces else {
+            stopIconSpin(delay: getDelay(prevTime: time_start))
             return
         }
         boolCanUpdatePlaces = false
@@ -1484,7 +1491,9 @@ extension SelectLocationViewController {
         self.placePinFetchQueue.cancelAllOperations()
         let fetcher = PlacePinFetcher(cluster: placeClusterManager, arrPlaceJSON: rawPlaceJSONs, idSet: setPlacePins)
         fetcher.completionBlock = {
-            DispatchQueue.main.async { [unowned self] in
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else { return }
+                self.stopIconSpin(delay: 0)
                 if fetcher.isCancelled {
                     //joshprint("[fetchPlacePins] operation cancelled")
                     return
@@ -1522,7 +1531,8 @@ extension SelectLocationViewController {
         placeAgent.whereKey("radius", value: "\(radius)")
         placeAgent.whereKey("type", value: "place")
         placeAgent.whereKey("max_count", value: "15")
-        placePinRequests[number] = placeAgent.getMapPins { [unowned self] (status, message) in
+        placePinRequests[number] = placeAgent.getMapPins { [weak self] (status, message) in
+            guard let `self` = self else { return }
             joshprint("No.\(number) fetched")
             guard status / 100 == 2 else {
                 self.placeFetchesCount += 1
@@ -1574,4 +1584,71 @@ extension SelectLocationViewController {
         let coordinate = faeMapView.convert(point_centers[number], toCoordinateFrom: nil)
         fetchPlacePinsPartly(center: coordinate, number: number)
     }
+}
+
+extension SelectLocationViewController {
+    
+    private func loadRefreshButton() {
+        guard previousVC == .chat else { return }
+        btnRefreshIcon = FMRefreshIcon()
+        btnRefreshIcon.addTarget(self, action: #selector(self.actionRefreshIcon(_:)), for: .touchUpInside)
+        btnRefreshIcon.layer.zPosition = 601
+        btnRefreshIcon.frame.origin.y = screenHeight - 125 - device_offset_bot
+        view.addSubview(btnRefreshIcon)
+        view.bringSubview(toFront: btnRefreshIcon)
+    }
+    
+    @objc private func actionRefreshIcon(_ sender: UIButton) {
+        if searchState == .map {
+            cancelPlacePinsFetch()
+            guard searchState == .map else { return }
+            PLACE_FETCH_ENABLE = true
+            if btnRefreshIcon.isSpinning {
+                btnRefreshIcon.stopIconSpin()
+                boolCanUpdatePlaces = true
+                return
+            }
+            guard boolCanUpdatePlaces else { return }
+            btnRefreshIcon.startIconSpin()
+            let pinsToRemove = faePlacePins + pinsFromSearch
+            removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: false) {
+                self.faePlacePins.removeAll(keepingCapacity: true)
+                self.setPlacePins.removeAll(keepingCapacity: true)
+                if self.selectedPlace != nil {
+                    self.faePlacePins.append(self.selectedPlace!)
+                    self.setPlacePins.insert(self.selectedPlace!.id)
+                }
+                self.fetchPlacePins()
+            }
+        } else if searchState == .multipleSearch {
+            btnRefreshIcon.startIconSpin()
+            guard let searchText = lblSearchContent.text else {
+                self.stopIconSpin(delay: 0)
+                return
+            }
+            Key.shared.radius_map = Int(faeMapView.region.span.latitudeDelta * 111045)
+            continueSearching(searchText: searchText, zoomToFit: false)
+        }
+    }
+    
+    func stopIconSpin(delay: Double) {
+        boolCanUpdatePlaces = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+            self.btnRefreshIcon.stopIconSpin()
+        })
+    }
+    
+    func getDelay(prevTime: DispatchTime) -> Double {
+        let standardInterval: Double = 1
+        let nowTime = DispatchTime.now()
+        let timeDiff = Double(nowTime.uptimeNanoseconds - prevTime.uptimeNanoseconds)
+        var delay: Double = 0
+        if timeDiff / Double(NSEC_PER_SEC) < standardInterval {
+            delay = standardInterval - timeDiff / Double(NSEC_PER_SEC)
+        } else {
+            delay = timeDiff / Double(NSEC_PER_SEC) - standardInterval
+        }
+        return delay
+    }
+    
 }

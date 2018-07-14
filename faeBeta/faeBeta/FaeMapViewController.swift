@@ -1080,7 +1080,7 @@ extension FaeMapViewController {
         
         faeMapView.mapGesture(isOn: true)
         deselectAllPlaceAnnos()
-        showOrHideRefreshIcon(show: true, animated: true)
+//        showOrHideRefreshIcon(show: true, animated: true)
         removePlaceAnnotations(with: pinsFromSearch, forced: true, instantly: true) {
             self.pinsFromSearch.removeAll(keepingCapacity: true)
             self.addPlaceAnnotations(with: self.faePlacePins, forced: true, instantly: true) {
@@ -1680,33 +1680,47 @@ extension FaeMapViewController: MapFilterMenuDelegate {
     }
     
     @objc private func actionRefreshIcon(_ sender: UIButton) {
-        cancelPlacePinsFetch()
-        guard searchState == .map else { return }
-        PLACE_FETCH_ENABLE = true
-        if btnRefreshIcon.isSpinning {
-            btnRefreshIcon.stopIconSpin()
-            boolCanUpdatePlaces = true
-            boolCanUpdateUsers = true
-            return
-        }
-        guard boolCanUpdatePlaces && boolCanUpdateUsers else { return }
-        btnRefreshIcon.startIconSpin()
-        removePlaceUserPins({
-            self.faePlacePins.removeAll(keepingCapacity: true)
-            self.setPlacePins.removeAll(keepingCapacity: true)
-            if self.selectedPlace != nil {
-                self.faePlacePins.append(self.selectedPlace!)
-                self.setPlacePins.insert(self.selectedPlace!.id)
+        if searchState == .map {
+            cancelPlacePinsFetch()
+            guard searchState == .map else { return }
+            PLACE_FETCH_ENABLE = true
+            if btnRefreshIcon.isSpinning {
+                btnRefreshIcon.stopIconSpin()
+                boolCanUpdatePlaces = true
+                boolCanUpdateUsers = true
+                return
             }
-            self.fetchPlacePins()
-        }) {
-            self.faeUserPins.removeAll(keepingCapacity: true)
-            self.setUserPins.removeAll(keepingCapacity: true)
-            self.updateTimerForUserPin()
+            guard boolCanUpdatePlaces && boolCanUpdateUsers else { return }
+            btnRefreshIcon.startIconSpin()
+            removePlaceUserPins({
+                self.faePlacePins.removeAll(keepingCapacity: true)
+                self.setPlacePins.removeAll(keepingCapacity: true)
+                if self.selectedPlace != nil {
+                    self.faePlacePins.append(self.selectedPlace!)
+                    self.setPlacePins.insert(self.selectedPlace!.id)
+                }
+                self.fetchPlacePins()
+            }) {
+                self.faeUserPins.removeAll(keepingCapacity: true)
+                self.setUserPins.removeAll(keepingCapacity: true)
+                self.updateTimerForUserPin()
+            }
+        } else if searchState == .multipleSearch {
+            btnRefreshIcon.startIconSpin()
+            guard let searchText = lblSearchContent.text else {
+                self.stopIconSpin(delay: 0)
+                return
+            }
+            Key.shared.radius_map = Int(faeMapView.region.span.latitudeDelta * 111045)
+            continueSearching(searchText: searchText, zoomToFit: false)
         }
     }
     
     @objc private func actionShowMapActionsMenu(_ sender: UIButton) {
+        guard !Key.shared.is_guest else {
+            loadGuestMode()
+            return
+        }
         if sender.isSelected {
             sender.isSelected = false
             uiviewDropUpMenu.hide()
@@ -2032,15 +2046,16 @@ extension FaeMapViewController: MapSearchDelegate {
     
     // MapSearchDelegate
     
-    func continueSearching(searchText: String) {
+    func continueSearching(searchText: String, zoomToFit: Bool) {
         PLACE_FETCH_ENABLE = false
         cancelPlacePinsFetch()
         updateUI(searchText: searchText)
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
-        showOrHideRefreshIcon(show: false, animated: false)
+        //showOrHideRefreshIcon(show: false, animated: false)
         tblPlaceResult.changeState(isLoading: true, isNoResult: nil)
-        removePlaceUserPins({
+        let pinsToRemove = faePlacePins + pinsFromSearch + pinsFromCollection
+        removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: false) {
             self.searchState = .multipleSearch
             self.PLACE_INSTANT_SHOWUP = true
             // search and show results
@@ -2048,17 +2063,17 @@ extension FaeMapViewController: MapSearchDelegate {
             if let locToSearch = LocManager.shared.locToSearch_map {
                 locationToSearch = locToSearch
             }
-
+            
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: searchText)
-            searchAgent.whereKey("source", value: "name")
+            searchAgent.whereKey("source", value: Key.shared.searchSource_map)
             searchAgent.whereKey("type", value: "place")
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "\(Key.shared.radius_map)")
             searchAgent.whereKey("offset", value: "0")
             searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
-                                                          "longitude": locationToSearch.longitude])
+                                                     "longitude": locationToSearch.longitude])
             searchAgent.search { [unowned self] (status: Int, message: Any?) in
                 joshprint("map searched places fetched")
                 if status / 100 != 2 || message == nil {
@@ -2082,17 +2097,22 @@ extension FaeMapViewController: MapSearchDelegate {
                 self.PLACE_INSTANT_SHOWUP = true
                 self.placeClusterManager.maxZoomLevelForClustering = 0
                 self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
-                    if let first = searchedPlaces.first {
-                        self.goTo(annotation: nil, place: first, animated: true)
+                    if zoomToFit {
+                        if let first = searchedPlaces.first {
+                            self.goTo(annotation: nil, place: first, animated: true)
+                        }
                     }
                     self.PLACE_INSTANT_SHOWUP = false
                 })
-                faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
-                                           places: self.tblPlaceResult.currentGroupOfPlaces,
-                                           edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
+                if zoomToFit {
+                    faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
+                                               places: self.tblPlaceResult.currentGroupOfPlaces,
+                                               edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
+                }
                 self.tblPlaceResult.changeState(isLoading: false, isNoResult: false)
+                self.stopIconSpin(delay: 0)
             }
-        }, nil)
+        }
     }
     
     func jumpToPlaces(searchText: String, places: [PlacePin]) {
@@ -2110,7 +2130,7 @@ extension FaeMapViewController: MapSearchDelegate {
         }
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
-        showOrHideRefreshIcon(show: false, animated: false)
+        //showOrHideRefreshIcon(show: false, animated: false)
         if let first = places.first {
             tblPlaceResult.dataOffset = places.count
             tblPlaceResult.changeState(isLoading: false, isNoResult: false)
@@ -2149,7 +2169,7 @@ extension FaeMapViewController: MapSearchDelegate {
         locationsFromCollection = locations
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
-        showOrHideRefreshIcon(show: false, animated: false)
+        //showOrHideRefreshIcon(show: false, animated: false)
         let pinsToAdd = locations.map { FaePinAnnotation(type: .location, cluster: self.locationPinClusterManager, data: $0) }
         pinsFromCollection = pinsToAdd
         removePlaceUserPins({

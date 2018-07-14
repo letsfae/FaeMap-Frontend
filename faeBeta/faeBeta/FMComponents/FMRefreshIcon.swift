@@ -37,7 +37,7 @@ class FMRefreshIcon: UIButton {
     
     override init(frame: CGRect = CGRect.zero) {
         super.init(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
-        loadMapFilter()
+        loadContent()
         NotificationCenter.default.addObserver(self, selector: #selector(self.startAnimation), name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
     }
     
@@ -49,7 +49,7 @@ class FMRefreshIcon: UIButton {
         super.init(coder: aDecoder)
     }
     
-    private func loadMapFilter() {
+    private func loadContent() {
         polygonOutside = UIImageView(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
         polygonOutside.image = #imageLiteral(resourceName: "mapFilterHexagon")
         polygonOutside.contentMode = .scaleAspectFit
@@ -143,7 +143,6 @@ class FMRefreshIcon: UIButton {
     }
     
     public func startIconSpin() {
-        guard self.center.y == screenHeight - 25 - device_offset_bot else { return }
         guard isSpinning == false else { return }
         self.boolHideInsides = true
         self.isSpinning = true

@@ -12,7 +12,7 @@ import Alamofire
 @objc protocol MapSearchDelegate: class {
     @objc optional func jumpToCategory(category: String)
     @objc optional func jumpToPlaces(searchText: String, places: [PlacePin])
-    @objc optional func continueSearching(searchText: String)
+    @objc optional func continueSearching(searchText: String, zoomToFit: Bool)
     @objc optional func selectPlace(place: PlacePin)
     @objc optional func selectLocation(location: CLLocation)
 }
