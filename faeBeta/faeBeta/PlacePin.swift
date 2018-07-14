@@ -24,7 +24,7 @@ class PlacePin: NSObject, FaePin {
     var class_3: String = ""
     var class_4: String = ""
     var category: String = ""
-    var category_icon_id: Int = 48
+    var category_icon_id: Int = -1
     var url = ""
     var price = ""
     var phone = ""
