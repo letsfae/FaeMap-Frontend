@@ -60,13 +60,12 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     var boolFromChat: Bool = false
     var boolReadMore: Bool = false
     
+    var strChatMessageId: String = ""
+    
     // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        guard realm.filterCollection(id: colId) != nil else {
-            return
-        }
         loadColItems()
         loadTable()
         loadHeaderImg()
@@ -74,7 +73,6 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
         loadHiddenHeader()
         loadHiddenSectionHeader()
         loadChooseOption()
-        observeOnCollectionChange()
         ColListDetailHeader.boolExpandMore = false
     }
     
@@ -94,8 +92,13 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             btnMapView.isEnabled = false
         }
         //realmColDetails = RealmCollection.filterCollectedPin(collection_id: colId)
-        realmColDetails = realm.filterCollection(id: colId)
-        getSavedItems(colId: colId)
+        if let details = realm.filterCollection(id: colId) {
+            realmColDetails = details
+            getSavedItems(colId: colId)
+            observeOnCollectionChange()
+        } else {
+            getSavedItemsFromServer()
+        }
     }
     
     fileprivate func loadHeaderImg() {
@@ -480,6 +483,33 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
                     faePlaceInfoCache.setObject(placeInfo as AnyObject, forKey: collectedPin["pin_id"].intValue as AnyObject)
                     self?.fetchedCount += 1
                 }
+            }
+        })
+    }
+    
+    func getSavedItemsFromServer() {
+        FaeCollection.shared.getOneCollection(String(colId), completion: { [unowned self] (status, message) in
+            if status / 100 == 2 {
+                guard message != nil else { return }
+                let col = JSON(message!)
+                self.realmColDetails.descrip = col["description"].stringValue
+                self.realmColDetails.type = col["type"].stringValue
+                self.realmColDetails.is_private = col["is_private"].boolValue
+                self.realmColDetails.created_at = col["created_at"].stringValue
+                self.realmColDetails.last_updated_at = col["last_updated_at"].stringValue
+                for pin in col["pins"].arrayValue {
+                    let collectedPin = CollectedPin(value: ["\(Key.shared.user_id)_\(col["user_id"].intValue)_\(pin["pin_id"].intValue)", Key.shared.user_id, col["user_id"].intValue, pin["pin_id"].intValue, pin["added_at"].stringValue])
+                    self.realmColDetails.pins.append(collectedPin)
+                }
+                self.tblColListDetail.reloadData()
+                let realm = try! Realm()
+                if let chatMessage = realm.filterMessage(self.strChatMessageId) {
+                    try! realm.write {
+                        chatMessage.text = "{\"id\":\"\(col["collection_id"].intValue)\", \"name\":\"\(col["name"].stringValue)\", \"count\":\"\(col["count"].intValue)\", \"creator\":\"\(col["user_id"].intValue)\"}"
+                    }
+                }
+            } else {
+                // TODO
             }
         })
     }
