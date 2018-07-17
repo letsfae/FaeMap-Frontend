@@ -50,7 +50,7 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
     
     // MARK: - UITableViewDataSource
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : 5
+        return section == 0 ? 2 : 4
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -138,10 +138,10 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 fbVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
                 present(fbVC!, animated: true, completion: nil)*/
                // break
-            case 3:
-                if UIApplication.shared.canOpenURL(URL(string: "twitter://")!) {
+            //case 3:
+                /*if UIApplication.shared.canOpenURL(URL(string: "twitter://")!) {
                     UIApplication.shared.openURL(URL(string: "twitter://post?message=Discover+amazing+places+with+me+on+Fae+Maps!+Check+it+out+here!%5bhttps%3a%2f%2fwww.faemaps.com%2f%5d")!)
-                }
+                }*/
                 /*if !SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter) {
                     felixprint("twitter not available")
                     return
@@ -149,7 +149,23 @@ class SetSpreadViewController: UIViewController, UITableViewDelegate, UITableVie
                 let twitterVC = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
                 twitterVC!.setInitialText("Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]")
                 present(twitterVC!, animated: true, completion: nil)*/
-            case 4:
+                /*if (TWTRTwitter.sharedInstance().sessionStore.hasLoggedInUsers()) {
+                    // App must have at least one logged-in user to compose a Tweet
+                    let composer = TWTRComposerViewController.emptyComposer()
+                    present(composer, animated: true, completion: nil)
+                } else {
+                    // Log in, and then check again
+                    TWTRTwitter.sharedInstance().logIn { session, error in
+                        if session != nil { // Log in succeeded
+                            let composer = TWTRComposerViewController.emptyComposer()
+                            self.present(composer, animated: true, completion: nil)
+                        } else {
+                            let alert = UIAlertController(title: "No Twitter Accounts Available", message: "You must log in before presenting a composer.", preferredStyle: .alert)
+                            self.present(alert, animated: false, completion: nil)
+                        }
+                    }
+                }*/
+            case 3:
                 let activityVC = UIActivityViewController(activityItems: ["Discover amazing places with me on Fae Maps! Check it out here![https://www.faemaps.com/]"], applicationActivities: nil)
                 activityVC.popoverPresentationController?.sourceView = self.view
                 present(activityVC, animated: true, completion: nil)

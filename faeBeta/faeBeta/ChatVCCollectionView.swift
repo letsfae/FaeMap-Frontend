@@ -241,6 +241,9 @@ extension ChatViewController {
             vcCollection.enterMode = .place
             vcCollection.boolFromChat = true
             vcCollection.colId = jsonCollection["id"].intValue
+            let realmCol = RealmCollection(value: [jsonCollection["id"].intValue, jsonCollection["name"].stringValue, jsonCollection["creator"].intValue, "", "", false, "", jsonCollection["count"].intValue, ""])
+            vcCollection.realmColDetails = realmCol
+            vcCollection.strChatMessageId = realmMessage.primary_key
             boolIsDisappearing = true
             navigationController?.pushViewController(vcCollection, animated: true)
             
