@@ -106,14 +106,17 @@ class BoardAvatarWaves: UIView {
     }
     
     func showWaves() {
+        self.alpha = 1
+        loadWaves()
 //        UIView.animate(withDuration: 0.3, animations: {
-            self.alpha = 1
+//            self.alpha = 1
 //        })
     }
     
     func hideWaves() {
+        UIView.animate(withDuration: 0, delay: 1, options: .curveEaseOut, animations: {
 //        UIView.animate(withDuration: 0.3, animations: {
             self.alpha = 0
-//        })
+        })
     }
 }
