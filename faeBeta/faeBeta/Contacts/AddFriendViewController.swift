@@ -44,6 +44,7 @@ class AddFriendViewController: UIViewController, UITableViewDelegate, UITableVie
         tblOptions.register(FaeAddFriendOptionsCell.self, forCellReuseIdentifier: "FaeAddFriendOptionsCell")
         tblOptions.register(FaeRecommendedCell.self, forCellReuseIdentifier: "myRecommendedCell")
         view.addSubview(tblOptions)
+        tblOptions.isScrollEnabled = false
         
         imgCity = UIImageView()
         imgCity.frame = CGRect(x: 0, y: screenHeight - 256 * screenHeightFactor, width: screenWidth, height: 256 * screenHeightFactor)
