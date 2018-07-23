@@ -44,7 +44,7 @@ class AllPlacesMapController: BasicMapController {
             guard fullyLoaded else { return }
             guard desiredCount > 0 else { return }
             guard desiredCount == completionCount else { return }
-            loadAnnos()
+            addAnnotations()
         }
     }
     
@@ -119,12 +119,30 @@ class AllPlacesMapController: BasicMapController {
         }
     }
     
+    private func addAnnotations() {
+        guard let first = annos.first else { return }
+        placeClusterManager.addAnnotations(annos, withCompletionHandler: {
+            let annotations = visiblePins(mapView: self.faeMapView, type: FaePinType(rawValue: self.enterMode.rawValue)!, returnAll: true)
+            switch self.enterMode {
+            case .place:
+                self.uiviewPlaceBar.annotations = annotations
+            case .location:
+                let cllocation = CLLocation(latitude: first.coordinate.latitude, longitude: first.coordinate.longitude)
+                self.uiviewLocationBar.updateLocationInfo(location: cllocation, { (address_1, address_2) in
+                    
+                })
+            }
+            self.goTo(annotation: annotations.first, place: nil, animated: true)
+        })
+        zoomToFitAllAnnotations(annotations: annos)
+    }
+    
     private func loadAnnotations(pins: [FaePin]) {
         annos = pins.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0 as! PlacePin) }
         placeClusterManager.addAnnotations(annos, withCompletionHandler: {
             let placePin = self.arrPins.first as? PlacePin
-            self.goTo(annotation: nil, place: placePin, animated: true)
             self.uiviewPlaceBar.annotations = visiblePins(mapView: self.faeMapView, type: .place, returnAll: true)
+            self.goTo(annotation: nil, place: placePin, animated: true)
         })
         zoomToFitAllAnnotations(annotations: annos)
     }
@@ -178,24 +196,6 @@ class AllPlacesMapController: BasicMapController {
         }
     }
     
-    private func loadAnnos() {
-        guard let first = annos.first else { return }
-        placeClusterManager.addAnnotations(self.annos, withCompletionHandler: {
-            let annotations = visiblePins(mapView: self.faeMapView, type: FaePinType(rawValue: self.enterMode.rawValue)!, returnAll: true)
-            self.goTo(annotation: annotations.first, place: nil, animated: true)
-            switch self.enterMode {
-            case .place:
-                self.uiviewPlaceBar.annotations = annotations
-            case .location:
-                let cllocation = CLLocation(latitude: first.coordinate.latitude, longitude: first.coordinate.longitude)
-                self.uiviewLocationBar.updateLocationInfo(location: cllocation, { (address_1, address_2) in
-                    
-                })
-            }
-        })
-        zoomToFitAllAnnotations(annotations: annos)
-    }
-    
     // MARK: - Place Pin Ctrl
     
     override func tapPlacePin(didSelect view: MKAnnotationView) {
@@ -203,7 +203,12 @@ class AllPlacesMapController: BasicMapController {
         guard let anView = view as? PlacePinAnnotationView else { return }
         faeMapView.selectedPlaceAnno = anView
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
-        guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
+        guard var firstAnn = cluster.representative as? FaePinAnnotation else { return }
+        if let sPlace = selectedPlace {
+            if faeBeta.coordinateEqual(cluster.coordinate, sPlace.coordinate) {
+                firstAnn = sPlace
+            }
+        }
         guard firstAnn.type == .place else { return }
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
@@ -227,7 +232,17 @@ class AllPlacesMapController: BasicMapController {
         } else {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
+        anView.iconIndex = first.category_icon_id
         anView.assignImage(first.icon)
+        if first.isSelected {
+            let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
+            anView.assignImage(icon)
+            anView.optionsReady = true
+            anView.optionsOpened = false
+            selectedPlaceAnno = anView
+            anView.superview?.bringSubview(toFront: anView)
+            anView.zPos = 199
+        }
         anView.delegate = self
         return anView
     }
@@ -391,9 +406,13 @@ extension AllPlacesMapController: PlaceViewDelegate {
                 }
                 if animated {
                     faeBeta.animateToCoordinate(mapView: faeMapView, coordinate: placeData.coordinate)
+                } else {
+                    let camera = faeMapView.camera
+                    camera.centerCoordinate = placeData.coordinate
+                    faeMapView.setCamera(camera, animated: false)
                 }
                 if desiredAnno != nil {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                         self.faeMapView.selectAnnotation(desiredAnno, animated: false)
                     }
                 }

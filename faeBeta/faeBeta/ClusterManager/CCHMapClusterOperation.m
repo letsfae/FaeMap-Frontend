@@ -100,87 +100,107 @@
 - (void)start
 {
     self.executing = YES;
-    
+    double zoomLevelToDisableSmallerCellRect = 14.5;
     double zoomLevel = CCHMapClusterControllerZoomLevelForRegion(self.mapViewRegion.center.longitude, self.mapViewRegion.span.longitudeDelta, self.mapViewWidth);
     BOOL disableClustering = (zoomLevel > self.maxZoomLevelForClustering);
-    BOOL respondsToSelector = [_clusterControllerDelegate respondsToSelector:@selector(mapClusterController:willReuseMapClusterAnnotation:)];
-    
+    if (self.forPlacePin) {
+        disableClustering = (zoomLevel > 18);
+    }
+    BOOL respondsToSelector = [_clusterControllerDelegate respondsToSelector:@selector(mapClusterController:willReuseMapClusterAnnotation:fullAnnotationSet:findSelectedPin:)];
+    printf("[zoom level] %.3f\n", zoomLevel);
     // For each cell in the grid, pick one cluster annotation to show
     MKMapRect gridMapRect = [self.class gridMapRectForMapRect:self.mapViewVisibleMapRect withCellMapSize:self.cellMapSize marginFactor:self.marginFactor];
     NSMutableSet *clusters = [NSMutableSet set];
-    CCHMapClusterControllerEnumerateCells(gridMapRect, _cellMapSize, ^(MKMapRect cellMapRect) {
-        NSSet *allAnnotationsInCell = [self->_allAnnotationsMapTree annotationsInMapRect:cellMapRect];
-        
+    CCHMapClusterControllerEnumerateCells(gridMapRect, _cellMapSize, ^(MKMapRect cellMapRect, MKMapRect fullCellMapRect) {
+        NSSet *allAnnotationsInCell;
+        NSSet *allAnnotationsInCellInFull;
+        if (zoomLevel >= zoomLevelToDisableSmallerCellRect) {
+            allAnnotationsInCell = [self->_allAnnotationsMapTree annotationsInMapRect:fullCellMapRect];
+            allAnnotationsInCellInFull = allAnnotationsInCell;
+        } else {
+            allAnnotationsInCell = [self->_allAnnotationsMapTree annotationsInMapRect:cellMapRect];
+            allAnnotationsInCellInFull = [self->_allAnnotationsMapTree annotationsInMapRect:fullCellMapRect];
+        }
         if (allAnnotationsInCell.count > 0) {
             BOOL annotationSetsAreUniqueLocations;
             NSArray *annotationSets;
+            NSArray *annotationSetsInFull;
             if (disableClustering) {
                 // Create annotation for each unique location because clustering is disabled
                 annotationSets = CCHMapClusterControllerAnnotationSetsByUniqueLocations(allAnnotationsInCell, NSUIntegerMax);
                 annotationSetsAreUniqueLocations = YES;
+                if (zoomLevel >= zoomLevelToDisableSmallerCellRect) {
+                    annotationSetsInFull = annotationSets;
+                } else {
+                    annotationSetsInFull = CCHMapClusterControllerAnnotationSetsByUniqueLocations(allAnnotationsInCellInFull, NSUIntegerMax);
+                }
             } else {
                 NSUInteger max = self->_minUniqueLocationsForClustering > 1 ? self->_minUniqueLocationsForClustering - 1 : 1;
                 annotationSets = CCHMapClusterControllerAnnotationSetsByUniqueLocations(allAnnotationsInCell, max);
+                if (zoomLevel >= zoomLevelToDisableSmallerCellRect) {
+                    annotationSetsInFull = annotationSets;
+                } else {
+                    annotationSetsInFull = CCHMapClusterControllerAnnotationSetsByUniqueLocations(allAnnotationsInCellInFull, max);
+                }
                 if (annotationSets) {
                     // Create annotation for each unique location because there are too few locations for clustering
                     annotationSetsAreUniqueLocations = YES;
                 } else {
                     // Create one annotation for entire cell
                     annotationSets = @[allAnnotationsInCell];
+                    annotationSetsInFull = @[allAnnotationsInCellInFull];
                     annotationSetsAreUniqueLocations = NO;
                 }
             }
             
-            NSMutableSet *visibleAnnotationsInCell = [NSMutableSet setWithSet:[self->_visibleAnnotationsMapTree annotationsInMapRect:cellMapRect]];
+            CLLocationCoordinate2D selectedAnnotationCoordinate = CLLocationCoordinate2DMake(0, 0);
+            BOOL selectedAnnotationFound = NO;
+            NSSet *annotationSetInFull;
+            for (NSSet *annotationSet in annotationSetsInFull) {
+                annotationSetInFull = annotationSet;
+                if (annotationSetsAreUniqueLocations) {
+                    selectedAnnotationFound = NO;
+                } else {
+                    IsSelectedCoordinate returnVal = [self->_clusterer mapClusterController:self->_clusterController coordinateForAnnotations:annotationSet inMapRect:fullCellMapRect];
+                    if (returnVal.isSelected) {
+                        selectedAnnotationFound = YES;
+                        selectedAnnotationCoordinate = returnVal.coordinate;
+                        break;
+                    }
+                }
+            }
+            //int count = 0;
             for (NSSet *annotationSet in annotationSets) {
+                //printf("annotationSet count: %d\n",count);
+                //count = count + 1;
                 CLLocationCoordinate2D coordinate;
                 BOOL isSelected = NO;
                 if (annotationSetsAreUniqueLocations) {
                     coordinate = [annotationSet.anyObject coordinate];
+                } else if (selectedAnnotationFound) {
+                    coordinate = selectedAnnotationCoordinate;
+                    isSelected = YES;
                 } else {
                     IsSelectedCoordinate returnVal = [self->_clusterer mapClusterController:self->_clusterController coordinateForAnnotations:annotationSet inMapRect:cellMapRect];
                     coordinate = returnVal.coordinate;
                     isSelected = returnVal.isSelected;
-//                    if (isSelected == YES) {
-//                        printf("[isSelected true]\n");
-//                    }
                 }
                 
+                NSMutableSet *visibleAnnotationsInCell = [NSMutableSet setWithSet:[self->_visibleAnnotationsMapTree annotationsInMapRect:fullCellMapRect]];
                 CCHMapClusterAnnotation *annotationForCell;
                 if (self->_reuseExistingClusterAnnotations) {
                     // Check if an existing cluster annotation can be reused
-//                    if (isSelected) {
-//                        for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
-//                            BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
-//                            if (coordinateMatches) {
-//                                annotationForCell = visibleAnnotation;
-//                                //printf("found \n");
-//                            }
-//                        }
-//                    } else {
-//                        if (self.isZoomIn) {
-                            for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
-                                BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
-                                if (coordinateMatches) {
-                                    annotationForCell = visibleAnnotation;
-                                    break;
-                                    //printf("found \n");
-                                }
-                            }
-//                        } else {
-//                            annotationForCell = CCHMapClusterControllerFindVisibleAnnotation(annotationSet, visibleAnnotationsInCell);
-//                            if (annotationForCell) {
-//                                BOOL coordinateMatches = fequal(coordinate.latitude, annotationForCell.coordinate.latitude) && fequal(coordinate.longitude, annotationForCell.coordinate.longitude);
-//                                //printf(coordinateMatches ? "2: Yes\n" : "2: No\n");
-//                                annotationForCell = coordinateMatches ? annotationForCell : nil;
-//                            }
-//                        }
-//                    }
+                    for (CCHMapClusterAnnotation *visibleAnnotation in visibleAnnotationsInCell) {
+                        BOOL coordinateMatches = fequal(coordinate.latitude, visibleAnnotation.coordinate.latitude) && fequal(coordinate.longitude, visibleAnnotation.coordinate.longitude);
+                        if (coordinateMatches) {
+                            annotationForCell = visibleAnnotation;
+                            break;
+                        }
+                    }
                 }
                 
                 if (annotationForCell == nil) {
                     // Create new cluster annotation
-                    ///printf("3: here\n");
                     annotationForCell = [[CCHMapClusterAnnotation alloc] init];
                     annotationForCell.mapClusterController = self->_clusterController;
                     annotationForCell.delegate = self->_clusterControllerDelegate;
@@ -189,22 +209,35 @@
                     [clusters addObject:annotationForCell];
                 } else {
                     // For an existing cluster annotation, this will implicitly update its annotation view
-                    if (!self.isZoomIn || self.isUserPin || self.isForcedRefresh) {
-                        [visibleAnnotationsInCell removeObject:annotationForCell];
+                    BOOL hasPreviousRepresentative = NO;
+                    if ([annotationForCell.annotations containsObject:annotationForCell.representative]) {
+                        hasPreviousRepresentative = YES;
+                    }
+                    
+                    if (self.isZoomingOut || !self.forPlacePin || self.isForcedRefresh) {
+                        if (!self.isVisibleAnnotationRemovingBlocked || !hasPreviousRepresentative) {
+                            [visibleAnnotationsInCell removeObject:annotationForCell];
+                        }
                     }
                     annotationForCell.annotations = annotationSet;
                     dispatch_async(dispatch_get_main_queue(), ^{
                         if (annotationSetsAreUniqueLocations) {
                             annotationForCell.coordinate = coordinate;
+                        } else if ([annotationForCell.annotations containsObject:annotationForCell.representative]) {
+                            //printf("[annotationForCell] contains representative\n");
+                            annotationForCell.coordinate = annotationForCell.representative.coordinate;
                         }
-                        annotationForCell.title = nil;
-                        annotationForCell.subtitle = nil;
                         if (respondsToSelector) {
-                            [self->_clusterControllerDelegate mapClusterController:self->_clusterController willReuseMapClusterAnnotation:annotationForCell];
+                            [self->_clusterControllerDelegate mapClusterController:self->_clusterController willReuseMapClusterAnnotation:annotationForCell fullAnnotationSet:annotationSetInFull findSelectedPin:isSelected];
                         }
                     });
-                    if (!self.isZoomIn || self.isUserPin || self.isForcedRefresh) {
-                        [clusters addObject:annotationForCell];
+                    // if is zooming out or panning
+                    // or is user cluster manager
+                    // or is forced refresh trigerred
+                    if (self.isZoomingOut || !self.forPlacePin || self.isForcedRefresh) {
+                        if (!self.isVisibleAnnotationRemovingBlocked || !hasPreviousRepresentative) {
+                            [clusters addObject:annotationForCell];
+                        }
                     }
                 }
             }
@@ -219,13 +252,12 @@
     [annotationsToAddAsSet minusSet:annotationsToKeep];
     NSArray *annotationsToAdd = [annotationsToAddAsSet allObjects];
     NSMutableSet *annotationsToRemoveAsSet = [NSMutableSet setWithSet:annotationsBeforeAsSet];
-//    if (self.isZoomIn && !self.isUserPin && !self.isForcedRefresh) {
-//        [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
-//    } else {
-//        [annotationsToRemoveAsSet minusSet:clusters];
-//    }
-    if (!self.isZoomIn || self.isUserPin || self.isForcedRefresh) {
-        [annotationsToRemoveAsSet minusSet:clusters];
+    if (self.isZoomingOut || !self.forPlacePin || self.isForcedRefresh) {
+        if (!self.isVisibleAnnotationRemovingBlocked) {
+            [annotationsToRemoveAsSet minusSet:clusters];
+        } else {
+            [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
+        }
     } else {
         [annotationsToRemoveAsSet minusSet:annotationsBeforeAsSet];
     }

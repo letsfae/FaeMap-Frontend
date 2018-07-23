@@ -13,7 +13,7 @@ typealias ImageView = UIImageView
 
 public typealias IndicatorView = UIActivityIndicatorView
 
-func compressImage(_ image: UIImage, max_image_bytes: Int = 1024) -> Data {
+func compressImage(_ image: UIImage, max_image_bytes: Int = 1024 * 5) -> Data {
     //    let max_image_bytes = 1024    // 0.1 MB for the image
     let dates = UIImageJPEGRepresentation(image, 1)
     let formatted_datas = Int((dates?.count)!) // 4752033

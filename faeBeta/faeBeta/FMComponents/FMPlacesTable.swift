@@ -427,7 +427,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func loadingData(current: CCHMapClusterAnnotation) {
         searchState = .map
-        if let place = current.annotations.first as? FaePinAnnotation {
+        if let place = current.representative as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.setValueForPlace(placeInfo: placeInfo)
             }
@@ -815,7 +815,9 @@ class FMPlaceResultBarCell: UITableViewCell {
         if placeInfo.address1 != "" {
             lblItemAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         } else {
-            General.shared.updateAddress(label: lblItemAddr, place: placeInfo)
+            if !joshDebug {
+                General.shared.updateAddress(label: lblItemAddr, place: placeInfo)
+            }
         }
         lblPrice.text = placeInfo.price
         // TODO: Yue - Hours update

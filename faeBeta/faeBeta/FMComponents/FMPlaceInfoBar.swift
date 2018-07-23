@@ -113,7 +113,7 @@ class NewFMPlaceInfoBar: UIScrollView, UIScrollViewDelegate {
     }
     
     func loadingData(current: CCHMapClusterAnnotation) {
-        if let place = current.annotations.first as? FaePinAnnotation {
+        if let place = current.representative as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.setValueForPlace(placeInfo: placeInfo)
             }
@@ -304,7 +304,7 @@ class FMPlaceInfoBar: UIView {
     
     func loadingData(current: CCHMapClusterAnnotation) {
         state = .map
-        if let place = current.annotations.first as? FaePinAnnotation {
+        if let place = current.representative as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.setValueForPlace(placeInfo: placeInfo)
             }
@@ -314,13 +314,8 @@ class FMPlaceInfoBar: UIView {
         var next_idx = 0
         for i in 0..<annotations.count {
             if annotations[i] == current {
-//                joshprint("[loadingData], find equals")
                 prev_idx = (i - 1) < 0 ? annotations.count - 1 : i - 1
                 next_idx = (i + 1) >= annotations.count ? 0 : i + 1
-//                joshprint("[loadingData], count = \(annotations.count)")
-//                joshprint("[loadingData],     i = \(i)")
-//                joshprint("[loadingData],  prev = \(prev_idx)")
-//                joshprint("[loadingData],  next = \(next_idx)")
                 break
             } else {
                 continue
@@ -571,7 +566,9 @@ class PlaceView: UIView {
         if placeInfo.address1 != "" {
             lblAddr.text = placeInfo.address1 + ", " + placeInfo.address2
         } else {
-            General.shared.updateAddress(label: lblAddr, place: placeInfo)
+            if !joshDebug {
+                General.shared.updateAddress(label: lblAddr, place: placeInfo)
+            }
         }
         
         lblPrice.text = placeInfo.price

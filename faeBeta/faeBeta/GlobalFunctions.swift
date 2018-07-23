@@ -20,6 +20,27 @@ func createActivityIndicator(large: Bool) -> UIActivityIndicatorView {
 }
 
 // MARK: - Map View
+func originXForLongitudeAtZoomLevel22(longitude: CLLocationDegrees) -> Double {
+    let MERCATOR_OFFSET: Double = 536870912
+    // (width in points at zoom level 22) / 2
+    let MERCATOR_RADIUS_SCALE: Double = MERCATOR_OFFSET / 180.0
+    return MERCATOR_OFFSET + MERCATOR_RADIUS_SCALE * longitude
+}
+
+func getZoomLevel(longitudeCenter: CLLocationDegrees, longitudeDelta: CLLocationDegrees, width: CGFloat) -> Double {
+    // Based on http://troybrant.net/blog/2010/01/mkmapview-and-zoom-levels-a-visual-guide/
+    // Adjusted so that at zoom level 0, the entire world fits into a single 256 point tile.
+    let LOG_2: Double = 0.69314718055994529
+    // log(2)
+    let centerPointX: Double = originXForLongitudeAtZoomLevel22(longitude: longitudeCenter)
+    let topLeftPointX: Double = originXForLongitudeAtZoomLevel22(longitude: longitudeCenter - CLLocationDegrees(longitudeDelta / 2))
+    let scaledMapWidth: Double = (centerPointX - topLeftPointX) * 2
+    let zoomScale = scaledMapWidth / Double(width)
+    let zoomExponent: Double = log(zoomScale) / LOG_2
+    let zoomLevel: Double = 22 - zoomExponent
+    return zoomLevel
+}
+
 func calculateRegion(miles: Double, coordinate: CLLocationCoordinate2D) -> MKCoordinateRegion {
     let scalingFactor = abs( (cos(2 * .pi * coordinate.latitude / 360.0) ));
     let span = MKCoordinateSpan(latitudeDelta: miles/69.0, longitudeDelta: miles/(scalingFactor * 69.0))
@@ -138,15 +159,14 @@ func visiblePins(mapView: MKMapView, type: FaePinType, returnAll: Bool = false) 
     return annos
 }
 
-func cameraDiagonalDistance(mapView: MKMapView?) -> Int {
+func cameraDistance(mapView: MKMapView?) -> Int {
     guard let map = mapView else { return 8000 }
-    let centerCoor: CLLocationCoordinate2D = getCenterCoordinate(mapView: map)
-    // init center location from center coordinate
+    let centerCoor = map.convert(CGPoint(x: screenWidth / 2, y: screenHeight), toCoordinateFrom: nil)
     let centerLocation = CLLocation(latitude: centerCoor.latitude, longitude: centerCoor.longitude)
-    let topCenterCoor: CLLocationCoordinate2D = getTopCenterCoordinate(mapView: map)
+    let topCenterCoor = map.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
     let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
     let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation)
-    return Int(radius * 4)
+    return Int(radius)
 }
 
 func calculateRadius(mapView: MKMapView?) -> Int {
@@ -158,15 +178,6 @@ func calculateRadius(mapView: MKMapView?) -> Int {
     let to_loc = CLLocation(latitude: to.latitude, longitude: to.longitude)
     let radius: CLLocationDistance = from_loc.distance(from: to_loc)
     return Int(radius * 1.5)
-}
-
-func getCenterCoordinate(mapView: MKMapView) -> CLLocationCoordinate2D {
-    return mapView.centerCoordinate
-}
-
-func getTopCenterCoordinate(mapView: MKMapView) -> CLLocationCoordinate2D {
-    // to get coordinate from CGPoint of your map
-    return mapView.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
 }
 
 func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {

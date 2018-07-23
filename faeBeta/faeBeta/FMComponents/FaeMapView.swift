@@ -38,6 +38,7 @@ class FaeMapView: MKMapView {
     private var isPlaceAnno = true
     private var isLocAnno = true
     private var block = false
+    private var block_singletap = false
     public var blockTap = false
     
     public var compassOffset: CGFloat = 215 // 134 & 215
@@ -91,6 +92,7 @@ class FaeMapView: MKMapView {
     }
     
     @objc private func handleSingleTap(_ tapGesture: UITapGestureRecognizer) {
+        
         let tapPoint = tapGesture.location(in: self)
         let numberOfTouches = tapGesture.numberOfTouches
         guard numberOfTouches == 1 && tapGesture.state == .ended else { return }

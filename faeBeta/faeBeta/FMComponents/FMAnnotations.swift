@@ -427,6 +427,7 @@ class PlacePinAnnotationView: MKAnnotationView {
     public var optionsReady = false
     public var optionsOpened = false
     public var optionsOpeing = false
+    public var isSelected_fae = false
     
     private var imgSaved: UIImageView!
     

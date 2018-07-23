@@ -449,8 +449,14 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
-            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
+            guard var firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
             if firstAnn.type == .place {
+                if let sPlace = selectedPlace {
+                    if faeBeta.coordinateEqual(clusterAnn.coordinate, sPlace.coordinate) {
+                        firstAnn = sPlace
+                    }
+                }
+                clusterAnn.representative = firstAnn
                 return viewForPlace(annotation: annotation, first: firstAnn)
             } else if firstAnn.type == .location {
                 return viewForLocation(annotation: annotation, first: firstAnn)
@@ -672,22 +678,27 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
     }
     
-    func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!, fullAnnotationSet annotations: Set<AnyHashable>!, findSelectedPin found: Bool) {
         
         switch mapClusterController {
         case placeClusterManager:
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
-                var found = false
-                for annotation in mapClusterAnnotation.annotations {
-                    guard let pin = annotation as? FaePinAnnotation else { continue }
-                    guard let sPlace = selectedPlace else { continue }
-                    if faeBeta.coordinateEqual(pin.coordinate, sPlace.coordinate) {
-                        found = true
-                        let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
-                        anView.assignImage(icon)
+                var pinFound = false
+                if found {
+                    for annotation in annotations {
+                        guard let pin = annotation as? FaePinAnnotation else { continue }
+                        guard let sPlace = selectedPlace else { continue }
+                        if faeBeta.coordinateEqual(pin.coordinate, sPlace.coordinate) {
+                            pinFound = true
+                            let icon = UIImage(named: "place_map_\(pin.category_icon_id)s") ?? #imageLiteral(resourceName: "place_map_48s")
+                            anView.assignImage(icon)
+                        }
                     }
-                }
-                if !found {
+                    if !pinFound {
+                        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+                        anView.assignImage(firstAnn.icon)
+                    }
+                } else {
                     let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
                     anView.assignImage(firstAnn.icon)
                 }
@@ -734,6 +745,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             anView.optionsReady = true
             anView.optionsOpened = false
             selectedPlaceAnno = anView
+            anView.superview?.bringSubview(toFront: anView)
+            anView.zPos = 199
         }
         //anView.delegate = self
         return anView
@@ -757,8 +770,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     
     private func tapPlacePin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
-        guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
+        guard var firstAnn = cluster.representative as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
+        if let sPlace = selectedPlace {
+            if faeBeta.coordinateEqual(cluster.coordinate, sPlace.coordinate) {
+                firstAnn = sPlace
+            }
+        }
         let idx = firstAnn.category_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
         firstAnn.isSelected = true
@@ -1298,17 +1316,18 @@ extension SelectLocationViewController: MapSearchDelegate {
         deselectAllPlaceAnnos()
         deselectAllLocAnnos()
         tblPlaceResult.changeState(isLoading: true, isNoResult: nil)
-        removePlaceAnnotations(with: faePlacePins, forced: true, instantly: false) {
+        let pinsToRemove = faePlacePins + pinsFromSearch
+        removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: false) {
             self.searchState = .multipleSearch
             self.PLACE_INSTANT_SHOWUP = true
             // search and show results
             var locationToSearch = self.faeMapView.centerCoordinate
-            if let locToSearch = LocManager.shared.locToSearch_map {
+            if let locToSearch = LocManager.shared.locToSearch_chat {
                 locationToSearch = locToSearch
             }
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: searchText)
-            searchAgent.whereKey("source", value: "name")
+            searchAgent.whereKey("source", value: "\(Key.shared.searchSource_chat)")
             searchAgent.whereKey("type", value: "place")
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "\(Key.shared.radius_chat)")
