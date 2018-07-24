@@ -69,6 +69,7 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
     
     // TODO: Vicky - 换scan nearby API
     private func loadNearbyPeople(_ completion: ((Int) -> ())?) {
+        arrNearby.removeAll()
         let faeMap = FaeMap()
         faeMap.whereKey("geo_latitude", value: "\(LocManager.shared.curtLat)")
         faeMap.whereKey("geo_longitude", value: "\(LocManager.shared.curtLong)")
@@ -94,13 +95,21 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
                 let nearby = UserNameCard(user_id: json[i]["user_id"].intValue, nick_name: json[i]["user_nick_name"].stringValue, user_name: json[i]["user_name"].stringValue, short_intro: json[i]["short_intro"].stringValue)
                 self.arrNearby.append(nearby)
                 let realm = try! Realm()
-                var relation = NO_RELATION
+                //relation = NO_RELATION
                 if let userExist = realm.filterUser(id: "\(json[i]["user_id"].intValue)") {
-                    relation = userExist.relation
-                }
-                let user = RealmUser(value: ["\(Key.shared.user_id)_\(json[i]["user_id"].intValue)", "\(Key.shared.user_id)", "\(json[i]["user_id"].intValue)", json[i]["user_name"].stringValue, json[i]["nick_name"].stringValue, relation, json[i]["age"].stringValue, json[i]["show_age"].boolValue, json[i]["gender"].stringValue, json[i]["show_gender"].boolValue, json[i]["short_intro"].stringValue])
-                try! realm.write {
-                    realm.add(user, update: true)
+                    try! realm.write {
+                        //relation = userExist.relation
+                        userExist.user_name = json[i]["user_name"].stringValue
+                        userExist.display_name = json[i]["user_nick_name"].stringValue
+                        userExist.age = json[i]["user_age"].stringValue
+                        userExist.gender = json[i]["user_gender"].stringValue
+                        userExist.short_intro = json[i]["short_intro"].stringValue
+                    }
+                } else {
+                    let user = RealmUser(value: ["\(Key.shared.user_id)_\(json[i]["user_id"].intValue)", "\(Key.shared.user_id)", "\(json[i]["user_id"].intValue)", json[i]["user_name"].stringValue, json[i]["user_nick_name"].stringValue, NO_RELATION, json[i]["user_age"].stringValue, json[i]["show_age"].boolValue, json[i]["user_gender"].stringValue, json[i]["show_gender"].boolValue, json[i]["short_intro"].stringValue])
+                    try! realm.write {
+                        realm.add(user, update: true)
+                    }
                 }
             }
             
