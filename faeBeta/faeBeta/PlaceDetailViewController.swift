@@ -49,6 +49,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     private var intCellCount = 0
     private var intSimilar = 0
     private var intNearby = 0
+    private var intSimilarNearbySection = 0
     private var isScrollViewDidScrollEnabled: Bool = true
     private var arrDay_LG = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
     private var arrDay = ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"]
@@ -97,6 +98,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     private func updateCategoryDictionary() {
+        guard !Key.shared.is_guest else {
+            return
+        }
         Category.shared.updateCategoryDictionary(place: place)
     }
     
@@ -149,13 +153,18 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         let lat = String(place.coordinate.latitude)
         let long = String(place.coordinate.longitude)
         
-        // TODO Vicky - 在similar places加载出来前点击展开cell偶尔会崩溃
+        // TODO Vicky - 在similar places加载出来前点击展开cell偶尔会崩溃 => 似乎解决了？
         getRelatedPlaces(lat, long, isSimilar: true) {
             vickyprint("Exist duplicate place: \(self.testDuplicates())")
             self.getRelatedPlaces(lat, long, isSimilar: false, {
                 self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
                 self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
-                self.tblPlaceDetail.reloadData()
+//                self.tblPlaceDetail.reloadData()
+//                self.tblPlaceDetail.reloadSections(IndexSet(integer: self.intCellCount - 1), with: .none)
+                self.intSimilarNearbySection = (self.intSimilar == 0 && self.intNearby == 0 ? 0 : 1)
+                self.tblPlaceDetail.beginUpdates()
+                self.tblPlaceDetail.insertSections(IndexSet(integer: self.intCellCount), with: .none)
+                self.tblPlaceDetail.endUpdates()
             })
         }
     }
@@ -179,7 +188,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         intHaveHour = place.hours.count > 0 ? 1 : 0
         intHaveWebPhone = place.url != "" || place.phone != "" ? 1 : 0
         boolHaveWeb = place.url != ""
-        intCellCount = intHaveHour + intHaveWebPhone + 2
+        intCellCount = intHaveHour + intHaveWebPhone + 1
         
         mapIndexPath.append(IndexPath(row: 1, section: 0))
         if intHaveHour != 0 {
@@ -230,7 +239,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
+                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -242,7 +251,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
+                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -254,7 +263,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
+                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -266,7 +275,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
                 FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [[["_score": "desc"], ["geo_location": "asc"]]])
+                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
                 FaeSearch.shared.whereKey("location", value: ["latitude": lat,
                                                               "longitude": long])
                 FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -716,7 +725,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
     // MARK: - UITableViewDelegate & Datasource
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return intCellCount
+        return intCellCount + intSimilarNearbySection
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -884,6 +893,7 @@ extension PlaceDetailViewController: UITableViewDataSource, UITableViewDelegate,
                     return
                 }
                 boolHourFold = !boolHourFold
+                
                 if !boolHourFold {
                     tableView.insertRows(at: hourIndexPath, with: .none)
                 } else {

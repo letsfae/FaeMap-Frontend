@@ -102,6 +102,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var goingToPrevGroup: Bool = false
     private var isLoading: Bool = false
     private var isNoResult: Bool = false
+    
+    var isShrinked: Bool = true
+    
     private var fullyLoaded = false
 
     var searchState: PlaceInfoBarState = .map {
@@ -151,6 +154,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     func fetchMorePlaces() {
         request?.cancel()
         btnNextPage.isSelected = false
+        btnNextPage.isUserInteractionEnabled = false
         var locationToSearch = LocManager.shared.curtLoc.coordinate
         if let locToSearch = LocManager.shared.locToSearch_map {
             locationToSearch = locToSearch
@@ -207,6 +211,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     private func updateMorePlaces(places: [PlacePin], numbered: Bool = true, start: Int = 0) {
         guard places.count > 0 else {
             btnNextPage.isSelected = false
+            btnNextPage.isUserInteractionEnabled = false
             return
         }
         var groupPlaces = [PlacePin]()
@@ -226,6 +231,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             allPlaces.append(groupPlaces)
         }
         btnNextPage.isSelected = places.count > 0
+        btnNextPage.isUserInteractionEnabled = places.count > 0
         totalPages += 1
         dataOffset += places.count
     }
@@ -244,11 +250,13 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 }
             }
             btnNextPage.isSelected = allPlaces.count > 1
+            btnNextPage.isUserInteractionEnabled = allPlaces.count > 1
         } else {
             tblResults.tag += 1
             if tblResults.tag >= allPlaces.count - 1 {
                 tblResults.tag = allPlaces.count - 1
                 btnNextPage.isSelected = false
+                btnNextPage.isUserInteractionEnabled = false
                 if tblResults.tag == prevTag {
                     return
                 }
@@ -260,7 +268,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         self.currentGroupOfPlaces = self.allPlaces[tblResults.tag]
         //        self.loading(current: getGroupLastSelectedPlace())
-        self.loading(current: self.currentGroupOfPlaces[0])
+        self.loading(current: self.currentGroupOfPlaces[0], isSwitchingPage: true)
 //        CATransaction.begin()
 //        CATransaction.setCompletionBlock {
 //            if let offset = self.dictOffset[self.tblResults.tag] {
@@ -350,6 +358,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         totalPages = 1
         btnPrevPage.isSelected = false
         btnNextPage.isSelected = allPlaces.count > 1
+        btnNextPage.isUserInteractionEnabled = allPlaces.count > 1
         tblResults.reloadData()
         
         fetchMorePlaces()
@@ -367,7 +376,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         boolRight = false
     }
     
-    func loading(current: PlacePin) {
+    func loading(current: PlacePin, isSwitchingPage: Bool = false) {
         searchState = .multipleSearch
         imgBack_1.setValueForPlace(placeInfo: current)
         groupLastSelected[tblResults.tag] = current
@@ -407,7 +416,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         imgBack_0.setValueForPlace(placeInfo: prevPlacePin)
         imgBack_2.setValueForPlace(placeInfo: nextPlacePin)
         resetSubviews()
-        panGesture.isEnabled = true
+        if !isSwitchingPage {
+            panGesture.isEnabled = true
+        }
         goingToNextGroup = false
         goingToPrevGroup = false
         //print("[loading] pan gesture enabled")
@@ -455,6 +466,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 if tblResults.tag >= allPlaces.count - 1 {
                     tblResults.tag = allPlaces.count - 1
                     btnNextPage.isSelected = false
+                    btnNextPage.isUserInteractionEnabled = false
                 }
                 btnPrevPage.isSelected = true
             }
@@ -467,6 +479,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                     btnPrevPage.isSelected = false
                 }
                 btnNextPage.isSelected = allPlaces.count > 1
+                btnNextPage.isUserInteractionEnabled = allPlaces.count > 1
             }
         }
         tblResults.reloadData()
@@ -679,6 +692,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func expand(_ completion: @escaping () -> Void) {
+        self.isShrinked = false
         self.frame.size.height = 90
         self.uiviewTblBckg.frame.size.height = 90
         self.dictOffset.removeAll()
@@ -700,6 +714,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     }
     
     func shrink(_ completion: @escaping () -> Void) {
+        isShrinked = true
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut, animations: {
             self.frame.size.height = 90
             self.uiviewTblBckg.frame.size.height = 90

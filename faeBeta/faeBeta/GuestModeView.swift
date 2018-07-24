@@ -56,7 +56,6 @@ class GuestModeView: UIView {
         let btnGuestModeLogIn = UIButton(frame: CGRect(x: 40, y: 263, w: 210, h: 40))
         btnGuestModeLogIn.setTitle("Log In", for: .normal)
         btnGuestModeLogIn.setTitleColor(.white, for: .normal)
-        btnGuestModeLogIn.setTitleColor(.lightGray, for: .highlighted)
         btnGuestModeLogIn.layer.cornerRadius = 20 * screenWidthFactor
         btnGuestModeLogIn.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
         btnGuestModeLogIn.backgroundColor = UIColor._2499090()
@@ -67,7 +66,6 @@ class GuestModeView: UIView {
         btnGuestModeCreateAccount.setTitle("Create a Fae Count", for: .normal)
         btnGuestModeCreateAccount.titleLabel?.font = UIFont(name: "AvenirNext-DemiBold", size: 16 * screenWidthFactor)
         btnGuestModeCreateAccount.setTitleColor(._2499090(), for: .normal)
-        btnGuestModeCreateAccount.setTitleColor(.lightGray, for: .highlighted)
         btnGuestModeCreateAccount.layer.borderColor = UIColor._2499090().cgColor
         btnGuestModeCreateAccount.layer.cornerRadius = 20 * screenWidthFactor
         btnGuestModeCreateAccount.backgroundColor = UIColor.white

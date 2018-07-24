@@ -230,7 +230,7 @@ extension MapSearchViewController {
                 if flagPlaceFetched {
                     delegate?.jumpToPlaces?(searchText: schPlaceBar.txtSchField.text!, places: searchedPlaces)
                 } else {
-                    delegate?.continueSearching?(searchText: schPlaceBar.txtSchField.text!)
+                    delegate?.continueSearching?(searchText: schPlaceBar.txtSchField.text!, zoomToFit: true)
                 }
                 navigationController?.popViewController(animated: false)
             }

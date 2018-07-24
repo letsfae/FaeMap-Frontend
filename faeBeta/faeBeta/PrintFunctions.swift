@@ -8,8 +8,8 @@
 
 import Foundation
 
-var joshDebug: Bool = true
-var vickyDebug: Bool = false
+var joshDebug: Bool = false
+var vickyDebug: Bool = true
 var felixDebug: Bool = false
 
 func joshprint(_ items: Any...) {

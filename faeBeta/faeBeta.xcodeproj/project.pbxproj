@@ -246,7 +246,7 @@
 		B33FB24C1F267CA600EC6655 /* ContactsNotificationCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23B1F267C0500EC6655 /* ContactsNotificationCtrl.swift */; };
 		B33FB24D1F267CA600EC6655 /* ContactsScrollBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23C1F267C0500EC6655 /* ContactsScrollBarCtrl.swift */; };
 		B33FB24F1F267CA600EC6655 /* ContactsNavBarCtrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */; };
-		B34E49CA20F59C9A00400747 /* Categories.csv in Resources */ = {isa = PBXBuildFile; fileRef = B34E49C920F59C9900400747 /* Categories.csv */; };
+		B34E49CE20F6F8CD00400747 /* Categories.csv in Resources */ = {isa = PBXBuildFile; fileRef = B34E49CD20F6F8CD00400747 /* Categories.csv */; };
 		B35DD60F1FCD44D10099AC3E /* RealmCollectionBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */; };
 		B364101B1F52672B00B099E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0A2ACA41CE3A3C7002E0C9D /* LaunchScreen.storyboard */; };
 		B36D0D331F46513000DE3107 /* BoardPlaces.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36D0D321F46513000DE3107 /* BoardPlaces.swift */; };
@@ -648,7 +648,7 @@
 		B33FB23B1F267C0500EC6655 /* ContactsNotificationCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNotificationCtrl.swift; sourceTree = "<group>"; };
 		B33FB23C1F267C0500EC6655 /* ContactsScrollBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsScrollBarCtrl.swift; sourceTree = "<group>"; };
 		B33FB23E1F267C0500EC6655 /* ContactsNavBarCtrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNavBarCtrl.swift; sourceTree = "<group>"; };
-		B34E49C920F59C9900400747 /* Categories.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Categories.csv; sourceTree = "<group>"; };
+		B34E49CD20F6F8CD00400747 /* Categories.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Categories.csv; sourceTree = "<group>"; };
 		B35DD60E1FCD44D10099AC3E /* RealmCollectionBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmCollectionBase.swift; sourceTree = "<group>"; };
 		B36D0D321F46513000DE3107 /* BoardPlaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardPlaces.swift; sourceTree = "<group>"; };
 		B36D0D341F46519500DE3107 /* MBTalkTalk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBTalkTalk.swift; sourceTree = "<group>"; };
@@ -1545,7 +1545,7 @@
 		B376D3A920F5811400D4E407 /* Files */ = {
 			isa = PBXGroup;
 			children = (
-				B34E49C920F59C9900400747 /* Categories.csv */,
+				B34E49CD20F6F8CD00400747 /* Categories.csv */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -1906,8 +1906,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B34E49CE20F6F8CD00400747 /* Categories.csv in Resources */,
 				B064EF2F1D74ECDF00C078F5 /* FAENumberKeyboard.xib in Resources */,
-				B34E49CA20F59C9A00400747 /* Categories.csv in Resources */,
 				DC74CE271DA83352001BE220 /* JSQMessagesCollectionViewCellIncomingCustom.xib in Resources */,
 				B0A2ACA31CE3A3C7002E0C9D /* Assets.xcassets in Resources */,
 				DC74CE2A1DA83352001BE220 /* JSQMessagesCollectionViewCellOutgoingCustom.xib in Resources */,
@@ -2514,6 +2514,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_COMPILATION_MODE = singlefile;
 				SWIFT_ENFORCE_EXCLUSIVE_ACCESS = none;
 				SWIFT_OBJC_BRIDGING_HEADER = "faeBeta/faeBeta-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

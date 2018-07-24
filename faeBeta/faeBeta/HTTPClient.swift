@@ -28,7 +28,7 @@ enum PostMethod: String {
 
 let configuration = { () -> URLSessionConfiguration in
     let con = URLSessionConfiguration.default
-    con.timeoutIntervalForRequest = 4 // seconds
+//    con.timeoutIntervalForRequest = 4 // seconds
 //    con.timeoutIntervalForResource = 4
     return con
 }()

@@ -79,6 +79,7 @@ class FaeUser: NSObject {
     func logInBackground(_ completion: @escaping (Int, Any?) -> Void) {
         postToURL("authentication", parameter: keyValue, authentication: nil) { (status: Int, message: Any?) in
             if status / 100 == 2 {
+                Key.shared.is_guest = false
                 self.processToken(message!)
                 self.getSelfProfile { (_: Int, message: Any?) in
                     guard let userInfo = message else {
@@ -493,7 +494,6 @@ class FaeUser: NSObject {
                 let encode = "FAE " + base64Encoded
                 Key.shared.userTokenEncode_guest = encode
                 Key.shared.is_guest = true
-                print("guest token:", encode)
                 completion(status, message)
             } else {
                 completion(status, message)

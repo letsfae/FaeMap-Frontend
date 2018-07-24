@@ -63,7 +63,7 @@ class BoardPlaceTabLeftViewModel {
         }
         var recommendPlaces = [PlacePin]()
         var recommendSet = Set<PlacePin>()
-        let count = min(5, realmCategory.count)
+        let count = min(3, realmCategory.count)
         for idx in 0..<count {
             let content = realmCategory[idx].name
             // check whether it belongs to class_one
@@ -72,9 +72,9 @@ class BoardPlaceTabLeftViewModel {
             FaeSearch.shared.whereKey("source", value: source)
             FaeSearch.shared.whereKey("type", value: "place")
             FaeSearch.shared.whereKey("size", value: "15")
-            FaeSearch.shared.whereKey("radius", value: "100000")
+            FaeSearch.shared.whereKey("radius", value: "16000")
             FaeSearch.shared.whereKey("offset", value: "0")
-//            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
+            FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
                                                           "longitude": longitude])
             FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
@@ -82,6 +82,7 @@ class BoardPlaceTabLeftViewModel {
         
         FaeSearch.shared.searchBulk { [weak self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
+                print("Board - Get Recommended Places Fail \(status) \(message!)")
                 completion()
                 return
             }
@@ -118,18 +119,17 @@ class BoardPlaceTabLeftViewModel {
             FaeSearch.shared.whereKey("source", value: "class_one")
             FaeSearch.shared.whereKey("type", value: "place")
             FaeSearch.shared.whereKey("size", value: "15")
-            FaeSearch.shared.whereKey("radius", value: "100000")
+            FaeSearch.shared.whereKey("radius", value: "16000")
             FaeSearch.shared.whereKey("offset", value: "0")
             FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
                                                           "longitude": longitude])
             FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
         }
-        
         FaeSearch.shared.searchBulk{ [weak self] (status, message) in
             guard let `self` = self else { return }
             guard status / 100 == 2 && message != nil else {
-                print("Board - Get Recommended Places Fail \(status) \(message!)")
+                print("Board - Get Nearby Places Fail \(status) \(message!)")
                 return
             }
             let json = JSON(message!)
