@@ -171,7 +171,9 @@ extension ChatViewController {
             let browser = SKPhotoBrowser(photos: images)
             browser.initializePageIndex(index ?? 0)
             boolIsDisappearing = true
-            present(browser, animated: true, completion: nil)
+            present(browser, animated: true, completion: {
+                self.boolIsDisappearing = false
+            })
         case "[Video]":
             if let mediaItem = faeMessage.media as? JSQVideoMediaItemCustom {
                 if let videoURL = mediaItem.fileURL {
@@ -183,6 +185,7 @@ extension ChatViewController {
                     boolIsDisappearing = true
                     present(playerController, animated: true) {
                         player.play()
+                        self.boolIsDisappearing = false
                     }
                     /*let player = AVPlayer(url: videoURL)
                     let playerLayer = AVPlayerLayer(player: player)
@@ -322,6 +325,10 @@ extension ChatViewController {
         uiviewNameCard.boolSmallSize = true
         uiviewNameCard.imgBackShadow.frame = CGRect.zero
         uiviewNameCard.show { }
+    }
+    
+    override func collectionView(_ collectionView: JSQMessagesCollectionViewCustom!, didTapCellAt indexPath: IndexPath!, touchLocation: CGPoint) {
+        faeInputBar.inputTextView.resignFirstResponder()
     }
 }
 

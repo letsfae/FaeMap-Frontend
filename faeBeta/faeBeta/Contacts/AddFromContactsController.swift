@@ -481,7 +481,8 @@ extension AddFromContactsController: SignInPhoneDelegate {
     }
     
     func backToAddFromContacts() {
-        showView()
+        //showView()
+        checkContactsPermission()
     }
 }
 

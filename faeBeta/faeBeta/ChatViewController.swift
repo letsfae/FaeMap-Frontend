@@ -124,6 +124,8 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
         collectionView.contentInset.top = device_offset_top
         faeInputBar.delegate = self
         
+        collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(closeKeyboard(_:))))
+        
         NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: NSNotification.Name(rawValue: "appWillEnterForeground"), object: nil)
     }
     
@@ -232,6 +234,13 @@ class ChatViewController: JSQMessagesViewControllerCustom, UINavigationControlle
     @objc
     private func appWillEnterForeground() {
         faeInputBar.inputTextView.resignFirstResponder()
+    }
+    
+    @objc
+    private func closeKeyboard(_ recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .ended {
+            //faeInputBar.inputTextView.resignFirstResponder()
+        }
     }
     
     // MARK: - Layout helper

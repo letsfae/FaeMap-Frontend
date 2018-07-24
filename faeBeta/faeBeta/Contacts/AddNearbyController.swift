@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import RealmSwift
 
 class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDataSource, FaeAddUsernameDelegate, FriendOperationFromContactsDelegate {
     // MARK: - Properties
@@ -67,6 +68,15 @@ class AddNearbyController: UIViewController, UITableViewDelegate, UITableViewDat
             for i in 0..<json.count {
                 let nearby = UserNameCard(user_id: json[i]["user_id"].intValue, nick_name: json[i]["user_nick_name"].stringValue, user_name: json[i]["user_name"].stringValue, short_intro: json[i]["short_intro"].stringValue)
                 self.arrNearby.append(nearby)
+                let realm = try! Realm()
+                var relation = NO_RELATION
+                if let userExist = realm.filterUser(id: "\(json[i]["user_id"].intValue)") {
+                    relation = userExist.relation
+                }
+                let user = RealmUser(value: ["\(Key.shared.user_id)_\(json[i]["user_id"].intValue)", "\(Key.shared.user_id)", "\(json[i]["user_id"].intValue)", json[i]["user_name"].stringValue, json[i]["nick_name"].stringValue, relation, json[i]["age"].stringValue, json[i]["show_age"].boolValue, json[i]["gender"].stringValue, json[i]["show_gender"].boolValue, json[i]["short_intro"].stringValue])
+                try! realm.write {
+                    realm.add(user, update: true)
+                }
             }
             
 //            self.mbPeople.sort{ $0.dis < $1.dis }

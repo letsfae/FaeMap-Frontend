@@ -50,6 +50,8 @@ class SetAvatar {
                 let realmUser = UserImage()
                 realmUser.user_id = "\(Key.shared.user_id)"
                 realmUser.userSmallAvatar = RealmChat.compressImageToData(image)! as NSData
+                //image.
+                //realmUser.userSmallAvatar = UIImagePNGRepresentation(image)! as NSData
                 try! realm.write {
                     realm.add(realmUser, update: true)
                 }

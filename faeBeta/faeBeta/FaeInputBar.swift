@@ -740,6 +740,7 @@ extension FaeInputBar: SendStickerDelegate, LocationMiniPickerDelegate, AudioRec
                 self.setupTopStackView(placemark: response, thumbnail: thunbmnail)
             }
         }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "InputBarTopPinViewClose"), object: nil)
     }
     
     func selectPlacePin(_ locationMiniPicker: LocationMiniPicker, placePin: PlacePin) {

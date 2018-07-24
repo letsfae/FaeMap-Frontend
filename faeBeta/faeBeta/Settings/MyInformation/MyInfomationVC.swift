@@ -119,11 +119,11 @@ class SetInfoViewController: UIViewController, UITableViewDelegate, UITableViewD
         switch indexPath.section {
         case 0:
             let vc = SetInfoNamecard()
-            vc.enterMode = .settings
-            if let nav = navigationController {
-                nav.pushViewController(vc, animated: true)
-            } else {
+            vc.enterMode = enterMode
+            if enterMode == .nameCard {
                 present(vc, animated: true)
+            } else {
+                navigationController?.pushViewController(vc, animated: true)
             }
         default: break
         }
