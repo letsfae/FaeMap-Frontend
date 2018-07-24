@@ -38,6 +38,9 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         return height
     } ()
     
+    // Closures
+    var reloadVisibleAnnotations: (() -> ())?
+    
     // Table
     private var uiviewTblBckg: UIView!
     var tblResults: UITableView!
@@ -94,6 +97,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var nextPlacePin: PlacePin!
     
     var visibleAnnotations = [CCHMapClusterAnnotation]()
+    private var curtAnnotation: CCHMapClusterAnnotation!
     private var prevAnnotation: CCHMapClusterAnnotation!
     private var nextAnnotation: CCHMapClusterAnnotation!
     
@@ -438,12 +442,45 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     
     func loadingData(current: CCHMapClusterAnnotation) {
         searchState = .map
+        curtAnnotation = current
         if let place = current.representative as? FaePinAnnotation {
             if let placeInfo = place.pinInfo as? PlacePin {
                 imgBack_1.setValueForPlace(placeInfo: placeInfo)
             }
         }
         guard visibleAnnotations.count > 0 else { return }
+        visibleAnnotations = sortAnnotations(current: current, annotations: visibleAnnotations)
+        prevAnnotation = current
+        nextAnnotation = current
+        var found = false
+        for anno in visibleAnnotations {
+            if anno.coordinate.longitude > current.coordinate.longitude {
+                nextAnnotation = anno
+                found = true
+                break
+            }
+        }
+        imgBack_2.isHidden = !found
+        found = false
+        for anno in visibleAnnotations {
+            if anno.coordinate.longitude < current.coordinate.longitude {
+                prevAnnotation = anno
+                found = true
+                break
+            }
+        }
+        imgBack_0.isHidden = !found
+        if let place = prevAnnotation.representative as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_0.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        if let place = nextAnnotation.representative as? FaePinAnnotation {
+            if let placeInfo = place.pinInfo as? PlacePin {
+                imgBack_2.setValueForPlace(placeInfo: placeInfo)
+            }
+        }
+        /*
         var prev_idx = visibleAnnotations.count - 1
         var next_idx = 0
         for i in 0..<visibleAnnotations.count {
@@ -467,6 +504,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 imgBack_2.setValueForPlace(placeInfo: placeInfo)
             }
         }
+         */
     }
     
     func configureCurrentPlaces(goingNext: Bool) {
@@ -568,6 +606,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 //guard boolLeft else { return }
                 guard !imgBack_0.isHidden else {
                     panBack()
+                    reloadVisibleAnnotations?()
+                    if searchState == .map {
+                        loadingData(current: curtAnnotation)
+                    }
                     return
                 }
                 panToPrev(resumeTime)
@@ -575,6 +617,10 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
                 //guard boolRight else { return }
                 guard !imgBack_2.isHidden else {
                     panBack()
+                    reloadVisibleAnnotations?()
+                    if searchState == .map {
+                        loadingData(current: curtAnnotation)
+                    }
                     return
                 }
                 panToNext(resumeTime)

@@ -1512,7 +1512,7 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             print("[regionDidChangeAnimated] temp coordinate & radius is set")
         }
         
-        if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.visibleAnnotations = visiblePlaces() }
+        reloadPlaceTableAnnotations()
         
         if mapMode == .selecting {
             guard !isGeoCoding else { return }
@@ -1547,6 +1547,10 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
                 }
             }
         }
+    }
+    
+    func reloadPlaceTableAnnotations() {
+        if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.visibleAnnotations = visiblePlaces(full: true) }
     }
     
     func animateToCoordinate(type: Int, coordinate: CLLocationCoordinate2D, animated: Bool) {
@@ -2322,6 +2326,9 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         tblPlaceResult.barDelegate = self
         tblPlaceResult.currentVC = .map
         view.addSubview(tblPlaceResult)
+        tblPlaceResult.reloadVisibleAnnotations = { [unowned self] in
+            self.reloadPlaceTableAnnotations()
+        }
         
         btnTapToShowResultTbl = FMTableExpandButton()
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
@@ -3080,9 +3087,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         tblPlaceResult.changeState(isLoading: false, isNoResult: false, shouldShrink: false)
         tblPlaceResult.resetSubviews()
         tblPlaceResult.tag = 1
-        AUTO_REFRESH = false
-        mapView(faeMapView, regionDidChangeAnimated: false)
-        AUTO_REFRESH = Key.shared.autoRefresh
+        reloadPlaceTableAnnotations()
         if modeCollection == .on {
             tblPlaceResult.loading(current: placePin, isSwitchingPage: !tblPlaceResult.isShrinked)
         } else {
@@ -3186,6 +3191,7 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                     self.placeClusterManager.isVisibleAnnotationRemovingBlocked = false
                     self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
                     self.faePlacePins += fetcher.placePins
+                    self.reloadPlaceTableAnnotations()
                     //joshprint("[place done]", Date().timeIntervalSince(self.date_start))
                 })
             }
