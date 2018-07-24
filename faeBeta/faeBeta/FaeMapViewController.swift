@@ -129,7 +129,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var rawPlaceJSONs = [JSON]()
     private var placeFetchesCount = 0 {
         didSet {
-            guard placeFetchesCount == 24 else { return }
+            guard placeFetchesCount == 1 else { return }
             doneFetchingAreaPlaceData()
         }
     }
@@ -261,6 +261,10 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private var LOC_INSTANT_REMOVE = false
     private var USE_TEST_PLACES = false
     private var PLACES_RELOADED = true
+    
+    // Debug Use
+    private var lblZoomLevelInfo: FaeLabel!
+    private var lblRadiusInfo: FaeLabel!
     
     // Auxiliary
     private var activityIndicator: UIActivityIndicatorView!
@@ -814,6 +818,22 @@ extension FaeMapViewController {
         faeMapView.showsUserLocation = true
         faeMapView.mapAction = self
         faeMapView.isSingleTapOnLocPinEnabled = true
+        faeMapView.showsBuildings = true
+        if #available(iOS 11.0, *) {
+            let scaleView = MKScaleView(mapView: faeMapView)
+            scaleView.scaleVisibility = .visible
+            scaleView.frame.origin.y = 150 + device_offset_top
+            view.addSubview(scaleView)
+        } else {
+            // Fallback on earlier versions
+        }
+        
+        lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 90 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
+        lblZoomLevelInfo.backgroundColor = .white
+        view.addSubview(lblZoomLevelInfo)
+        lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 120 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
+        lblRadiusInfo.backgroundColor = .white
+        view.addSubview(lblRadiusInfo)
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
@@ -822,7 +842,7 @@ extension FaeMapViewController {
         placeClusterManager.clusterer = self
         placeClusterManager.animator = self
         placeClusterManager.marginFactor = 0.5
-        placeClusterManager.isDebuggingEnabled = true
+        placeClusterManager.isDebuggingEnabled = false
         
         userClusterManager = CCHMapClusterController(mapView: faeMapView)
         userClusterManager.delegate = self
@@ -1452,7 +1472,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         guard fullyLoaded else { return }
         isMapWillChange = false
         let level = getZoomLevel(longitudeCenter: mapView.region.center.longitude, longitudeDelta: mapView.region.span.longitudeDelta, width: mapView.bounds.size.width)
-//        print("[zoom level]", level)
+        var width = "Zoom Level: \(Double(round(1000*level)/1000))".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
+        lblZoomLevelInfo.text = "Zoom Level: \(Double(round(1000*level)/1000))"
+        lblZoomLevelInfo.frame.size.width = width
+        let radius = cameraDistance(mapView: mapView)
+        width = "Radius: \(radius/2)".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
+        lblRadiusInfo.text = "Radius: \(radius/2)"
+        lblRadiusInfo.frame.size.width = width
         if level <= 5 {
             PLACE_FETCH_ENABLE = false
             let pinsToAdd = faePlacePins + pinsFromSearch + pinsFromCollection
@@ -3130,13 +3156,14 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         General.shared.renewSelfLocation()
         rawPlaceJSONs.removeAll()
         coordinates_place.removeAll(keepingCapacity: true)
-        var count = 0
-        for point in point_centers {
-            let coordinate = faeMapView.convert(point, toCoordinateFrom: nil)
-            coordinates_place.append(coordinate)
-            fetchPlacePinsPartly(center: coordinate, number: count)
-            count += 1
-        }
+//        var count = 0
+//        for point in point_centers {
+//            let coordinate = faeMapView.convert(point, toCoordinateFrom: nil)
+//            coordinates_place.append(coordinate)
+//            fetchPlacePinsPartly(center: coordinate, number: count)
+//            count += 1
+//        }
+        fetchPlacePinsPartly(center: faeMapView.centerCoordinate, number: 0)
     }
     
     func doneFetchingAreaPlaceData() {
@@ -3172,25 +3199,27 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             General.shared.renewSelfLocation()
         }
         if PLACE_FETCH_ENABLE {
-            placeFetchesCountWhenMapPanning = 0
-            numberOfAreasWithNoPlacePin = 0
-            rawPlaceJSONs.removeAll()
-            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now()) {
-                for i in 0...23 {
-                    self.fetchPlaceDataInCertainMapRect(number: i)
-                }
-            }
+            self.startFetchingAreaPlaceData()
+//            placeFetchesCountWhenMapPanning = 0
+//            numberOfAreasWithNoPlacePin = 0
+//            rawPlaceJSONs.removeAll()
+//            DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now()) {
+//                for i in 0...23 {
+//                    self.fetchPlaceDataInCertainMapRect(number: i)
+//                }
+//            }
         }
     }
     
     func fetchPlacePinsPartly(center: CLLocationCoordinate2D, number: Int) {
-        let radius = calculateRadius(mapView: faeMapView)
+        let radius = cameraDistance(mapView: faeMapView)
         let placeAgent = FaeMap()
         placeAgent.whereKey("geo_latitude", value: "\(center.latitude)")
         placeAgent.whereKey("geo_longitude", value: "\(center.longitude)")
-        placeAgent.whereKey("radius", value: "\(radius)")
+        placeAgent.whereKey("radius", value: "\(radius/2)")
         placeAgent.whereKey("type", value: "place")
-        placeAgent.whereKey("max_count", value: "15")
+        placeAgent.whereKey("max_count", value: "100")
+        joshprint("[fetching radius]", radius)
         if let request = placePinRequests[number] {
             request.cancel()
             placePinRequests[number] = nil

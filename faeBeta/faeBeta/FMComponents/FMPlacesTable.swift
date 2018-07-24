@@ -425,6 +425,17 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         //print("")
     }
     
+    func sortAnnotations(current: CCHMapClusterAnnotation, annotations: [CCHMapClusterAnnotation]) -> [CCHMapClusterAnnotation] {
+        var annos = annotations
+        annos.sort { (first, second) -> Bool in
+            let curt_loc = CLLocation(latitude: current.coordinate.latitude, longitude: current.coordinate.longitude)
+            let first_loc = CLLocation(latitude: first.coordinate.latitude, longitude: first.coordinate.longitude)
+            let second_loc = CLLocation(latitude: second.coordinate.latitude, longitude: second.coordinate.longitude)
+            return curt_loc.distance(from: first_loc) < curt_loc.distance(from: second_loc)
+        }
+        return annos
+    }
+    
     func loadingData(current: CCHMapClusterAnnotation) {
         searchState = .map
         if let place = current.representative as? FaePinAnnotation {

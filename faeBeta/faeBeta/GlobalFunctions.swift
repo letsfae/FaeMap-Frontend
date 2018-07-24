@@ -161,9 +161,9 @@ func visiblePins(mapView: MKMapView, type: FaePinType, returnAll: Bool = false) 
 
 func cameraDistance(mapView: MKMapView?) -> Int {
     guard let map = mapView else { return 8000 }
-    let centerCoor = map.convert(CGPoint(x: screenWidth / 2, y: screenHeight), toCoordinateFrom: nil)
+    let centerCoor = map.convert(CGPoint(x: screenWidth / 2, y: screenHeight), toCoordinateFrom: map.superview)
     let centerLocation = CLLocation(latitude: centerCoor.latitude, longitude: centerCoor.longitude)
-    let topCenterCoor = map.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: nil)
+    let topCenterCoor = map.convert(CGPoint(x: screenWidth / 2, y: 0), toCoordinateFrom: map.superview)
     let topCenterLocation = CLLocation(latitude: topCenterCoor.latitude, longitude: topCenterCoor.longitude)
     let radius: CLLocationDistance = centerLocation.distance(from: topCenterLocation)
     return Int(radius)
