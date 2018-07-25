@@ -148,6 +148,7 @@ class FaeMessageMaker {
         
         func captureSnapImage(complete: @escaping (() -> Void)) {
             let generator = AVAssetImageGenerator(asset: AVURLAsset(url: writeURL!))
+            generator.appliesPreferredTrackTransform = true
             var times = [NSValue]()
             times.append(NSValue(time: CMTime(seconds: 0.0, preferredTimescale: 1)))
             generator.generateCGImagesAsynchronously(forTimes: times) { (requestedTime, cgImage, actualTime, result, error) in
