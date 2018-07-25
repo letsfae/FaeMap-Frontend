@@ -251,7 +251,7 @@
             //printf("[shouldAddOperation]\n");
         } else {
             //printf("[difference] %.3f\n", zoomLevel - self.previousZoomLevel);
-            if (fabs(zoomLevel - self.previousZoomLevel) >= 0.8) {
+            if (fabs(zoomLevel - self.previousZoomLevel) >= 0.618) {
                 self.previousZoomLevel = zoomLevel;
             } else {
                 operation.shouldAddNewClusterAnnotation = NO;
