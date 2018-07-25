@@ -67,6 +67,7 @@ class AllPlacesMapController: BasicMapController {
         faeMapView.longPress.isEnabled = true
         faeMapView.isSingleTapOnLocPinEnabled = true
         faeMapView.mapAction = self
+        placeClusterManager.isFullMapRectEnabled = true
         btnZoom.isHidden = true
         btnLocat.isHidden = false
         PIN_INSTANT_SHOWUP = true
@@ -447,21 +448,9 @@ extension AllPlacesMapController: PlacePinAnnotationDelegate {
                 guard let placeData = selectedPlace?.pinInfo as? PlacePin else {
                     return
                 }
-                guard var arrCtrlers = navigationController?.viewControllers else {
-                    showAlert(title: "Unexpected Error", message: "please try again", viewCtrler: self)
-                    return
-                }
-                if AllPlacesMapController.isBackToLastPlaceDetailVCEnabled {
-                    while !(arrCtrlers.last is PlaceDetailViewController) {
-                        arrCtrlers.removeLast()
-                    }
-                }
                 let vcPlaceDetail = PlaceDetailViewController()
                 vcPlaceDetail.place = placeData
-                arrCtrlers.removeLast()
-                arrCtrlers.append(vcPlaceDetail)
-                
-                navigationController?.setViewControllers(arrCtrlers, animated: true)
+                navigationController?.pushViewController(vcPlaceDetail, animated: true)
             } else if enterMode == .location {
                 
             }

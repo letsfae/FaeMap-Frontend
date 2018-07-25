@@ -21,6 +21,7 @@ class PlaceViewMapController: BasicMapController {
         faeMapView.singleTap.isEnabled = false
         faeMapView.doubleTap.isEnabled = false
         faeMapView.longPress.isEnabled = false
+        placeClusterManager.isFullMapRectEnabled = true
         
         let edgeView = LeftMarginToEnableNavGestureView()
         view.addSubview(edgeView)

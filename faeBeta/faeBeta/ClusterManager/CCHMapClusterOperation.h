@@ -47,6 +47,9 @@
 @property (nonatomic) BOOL isForcedRefresh;
 @property (nonatomic) BOOL forPlacePin;
 @property (nonatomic) BOOL isVisibleAnnotationRemovingBlocked;
+@property (nonatomic) BOOL shouldAddNewClusterAnnotation;
+@property (nonatomic) BOOL isFullMapRectEnabled;
+@property (nonatomic) BOOL isClusteringDisabled;
 
 - (instancetype)initWithMapView:(MKMapView *)mapView cellSize:(double)cellSize marginFactor:(double)marginFactor reuseExistingClusterAnnotations:(BOOL)reuseExistingClusterAnnotation maxZoomLevelForClustering:(double)maxZoomLevelForClustering minUniqueLocationsForClustering:(NSUInteger)minUniqueLocationsForClustering;
 

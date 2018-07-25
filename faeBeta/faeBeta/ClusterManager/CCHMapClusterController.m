@@ -106,8 +106,11 @@
         
         _isVisibleAnnotationRemovingBlocked = NO;
         
-        MKCoordinateRegion region = mapView.region;
-        _previousZoomLevel = CCHMapClusterControllerZoomLevelForRegion(region.center.longitude, region.span.longitudeDelta, self.mapView.bounds.size.width);
+        _isFullMapRectEnabled = NO;
+        
+        _isClusteringDisabled = NO;
+        
+        _previousZoomLevel = 0;
     }
     
     return self;
@@ -201,25 +204,33 @@
     operation.forPlacePin = self.forPlacePin;
     operation.isForcedRefresh = self.isForcedRefresh;
     operation.isVisibleAnnotationRemovingBlocked = self.isVisibleAnnotationRemovingBlocked;
+    operation.isFullMapRectEnabled = self.isFullMapRectEnabled;
+    operation.isClusteringDisabled = self.isClusteringDisabled;
     
     BOOL hasZoomed = !fequal(self.mapView.region.span.longitudeDelta, self.regionSpanBeforeChange.longitudeDelta);
+    BOOL shouldAddOperation = NO;
     if (hasZoomed && self.mapView.region.span.longitudeDelta < self.regionSpanBeforeChange.longitudeDelta) {
         operation.isZoomingIn = YES;
         operation.isZoomingOut = NO;
         operation.isPanning = NO;
-        //printf("[isZoomIn] true\n");
+        shouldAddOperation = NO;
     } else if (fequal(self.mapView.region.span.longitudeDelta, self.regionSpanBeforeChange.longitudeDelta)) {
         operation.isZoomingIn = NO;
         operation.isZoomingOut = NO;
         operation.isPanning = YES;
-        //printf("[isZoomIn] equal\n");
+        shouldAddOperation = YES;
     } else {
         operation.isZoomingIn = NO;
         operation.isZoomingOut = YES;
         operation.isPanning = NO;
-        //printf("[isZoomIn] false\n");
+        shouldAddOperation = YES;
     }
-    
+
+    if (self.isForcedRefresh) {
+        shouldAddOperation = YES;
+        //printf("[forced]\n");
+    }
+
     if (completionHandler) {
         operation.completionBlock = ^{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -227,7 +238,27 @@
             });
         };
     };
-    
+    operation.shouldAddNewClusterAnnotation = YES;
+    if (self.forPlacePin) {
+        double zoomLevel = CCHMapClusterControllerZoomLevelForRegion(self.mapView.region.center.longitude, self.mapView.region.span.longitudeDelta, self.mapView.bounds.size.width);
+        //printf("[curt] %.3f\n", zoomLevel);
+        //printf("[prev] %.3f\n", self.previousZoomLevel);
+        if (shouldAddOperation) {
+            if (operation.isZoomingOut) {
+                //printf("[isZoomingOut]\n");
+                self.previousZoomLevel = zoomLevel;
+            }
+            //printf("[shouldAddOperation]\n");
+        } else {
+            //printf("[difference] %.3f\n", zoomLevel - self.previousZoomLevel);
+            if (fabs(zoomLevel - self.previousZoomLevel) >= 0.8) {
+                self.previousZoomLevel = zoomLevel;
+            } else {
+                operation.shouldAddNewClusterAnnotation = NO;
+            }
+        }
+        //printf("end\n");
+    }
     [self.backgroundQueue addOperation:operation];
     
     // Debugging

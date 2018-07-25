@@ -47,6 +47,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     public var mode: SelectLoctionMode = .full
     
     // Place pins data management
+    private var isForcedRefresh: Bool = false
     private var placeClusterManager: CCHMapClusterController!
     private var faePlacePins = [FaePinAnnotation]()
     private var setPlacePins = Set<Int>()
@@ -100,13 +101,13 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     private var placeFetchesCount = 0 {
         didSet {
             guard placeFetchesCount == 24 else { return }
-            doneFetchingAreaOfData()
+            doneFetchingAreaPlaceData()
         }
     }
     private var mapViewPanningFetchesCount = 0 {
         didSet {
             guard mapViewPanningFetchesCount == numberOfAreasWithNoPins else { return }
-            doneFetchingAreaOfData()
+            doneFetchingAreaPlaceData()
         }
     }
     private var numberOfAreasWithNoPins = 48
@@ -196,6 +197,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updatePlacePins()
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "mapFilterAnimationRestart"), object: nil)
     }
     
     // MARK: - Loading Parts
@@ -226,16 +228,18 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
-        placeClusterManager.cellSize = 100
-        placeClusterManager.minUniqueLocationsForClustering = 3
+        placeClusterManager.cellSize = Double(screenWidth / 5)
+        //placeClusterManager.minUniqueLocationsForClustering = 3
         placeClusterManager.clusterer = self
         placeClusterManager.animator = self
+        placeClusterManager.marginFactor = 1
         
         locationPinClusterManager = CCHMapClusterController(mapView: faeMapView)
         locationPinClusterManager.delegate = self
         locationPinClusterManager.cellSize = 60
         locationPinClusterManager.animator = self
         locationPinClusterManager.clusterer = self
+        locationPinClusterManager.forPlacePin = false
         
         let camera = faeMapView.camera
         camera.centerCoordinate = LocManager.shared.curtLoc.coordinate
@@ -384,6 +388,9 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             tblPlaceResult.currentVC = .chat
         }
         view.addSubview(tblPlaceResult)
+        tblPlaceResult.reloadVisibleAnnotations = { [unowned self] in
+            self.reloadPlaceTableAnnotations()
+        }
         
         btnTapToShowResultTbl = FMTableExpandButton()
         btnTapToShowResultTbl.setImage(#imageLiteral(resourceName: "tapToShowResultTbl"), for: .normal)
@@ -500,8 +507,29 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         }
     }
     
+    private var isMapWillChange: Bool = false
+    private var PLACES_RELOADED = true
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         guard fullyLoaded else { return }
+        
+        isMapWillChange = false
+        let level = getZoomLevel(longitudeCenter: mapView.region.center.longitude, longitudeDelta: mapView.region.span.longitudeDelta, width: mapView.bounds.size.width)
+        if level <= 5 {
+            PLACE_FETCH_ENABLE = false
+            let pinsToAdd = faePlacePins + pinsFromSearch
+            removePlaceAnnotations(with: pinsToAdd, forced: true, instantly: true) {
+                self.PLACES_RELOADED = false
+            }
+        } else {
+            if PLACES_RELOADED == false {
+                PLACES_RELOADED = true
+                PLACE_FETCH_ENABLE = true
+                let pinsToAdd = faePlacePins + pinsFromSearch
+                addPlaceAnnotations(with: pinsToAdd, forced: true, instantly: false) {
+                    
+                }
+            }
+        }
         
         chosenLocation = mapView.centerCoordinate
         
@@ -513,7 +541,7 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             tblPlaceResult.altitude = mapView.camera.altitude
         }
         
-        if tblPlaceResult.tag > 0 && PLACE_ENABLE { tblPlaceResult.visibleAnnotations = visiblePlaces() }
+        reloadPlaceTableAnnotations()
         
         let mapCenter = CGPoint(x: screenWidth / 2, y: screenHeight / 2)
         let mapCenterCoordinate = mapView.convert(mapCenter, toCoordinateFrom: nil)
@@ -583,6 +611,17 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         fullAttrStr.append(title_1_attr)
         DispatchQueue.main.async {
             self.lblSearchContent.attributedText = fullAttrStr
+        }
+    }
+    
+    func reloadPlaceTableAnnotations() {
+        if tblPlaceResult.tag > 0 && PLACE_FETCH_ENABLE { tblPlaceResult.visibleAnnotations = visiblePlaces(full: true) }
+        if selectedPlaceAnno != nil {
+            if searchState == .map {
+                tblPlaceResult.loadingData(current: tblPlaceResult.curtAnnotation)
+            } else if searchState == .multipleSearch {
+                
+            }
         }
     }
     
@@ -792,9 +831,10 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
         tblPlaceResult.show()
         tblPlaceResult.resetSubviews()
         tblPlaceResult.tag = 1
-        mapView(faeMapView, regionDidChangeAnimated: false)
+        tblPlaceResult.curtAnnotation = cluster
+        reloadPlaceTableAnnotations()
         if searchState == .map {
-            tblPlaceResult.loadingData(current: cluster)
+            
         } else if searchState == .multipleSearch {
             tblPlaceResult.loading(current: placePin, isSwitchingPage: !tblPlaceResult.isShrinked)
         }
@@ -1356,13 +1396,12 @@ extension SelectLocationViewController: MapSearchDelegate {
                 self.tblPlaceResult.currentGroupOfPlaces = self.tblPlaceResult.updatePlacesArray(places: searchedPlaces)
                 self.tblPlaceResult.loading(current: searchedPlaces[0])
                 self.pinsFromSearch = self.tblPlaceResult.currentGroupOfPlaces.map { FaePinAnnotation(type: .place, cluster: self.placeClusterManager, data: $0) }
-                self.PLACE_INSTANT_SHOWUP = true
                 self.placeClusterManager.maxZoomLevelForClustering = 0
-                self.placeClusterManager.addAnnotations(self.pinsFromSearch, withCompletionHandler: {
+                self.addPlaceAnnotations(with: self.pinsFromSearch, forced: self.isForcedRefresh, instantly: true, {
+                    self.isForcedRefresh = false
                     if let first = searchedPlaces.first {
                         self.goTo(annotation: nil, place: first, animated: true)
                     }
-                    self.PLACE_INSTANT_SHOWUP = false
                 })
                 if zoomToFit {
                     faeBeta.zoomToFitAllPlaces(mapView: self.faeMapView,
@@ -1506,7 +1545,7 @@ extension SelectLocationViewController {
         }
     }
     
-    func doneFetchingAreaOfData() {
+    func doneFetchingAreaPlaceData() {
         self.placePinFetchQueue.cancelAllOperations()
         let fetcher = PlacePinFetcher(cluster: placeClusterManager, arrPlaceJSON: rawPlaceJSONs, idSet: setPlacePins)
         fetcher.completionBlock = {
@@ -1520,9 +1559,11 @@ extension SelectLocationViewController {
                 guard self.PLACE_FETCH_ENABLE else { return }
                 guard self.searchState == .map else { return }
                 //joshprint("[fetchPlacePins] fetched")
-                self.addPlaceAnnotations(with: fetcher.placePins, forced: false, instantly: false, {
+                self.addPlaceAnnotations(with: fetcher.placePins, forced: self.isForcedRefresh, instantly: false, {
+                    self.isForcedRefresh = false
                     self.setPlacePins = self.setPlacePins.union(Set(fetcher.ids))
                     self.faePlacePins += fetcher.placePins
+                    self.reloadPlaceTableAnnotations()
                 })
             }
         }
@@ -1637,6 +1678,7 @@ extension SelectLocationViewController {
                     self.faePlacePins.append(self.selectedPlace!)
                     self.setPlacePins.insert(self.selectedPlace!.id)
                 }
+                self.isForcedRefresh = true
                 self.fetchPlacePins()
             }
         } else if searchState == .multipleSearch {
@@ -1646,6 +1688,7 @@ extension SelectLocationViewController {
                 return
             }
             Key.shared.radius_map = Int(faeMapView.region.span.latitudeDelta * 111045)
+            self.isForcedRefresh = true
             continueSearching(searchText: searchText, zoomToFit: false)
         }
     }

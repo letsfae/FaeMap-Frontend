@@ -80,6 +80,10 @@
 
 @property (nonatomic) BOOL isVisibleAnnotationRemovingBlocked;
 
+@property (nonatomic) BOOL isFullMapRectEnabled;
+
+@property (nonatomic) BOOL isClusteringDisabled;
+
 /**
  Initializes the cluster controller.
  @param mapView `MKMapView` to use to display clusters.

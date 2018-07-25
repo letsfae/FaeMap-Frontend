@@ -97,7 +97,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
     var nextPlacePin: PlacePin!
     
     var visibleAnnotations = [CCHMapClusterAnnotation]()
-    private var curtAnnotation: CCHMapClusterAnnotation!
+    var curtAnnotation: CCHMapClusterAnnotation!
     private var prevAnnotation: CCHMapClusterAnnotation!
     private var nextAnnotation: CCHMapClusterAnnotation!
     

@@ -121,7 +121,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     fileprivate func configureReachability() {
         NotificationCenter.default.addObserver(self, selector: #selector(self.reachabilityChanged), name: ReachabilityChangedNotification, object: nil)
-        
         reachability = Reachability.init()
         do {
             try reachability.startNotifier()
