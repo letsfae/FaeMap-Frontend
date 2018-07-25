@@ -70,7 +70,9 @@ class AllPlacesCell: UITableViewCell {
         if place.address.contains(",") {
             lblPlaceAddr.text = place.address
         } else {
-            General.shared.updateAddress(label: lblPlaceAddr, place: place.place)
+            if joshDebug {
+                General.shared.updateAddress(label: lblPlaceAddr, place: place.place)
+            }
         }
         lblPrice.text = place.price
         lblOpeninghour.text = place.openingHour

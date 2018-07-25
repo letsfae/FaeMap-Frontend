@@ -14,6 +14,7 @@
 		3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */ = {isa = PBXBuildFile; fileRef = 3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */; };
 		500DB2801F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */; };
 		50111C261F476B4B004EA00E /* FMChooseLocs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50111C251F476B4B004EA00E /* FMChooseLocs.swift */; };
+		5017513420FE9A8A00D42B12 /* ExploreImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5017513320FE9A8A00D42B12 /* ExploreImagesView.swift */; };
 		50178B7F2045A17D0068012C /* MBLoadingWaves.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50178B7E2045A17D0068012C /* MBLoadingWaves.swift */; };
 		50181F0B1F688579004798B5 /* EXPPicMapCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50181F0A1F688579004798B5 /* EXPPicMapCells.swift */; };
 		5018565E1F33E39100ADD0F3 /* FMPlaceOptRoute.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */; };
@@ -378,6 +379,7 @@
 		3733629C1EA9A3BA00B257C3 /* PinsViewController(General).swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PinsViewController(General).swift"; sourceTree = "<group>"; };
 		500DB27F1F6B094300DB8798 /* CenterCellCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterCellCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		50111C251F476B4B004EA00E /* FMChooseLocs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMChooseLocs.swift; sourceTree = "<group>"; };
+		5017513320FE9A8A00D42B12 /* ExploreImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreImagesView.swift; sourceTree = "<group>"; };
 		50178B7E2045A17D0068012C /* MBLoadingWaves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MBLoadingWaves.swift; sourceTree = "<group>"; };
 		50181F0A1F688579004798B5 /* EXPPicMapCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EXPPicMapCells.swift; sourceTree = "<group>"; };
 		5018565D1F33E39100ADD0F3 /* FMPlaceOptRoute.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FMPlaceOptRoute.swift; sourceTree = "<group>"; };
@@ -885,6 +887,7 @@
 				508E651620C352E4003935CC /* EXPPicCell.swift */,
 				5028597E209A1F3400F98B00 /* ExploreMapController.swift */,
 				50181F0A1F688579004798B5 /* EXPPicMapCells.swift */,
+				5017513320FE9A8A00D42B12 /* ExploreImagesView.swift */,
 			);
 			name = Explore;
 			sourceTree = "<group>";
@@ -2228,6 +2231,7 @@
 				50188F411FC36C390038CAFF /* CCHMapTreeUtils.m in Sources */,
 				B37E5DC01F831040008A6B4B /* Privacy&SecurityVC.swift in Sources */,
 				506D1FE21F2B187C004119EA /* PinDetailProtocols.swift in Sources */,
+				5017513420FE9A8A00D42B12 /* ExploreImagesView.swift in Sources */,
 				DCC59D141F8C334E00B2A27F /* CPCollectionViewLayout.swift in Sources */,
 				DC12C3701F47A3C600796C86 /* NewChatTableViewCell.swift in Sources */,
 				3733629D1EA9A3BA00B257C3 /* PinsViewController(General).swift in Sources */,

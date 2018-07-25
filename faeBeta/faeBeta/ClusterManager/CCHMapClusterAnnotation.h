@@ -52,6 +52,9 @@
 /** The displayed annotation inside the annotations of this cluster annotation. */
 @property (nonatomic, weak) MKPointAnnotation *representative;
 
+/** If annotatation is displayed on map */
+@property (nonatomic) BOOL isDisplayedOnMap;
+
 /** Returns YES if this cluster contains more than one annotation. */
 - (BOOL)isCluster;
 /** Returns YES if all annotations in this cluster have the same location. */

@@ -54,6 +54,6 @@
  @param mapClusterController The cluster controller sending the message.
  @param mapClusterAnnotation The cluster annotation that's reused. Its properties are updated to reflect the current state.
  */
-- (void)mapClusterController:(CCHMapClusterController *)mapClusterController willReuseMapClusterAnnotation:(CCHMapClusterAnnotation *)mapClusterAnnotation;
+- (void)mapClusterController:(CCHMapClusterController *)mapClusterController willReuseMapClusterAnnotation:(CCHMapClusterAnnotation *)mapClusterAnnotation fullAnnotationSet:(NSSet *)annotations findSelectedPin:(BOOL)found;
 
 @end

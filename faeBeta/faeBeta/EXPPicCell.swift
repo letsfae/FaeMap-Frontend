@@ -25,21 +25,44 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     private var placeInfo: PlacePin!
     private var arrImgURL = [String]()
     private var pageCtrl: CHIPageControlChimayo!
+
+    // new
+    private var uiviewPlaceImages: ExploreImagesView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        loadCollectionView()
+        //loadCollectionView()
+        loadImagesView()
         loadCellBottom()
     }
     
     override func prepareForReuse() {
         super.prepareForReuse()
         pageCtrl.set(progress: 0, animated: false)
-        clctViewImages.setContentOffset(.zero, animated: false)
+        //clctViewImages.setContentOffset(.zero, animated: false)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+    }
+    
+    func loadImagesView() {
+        uiviewSub = UIView()
+        addSubview(uiviewSub)
+        uiviewSub.layer.cornerRadius = 8
+        uiviewSub.clipsToBounds = true
+        addConstraintsWithFormat("H:|-26-[v0]-26-|", options: [], views: uiviewSub)
+        addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewSub)
+        
+        uiviewPlaceImages = ExploreImagesView()
+        uiviewSub.addSubview(uiviewPlaceImages)
+        uiviewSub.addConstraintsWithFormat("H:|-0-[v0]-0-|", options: [], views: uiviewPlaceImages)
+        uiviewSub.addConstraintsWithFormat("V:|-0-[v0]-0-|", options: [], views: uiviewPlaceImages)
+        uiviewPlaceImages.loadContent()
+        uiviewPlaceImages.setup()
+        
+        let tapGes = UITapGestureRecognizer(target: self, action: #selector(handleTap))
+        uiviewPlaceImages.addGestureRecognizer(tapGes)
     }
     
     func updateCell(placeData: PlacePin) {
@@ -56,11 +79,14 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
         } else {
             General.shared.updateAddress(label: lblPlaceAddr, place: placeData, full: false)
         }
-        
-        arrImgURL.removeAll(keepingCapacity: true)
-        arrImgURL = Array(placeData.imageURLs.prefix(4))
-        clctViewImages.reloadData()
-        pageCtrl.numberOfPages = arrImgURL.count
+        uiviewPlaceImages.arrURLs = placeData.imageURLs
+        uiviewPlaceImages.loadContent()
+        uiviewPlaceImages.setup()
+        uiviewPlaceImages.pageControl = pageCtrl
+//        arrImgURL.removeAll(keepingCapacity: true)
+//        arrImgURL = Array(placeData.imageURLs.prefix(4))
+//        clctViewImages.reloadData()
+        pageCtrl.numberOfPages = placeData.imageURLs.count
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
@@ -89,6 +115,10 @@ class EXPClctPicCell: UICollectionViewCell, UICollectionViewDelegate, UICollecti
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        delegate?.jumpToPlaceDetail(placeInfo)
+    }
+    
+    @objc func handleTap() {
         delegate?.jumpToPlaceDetail(placeInfo)
     }
     

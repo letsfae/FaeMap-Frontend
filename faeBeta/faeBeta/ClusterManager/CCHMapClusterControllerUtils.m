@@ -122,12 +122,17 @@ CCHMapClusterAnnotation *CCHMapClusterControllerClusterAnnotationForAnnotation(M
     return annotationResult;
 }
 
-void CCHMapClusterControllerEnumerateCells(MKMapRect mapRect, double cellSize, void (^block)(MKMapRect cellMapRect))
+void CCHMapClusterControllerEnumerateCells(MKMapRect mapRect, double cellSize, void (^block)(MKMapRect cellMapRect, MKMapRect fullCellMapRect))
 {
     NSCAssert(block != NULL, @"Block argument can't be NULL");
     if (block == nil) {
         return;
     }
+    
+    //josh
+    double cellOffset = cellSize * 0.15;
+
+    //end of josh
     
     MKMapRect cellRect = MKMapRectMake(0, MKMapRectGetMinY(mapRect), cellSize, cellSize);
     while (MKMapRectGetMinY(cellRect) < MKMapRectGetMaxY(mapRect)) {
@@ -135,8 +140,9 @@ void CCHMapClusterControllerEnumerateCells(MKMapRect mapRect, double cellSize, v
         
         while (MKMapRectGetMinX(cellRect) < MKMapRectGetMaxX(mapRect)) {
             // Wrap around the origin's longitude
-            MKMapRect rect = MKMapRectMake(fmod(cellRect.origin.x, MKMapSizeWorld.width), cellRect.origin.y, cellRect.size.width, cellRect.size.height);
-            block(rect);
+            MKMapRect rect = MKMapRectMake(fmod(cellRect.origin.x + cellOffset, MKMapSizeWorld.width), cellRect.origin.y + cellOffset, cellRect.size.width - 2 * cellOffset, cellRect.size.height - 2 * cellOffset);
+            MKMapRect fullRect = MKMapRectMake(fmod(cellRect.origin.x, MKMapSizeWorld.width), cellRect.origin.y, cellRect.size.width, cellRect.size.height);
+            block(rect, fullRect);
             
             cellRect.origin.x += MKMapRectGetWidth(cellRect);
         }

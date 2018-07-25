@@ -51,6 +51,7 @@ class RoutingMapController: BasicMapController, SelectLocationDelegate, FMRouteC
     override func viewDidLoad() {
         super.viewDidLoad()
         fullyLoaded = false
+        placeClusterManager.isFullMapRectEnabled = true
         loadTopBar()
         setupRoutingPart()
         updateRoutingInfo()

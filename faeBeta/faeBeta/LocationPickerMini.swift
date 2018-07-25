@@ -153,8 +153,14 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
             return anView
         } else if annotation is CCHMapClusterAnnotation {
             guard let clusterAnn = annotation as? CCHMapClusterAnnotation else { return nil }
-            guard let firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
+            guard var firstAnn = clusterAnn.annotations.first as? FaePinAnnotation else { return nil }
             if firstAnn.type == .place {
+                if let sPlace = selectedPlace {
+                    if faeBeta.coordinateEqual(clusterAnn.coordinate, sPlace.coordinate) {
+                        firstAnn = sPlace
+                    }
+                }
+                clusterAnn.representative = firstAnn
                 return viewForPlace(annotation: annotation, first: firstAnn)
             }
         }
@@ -209,11 +215,30 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         }
     }
     
-    func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!) {
+    func mapClusterController(_ mapClusterController: CCHMapClusterController!, willReuse mapClusterAnnotation: CCHMapClusterAnnotation!, fullAnnotationSet annotations: Set<AnyHashable>!, findSelectedPin found: Bool) {
         let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
         if firstAnn.type == .place {
             if let anView = faeMapView.view(for: mapClusterAnnotation) as? PlacePinAnnotationView {
-                anView.assignImage(firstAnn.icon)
+                var pinFound = false
+                if found {
+                    for annotation in annotations {
+                        guard let pin = annotation as? FaePinAnnotation else { continue }
+                        guard let sPlace = selectedPlace else { continue }
+                        if faeBeta.coordinateEqual(pin.coordinate, sPlace.coordinate) {
+                            pinFound = true
+                            let icon = UIImage(named: "place_map_\(pin.category_icon_id)s") ?? #imageLiteral(resourceName: "place_map_48s")
+                            anView.assignImage(icon)
+                        }
+                    }
+                    if !pinFound {
+                        let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+                        anView.assignImage(firstAnn.icon)
+                    }
+                } else {
+                    let firstAnn = mapClusterAnnotation.annotations.first as! FaePinAnnotation
+                    anView.assignImage(firstAnn.icon)
+                }
+                anView.superview?.bringSubview(toFront: anView)
             }
         }
     }
@@ -236,14 +261,28 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
         } else {
             anView = PlacePinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
+        anView.iconIndex = first.category_icon_id
         anView.assignImage(first.icon)
+        if first.isSelected {
+            let icon = UIImage(named: "place_map_\(anView.iconIndex)s") ?? #imageLiteral(resourceName: "place_map_48s")
+            anView.assignImage(icon)
+            anView.optionsReady = true
+            anView.optionsOpened = false
+            anView.superview?.bringSubview(toFront: anView)
+            anView.zPos = 199
+        }
         return anView
     }
     
     private func tapPlacePin(didSelect view: MKAnnotationView) {
         guard let cluster = view.annotation as? CCHMapClusterAnnotation else { return }
-        guard let firstAnn = cluster.annotations.first as? FaePinAnnotation else { return }
+        guard var firstAnn = cluster.representative as? FaePinAnnotation else { return }
         guard let anView = view as? PlacePinAnnotationView else { return }
+        if let sPlace = selectedPlace {
+            if faeBeta.coordinateEqual(cluster.coordinate, sPlace.coordinate) {
+                firstAnn = sPlace
+            }
+        }
         let idx = firstAnn.category_icon_id
         firstAnn.icon = UIImage(named: "place_map_\(idx)s") ?? #imageLiteral(resourceName: "place_map_48s")
         anView.assignImage(firstAnn.icon)
@@ -257,7 +296,7 @@ class LocationMiniPicker: UIView, MKMapViewDelegate, CCHMapClusterControllerDele
     }
     
     private func updatePlacePins() {
-        let coorDistance = faeBeta.cameraDiagonalDistance(mapView: faeMapView)
+        let coorDistance = faeBeta.cameraDistance(mapView: faeMapView)
         refreshPlacePins(radius: coorDistance)
     }
     

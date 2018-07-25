@@ -100,12 +100,17 @@
         
         _canUpdate = YES;
         
-        _isUserPinController = NO;
+        _forPlacePin = YES;
         
         _isForcedRefresh = NO;
         
-        MKCoordinateRegion region = mapView.region;
-        _previousZoomLevel = CCHMapClusterControllerZoomLevelForRegion(region.center.longitude, region.span.longitudeDelta, self.mapView.bounds.size.width);
+        _isVisibleAnnotationRemovingBlocked = NO;
+        
+        _isFullMapRectEnabled = NO;
+        
+        _isClusteringDisabled = NO;
+        
+        _previousZoomLevel = 0;
     }
     
     return self;
@@ -196,26 +201,36 @@
     operation.animator = self.animator;
     operation.clusterControllerDelegate = self.delegate;
     operation.clusterController = self;
-    operation.isUserPin = self.isUserPinController;
+    operation.forPlacePin = self.forPlacePin;
     operation.isForcedRefresh = self.isForcedRefresh;
+    operation.isVisibleAnnotationRemovingBlocked = self.isVisibleAnnotationRemovingBlocked;
+    operation.isFullMapRectEnabled = self.isFullMapRectEnabled;
+    operation.isClusteringDisabled = self.isClusteringDisabled;
+    
     BOOL hasZoomed = !fequal(self.mapView.region.span.longitudeDelta, self.regionSpanBeforeChange.longitudeDelta);
+    BOOL shouldAddOperation = NO;
     if (hasZoomed && self.mapView.region.span.longitudeDelta < self.regionSpanBeforeChange.longitudeDelta) {
-        operation.isZoomIn = YES;
+        operation.isZoomingIn = YES;
+        operation.isZoomingOut = NO;
+        operation.isPanning = NO;
+        shouldAddOperation = NO;
     } else if (fequal(self.mapView.region.span.longitudeDelta, self.regionSpanBeforeChange.longitudeDelta)) {
-        operation.isZoomIn = YES;
+        operation.isZoomingIn = NO;
+        operation.isZoomingOut = NO;
+        operation.isPanning = YES;
+        shouldAddOperation = YES;
     } else {
-        operation.isZoomIn = NO;
+        operation.isZoomingIn = NO;
+        operation.isZoomingOut = YES;
+        operation.isPanning = NO;
+        shouldAddOperation = YES;
     }
-    //printf("after  %f\n", self.mapView.region.span.longitudeDelta);
-    //printf("before %f\n", self.regionSpanBeforeChange.longitudeDelta);
-    
-    //if (operation.isZoomIn) {
-    //    printf("[isZoomIn] true\n");
-    //} else {
-    //    printf("[isZoomIn] false\n");
-    //}
-    //printf("\n");
-    
+
+    if (self.isForcedRefresh) {
+        shouldAddOperation = YES;
+        //printf("[forced]\n");
+    }
+
     if (completionHandler) {
         operation.completionBlock = ^{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -223,7 +238,27 @@
             });
         };
     };
-    
+    operation.shouldAddNewClusterAnnotation = YES;
+    if (self.forPlacePin) {
+        double zoomLevel = CCHMapClusterControllerZoomLevelForRegion(self.mapView.region.center.longitude, self.mapView.region.span.longitudeDelta, self.mapView.bounds.size.width);
+        //printf("[curt] %.3f\n", zoomLevel);
+        //printf("[prev] %.3f\n", self.previousZoomLevel);
+        if (shouldAddOperation) {
+            if (operation.isZoomingOut) {
+                //printf("[isZoomingOut]\n");
+                self.previousZoomLevel = zoomLevel;
+            }
+            //printf("[shouldAddOperation]\n");
+        } else {
+            //printf("[difference] %.3f\n", zoomLevel - self.previousZoomLevel);
+            if (fabs(zoomLevel - self.previousZoomLevel) >= 0.8) {
+                self.previousZoomLevel = zoomLevel;
+            } else {
+                operation.shouldAddNewClusterAnnotation = NO;
+            }
+        }
+        //printf("end\n");
+    }
     [self.backgroundQueue addOperation:operation];
     
     // Debugging
@@ -249,17 +284,28 @@
     }
     
     // Add polygons outlining each cell
-    CCHMapClusterControllerEnumerateCells(gridMapRect, cellMapSize, ^(MKMapRect cellMapRect) {
+    CCHMapClusterControllerEnumerateCells(gridMapRect, cellMapSize, ^(MKMapRect cellMapRect, MKMapRect fullCellMapRect) {
         //        cellMapRect.origin.x -= MKMapSizeWorld.width;  // fixes issue when view port spans 180th meridian
-        
+        double zoomLevelToDisableSmallerCellRect = 14.5;
+        double zoomLevel = CCHMapClusterControllerZoomLevelForRegion(self.mapView.region.center.longitude, self.mapView.region.span.longitudeDelta, self.mapView.bounds.size.width);
         MKMapPoint points[4];
-        points[0] = MKMapPointMake(MKMapRectGetMinX(cellMapRect), MKMapRectGetMinY(cellMapRect));
-        points[1] = MKMapPointMake(MKMapRectGetMaxX(cellMapRect), MKMapRectGetMinY(cellMapRect));
-        points[2] = MKMapPointMake(MKMapRectGetMaxX(cellMapRect), MKMapRectGetMaxY(cellMapRect));
-        points[3] = MKMapPointMake(MKMapRectGetMinX(cellMapRect), MKMapRectGetMaxY(cellMapRect));
-        CCHMapClusterControllerDebugPolygon *debugPolygon = (CCHMapClusterControllerDebugPolygon *)[CCHMapClusterControllerDebugPolygon polygonWithPoints:points count:4];
-        debugPolygon.mapClusterController = self;
-        [mapView addOverlay:debugPolygon];
+        if (zoomLevel >= zoomLevelToDisableSmallerCellRect) {
+            points[0] = MKMapPointMake(MKMapRectGetMinX(fullCellMapRect), MKMapRectGetMinY(fullCellMapRect));
+            points[1] = MKMapPointMake(MKMapRectGetMaxX(fullCellMapRect), MKMapRectGetMinY(fullCellMapRect));
+            points[2] = MKMapPointMake(MKMapRectGetMaxX(fullCellMapRect), MKMapRectGetMaxY(fullCellMapRect));
+            points[3] = MKMapPointMake(MKMapRectGetMinX(fullCellMapRect), MKMapRectGetMaxY(fullCellMapRect));
+            CCHMapClusterControllerDebugPolygon *debugPolygon = (CCHMapClusterControllerDebugPolygon *)[CCHMapClusterControllerDebugPolygon polygonWithPoints:points count:4];
+            debugPolygon.mapClusterController = self;
+            [mapView addOverlay:debugPolygon];
+        } else {
+            points[0] = MKMapPointMake(MKMapRectGetMinX(cellMapRect), MKMapRectGetMinY(cellMapRect));
+            points[1] = MKMapPointMake(MKMapRectGetMaxX(cellMapRect), MKMapRectGetMinY(cellMapRect));
+            points[2] = MKMapPointMake(MKMapRectGetMaxX(cellMapRect), MKMapRectGetMaxY(cellMapRect));
+            points[3] = MKMapPointMake(MKMapRectGetMinX(cellMapRect), MKMapRectGetMaxY(cellMapRect));
+            CCHMapClusterControllerDebugPolygon *debugPolygon = (CCHMapClusterControllerDebugPolygon *)[CCHMapClusterControllerDebugPolygon polygonWithPoints:points count:4];
+            debugPolygon.mapClusterController = self;
+            [mapView addOverlay:debugPolygon];
+        }
     });
 }
 

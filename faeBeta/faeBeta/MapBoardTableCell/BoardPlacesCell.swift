@@ -136,7 +136,9 @@ class PlacesCollectionCell: UICollectionViewCell {
         if place.address.contains(",") {
             lblAddress.text = place.address
         } else {
-            General.shared.updateAddress(label: lblAddress, place: place.place)
+            if !joshDebug {
+                General.shared.updateAddress(label: lblAddress, place: place.place)
+            }
         }
         
         imgPic.backgroundColor = ._210210210()

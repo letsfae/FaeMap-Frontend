@@ -255,6 +255,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
             vc.enterMode = enterMode
             vc.strTitle = realmColDetails.name
             vc.arrIds = arrSavedPinIds
+            
+            
             navigationController?.pushViewController(vc, animated: false)
         case 1: // share
             // TODO JICHAO

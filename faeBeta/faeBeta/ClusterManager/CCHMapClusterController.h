@@ -72,11 +72,17 @@
 /** By Fae - Yue Shen: Can do re-cluster when region did change */
 @property (nonatomic) BOOL canUpdate;
 
-@property (nonatomic) BOOL previousZoomLevel;
+@property (nonatomic) double previousZoomLevel;
 
-@property (nonatomic) BOOL isUserPinController;
+@property (nonatomic) BOOL forPlacePin;
 
 @property (nonatomic) BOOL isForcedRefresh;
+
+@property (nonatomic) BOOL isVisibleAnnotationRemovingBlocked;
+
+@property (nonatomic) BOOL isFullMapRectEnabled;
+
+@property (nonatomic) BOOL isClusteringDisabled;
 
 /**
  Initializes the cluster controller.
