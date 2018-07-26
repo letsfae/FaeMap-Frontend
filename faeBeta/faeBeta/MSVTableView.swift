@@ -114,8 +114,9 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 }
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
-                schLocationBar.btnClose.isHidden = true
-                lookUpForCoordinate(cityData: geobytesCityData[indexPath.row])
+                schLocationBar.btnClear.isHidden = true
+                isCityDataChosen = true
+                lookUpForCoordinate(cityName: geobytesCityData[indexPath.row])
             } else {
                 // fixed cell - "Use my Current Location", "Use Current Map View"
                 schLocationBar.txtSchField.attributedText = nil
@@ -133,7 +134,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 strPreviousFixedOptionSelection = locText
                 schLocationBar.txtSchField.resignFirstResponder()
                 schPlaceBar.txtSchField.becomeFirstResponder()
-                schLocationBar.btnClose.isHidden = true
+                schLocationBar.btnClear.isHidden = true
                 if indexPath.row == 0 {
                     let curLoc = LocManager.shared.curtLoc.coordinate
                     updateSavedLocationToSearchInEachViewController(coordinate: curLoc)

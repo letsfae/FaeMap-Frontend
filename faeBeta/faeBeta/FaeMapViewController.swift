@@ -832,12 +832,12 @@ extension FaeMapViewController {
 //            // Fallback on earlier versions
 //        }
 //        
-//        lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 90 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
-//        lblZoomLevelInfo.backgroundColor = .white
-//        view.addSubview(lblZoomLevelInfo)
-//        lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 120 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
-//        lblRadiusInfo.backgroundColor = .white
-//        view.addSubview(lblRadiusInfo)
+        lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 90 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
+        lblZoomLevelInfo.backgroundColor = .white
+        view.addSubview(lblZoomLevelInfo)
+        lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 120 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
+        lblRadiusInfo.backgroundColor = .white
+        view.addSubview(lblRadiusInfo)
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
@@ -863,13 +863,13 @@ extension FaeMapViewController {
         locationPinClusterManager.clusterer = self
         locationPinClusterManager.forPlacePin = false
         
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 1750, 1750)
         faeMapView.setRegion(coordinateRegion, animated: false)
         prevMapCenter = LocManager.shared.curtLoc.coordinate
     }
     
     @objc private func firstUpdateLocation() {
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 3000, 3000)
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 1750, 1750)
         faeMapView.setRegion(coordinateRegion, animated: false)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
             self.refreshMap(pins: false, users: true, places: true)
@@ -1083,6 +1083,10 @@ extension FaeMapViewController {
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
         searchVC.previousVC = .map
+        searchVC.gotoCity = { [unowned self] (cityData) in
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(cityData.coordinate, 12000, 12000)
+            self.faeMapView.setRegion(coordinateRegion, animated: false)
+        }
         if let text = lblSearchContent.text {
             searchVC.strSearchedPlace = text
         } else {
@@ -1479,13 +1483,13 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         joshprint("[regionDidChangeAnimated]")
         isMapWillChange = false
         let level = getZoomLevel(longitudeCenter: mapView.region.center.longitude, longitudeDelta: mapView.region.span.longitudeDelta, width: mapView.bounds.size.width)
-//        var width = "Zoom Level: \(Double(round(1000*level)/1000))".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
-//        lblZoomLevelInfo.text = "Zoom Level: \(Double(round(1000*level)/1000))"
-//        lblZoomLevelInfo.frame.size.width = width
-//        let radius = cameraDistance(mapView: mapView)
-//        width = "Radius: \(radius/2)".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
-//        lblRadiusInfo.text = "Radius: \(radius/2)"
-//        lblRadiusInfo.frame.size.width = width
+        var width = "Zoom Level: \(Double(round(1000*level)/1000))".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
+        lblZoomLevelInfo.text = "Zoom Level: \(Double(round(1000*level)/1000))"
+        lblZoomLevelInfo.frame.size.width = width
+        let radius = cameraDistance(mapView: mapView)
+        width = "Radius: \(radius/2)".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
+        lblRadiusInfo.text = "Radius: \(radius/2)"
+        lblRadiusInfo.frame.size.width = width
         if level <= 5 {
             PLACE_FETCH_ENABLE = false
             let pinsToAdd = faePlacePins + pinsFromSearch + pinsFromCollection

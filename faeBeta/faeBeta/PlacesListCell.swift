@@ -43,6 +43,13 @@ class PlacesListCell: UITableViewCell {
     public func configureCell(_ addressInfo: MKLocalSearchCompletion, last: Bool) {
         lblPlaceName.text = addressInfo.title
         lblAddress.text = addressInfo.subtitle
+        if addressInfo.subtitle == "" {
+            lblPlaceName.center.y = self.frame.size.height / 2
+            lblAddress.isHidden = true
+        } else {
+            lblPlaceName.frame.origin.y = 16
+            lblAddress.isHidden = false
+        }
         bottomLine.isHidden = last
     }
     
@@ -51,7 +58,9 @@ class PlacesListCell: UITableViewCell {
         if placeInfo.address1 != "" {
             lblAddress.text = placeInfo.address1 + ", " + placeInfo.address2
         } else {
-            General.shared.updateAddress(label: lblAddress, place: placeInfo)
+            if !joshDebug {
+                General.shared.updateAddress(label: lblAddress, place: placeInfo)
+            }
         }
         bottomLine.isHidden = last
         imgPic.backgroundColor = ._210210210()
@@ -72,22 +81,23 @@ class PlacesListCell: UITableViewCell {
         imgPic.backgroundColor = ._210210210()
         addSubview(imgPic)
         
-        lblPlaceName = UILabel()
+        let width = self.frame.size.width - 92
+        lblPlaceName = UILabel(frame: CGRect(x: 72, y: 16, width: width, height: 20))
         lblPlaceName.textAlignment = .left
         lblPlaceName.lineBreakMode = .byTruncatingTail
         lblPlaceName.textColor = ._898989()
         lblPlaceName.font = UIFont(name: "AvenirNext-Medium", size: 15)
         addSubview(lblPlaceName)
-        addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblPlaceName)
+        //addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblPlaceName)
         
-        lblAddress = UILabel()
+        lblAddress = UILabel(frame: CGRect(x: 72, y: 36, width: width, height: 16))
         lblAddress.textAlignment = .left
         lblAddress.lineBreakMode = .byTruncatingTail
         lblAddress.textColor = ._107107107()
         lblAddress.font = UIFont(name: "AvenirNext-Medium", size: 12)
         addSubview(lblAddress)
-        addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblAddress)
-        addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblPlaceName, lblAddress)
+        //addConstraintsWithFormat("H:|-72-[v0]-20-|", options: [], views: lblAddress)
+        //addConstraintsWithFormat("V:|-16-[v0(20)]-0-[v1(16)]", options: [], views: lblPlaceName, lblAddress)
         
         bottomLine = UIView()
         bottomLine.backgroundColor = ._200199204()

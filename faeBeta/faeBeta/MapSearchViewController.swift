@@ -17,6 +17,12 @@ import Alamofire
     @objc optional func selectLocation(location: CLLocation)
 }
 
+struct CityData {
+    let coordinate: CLLocationCoordinate2D
+    let name: String
+    let attributedName: NSAttributedString?
+}
+
 class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     weak var delegate: MapSearchDelegate?
@@ -88,6 +94,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var citySearchRequest: DataRequest?
     var cityDetailRequest: DataRequest?
     
+    // Geobytes City Data
+    var isCityDataChosen: Bool = false
+    var isCityDetailFetched: Bool = false
+    var fetchedCityDetail: CityData?
+    var gotoCity: ((CityData) -> ())?
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,7 +139,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     // MARK: - Load UI's
     private func preloadSearchLocation() {
         if cityToSearch != "" {
-            lookUpForCoordinate(cityData: cityToSearch)
+            lookUpForCoordinate(cityName: cityToSearch)
         }
         guard previousVC == .board else { return }
         guard strSearchedLocation != "" else { return }
@@ -181,7 +193,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         schPlaceBar.txtSchField.placeholder = previousVC != .chat ? "Search Fae Map" : "Search Place or Address"
         if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
             schPlaceBar.txtSchField.text = strSearchedPlace
-            schPlaceBar.btnClose.isHidden = false
+            schPlaceBar.btnClear.isHidden = false
         }
         uiviewSearch.addSubview(schPlaceBar)
         
@@ -336,7 +348,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         uiview.layer.shadowOpacity = 0.6
     }
     
-    private func cancelAllRequests() {
+    func cancelAllRequests() {
         searchRequest?.cancel()
         citySearchRequest?.cancel()
         cityDetailRequest?.cancel()

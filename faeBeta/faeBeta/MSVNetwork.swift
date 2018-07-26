@@ -56,9 +56,13 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     }
     
     // Look for coordinate
-    func lookUpForCoordinate(cityData: String) {
+    func lookUpForCoordinate(cityName: String) {
+        isCityDetailFetched = false
+        isCityDataChosen = false
+        fetchedCityDetail = nil
+        cityDetailRequest?.cancel()
         activityIndicatorLocationSearch.startAnimating()
-        cityDetailRequest = CitySearcher.shared.cityDetail(cityData) { [weak self] (status, location) in
+        cityDetailRequest = CitySearcher.shared.cityDetail(cityName) { [weak self] (status, location) in
             self?.activityIndicatorLocationSearch.stopAnimating()
             guard let `self` = self else { return }
             guard status / 100 == 2 else {
@@ -75,6 +79,8 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
             case .chat:
                 LocManager.shared.locToSearch_chat = location.coordinate
             }
+            self.isCityDetailFetched = true
+            self.fetchedCityDetail = CityData(coordinate: location.coordinate, name: cityName, attributedName: nil)
             self.faeRegion = calculateRegion(miles: 100, coordinate: location.coordinate)
             self.reloadAddressCompleterRegion()
             guard self.schPlaceBar != nil else { return }
@@ -87,7 +93,6 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
     
     // Geobytes City Search AutocompleteFilter
     func placeAutocomplete(_ searchText: String) {
-        activityIndicatorLocationSearch.startAnimating()
         switch previousVC {
         case .map:
             Key.shared.selectedSearchedCity_map = nil
@@ -96,6 +101,8 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
         case .chat:
             Key.shared.selectedSearchedCity_chat = nil
         }
+        citySearchRequest?.cancel()
+        activityIndicatorLocationSearch.startAnimating()
         citySearchRequest = CitySearcher.shared.cityAutoComplete(searchText) { [weak self] (status, result) in
             self?.activityIndicatorLocationSearch.stopAnimating()
             guard let `self` = self else { return }
@@ -131,7 +138,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
             showOrHideViews(searchText: content)
             return
         }
-        var radius: Int = 100000
+        var radius: Int = 16100
         var locationToSearch = CLLocationCoordinate2D(latitude: Defaults.Latitude, longitude: Defaults.Longitude)
         
         switch previousVC {
@@ -145,15 +152,15 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
-                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    //joshprint("[searchArea] Current Location")
+                    joshprint("[searchArea] Current Location")
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
                     radius = Int(faeMapView.region.span.latitudeDelta * 222090)
-                    //joshprint("[searchArea] Current Map View")
+                    joshprint("[searchArea] Current Map View")
                 default:
-                    //joshprint("[searchArea] other")
+                    joshprint("[searchArea] other")
+                    joshprint("[radius]", radius)
                     break
                 }
             }
@@ -188,7 +195,6 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 switch locText {
                 case "Current Location":
                     locationToSearch = LocManager.shared.curtLoc.coordinate
-                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
                     //joshprint("[searchArea] Current Location")
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
