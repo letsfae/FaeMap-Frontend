@@ -62,7 +62,7 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var schBarType = SearchBarType.place
     var strPreviousFixedOptionSelection: String = "Current Location"
     
-    var filteredCategory = [(key: String, value: Int)]()
+    var filteredCategory = [(key: String, value: String)]()
     var fixedLocOptions: [String] = ["Use my Current Location", "Use Current Map View"]
     var searchedPlaces = [PlacePin]()
     var searchedAddresses = [MKLocalSearchCompletion]() // Apple Place Data
@@ -280,12 +280,12 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     private func setButtonsUI() {
         for i in 0..<6 {
             
-            let img_id = i < arrPlaceNames.count ? Category.shared.categories[arrPlaceNames[i]] ?? -1 : -1
-            if img_id == -1 {
+            let img_id = i < arrPlaceNames.count ? Category.shared.category_to_icon[arrPlaceNames[i]] : ""
+            if img_id == "" {
                 btnCategories[i].setImage(nil, for: .normal)
                 lblCategories[i].text = ""
             } else {
-                btnCategories[i].setImage(UIImage(named: "place_result_\(img_id)"), for: .normal)
+                btnCategories[i].setImage(UIImage(named: "place_result_\(img_id!)"), for: .normal)
                 lblCategories[i].text = arrPlaceNames[i]
             }
         }

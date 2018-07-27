@@ -309,6 +309,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         
         fullyLoaded = true
         initScreenPointCenters()
+        
+        let _ = Category.init()//Category.shared.category_to_icon
     }
     
     deinit {

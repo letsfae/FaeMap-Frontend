@@ -66,13 +66,13 @@ class BoardPlaceTabLeftViewModel {
         let count = min(3, realmCategory.count)
         for idx in 0..<count {
             let content = realmCategory[idx].name
-            // check whether it belongs to class_one
-            let source = Category.shared.class1_to_2[content] == nil ? "categories" : "class_one"
+            // check whether it belongs to master_class
+            let source = Category.shared.master_to_class1[content] == nil ? "categories" : "master_class"
             FaeSearch.shared.whereKey("content", value: content)
             FaeSearch.shared.whereKey("source", value: source)
             FaeSearch.shared.whereKey("type", value: "place")
             FaeSearch.shared.whereKey("size", value: "15")
-            FaeSearch.shared.whereKey("radius", value: "16000")
+            FaeSearch.shared.whereKey("radius", value: "16100")
             FaeSearch.shared.whereKey("offset", value: "0")
             FaeSearch.shared.whereKey("sort", value: [["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": latitude,
@@ -116,10 +116,10 @@ class BoardPlaceTabLeftViewModel {
     private func searchByCategories(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         for category in arrCategories {
             FaeSearch.shared.whereKey("content", value: category)
-            FaeSearch.shared.whereKey("source", value: "class_one")
+            FaeSearch.shared.whereKey("source", value: "master_class")
             FaeSearch.shared.whereKey("type", value: "place")
             FaeSearch.shared.whereKey("size", value: "15")
-            FaeSearch.shared.whereKey("radius", value: "16000")
+            FaeSearch.shared.whereKey("radius", value: "16100")
             FaeSearch.shared.whereKey("offset", value: "0")
             FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             FaeSearch.shared.whereKey("location", value: ["latitude": latitude,

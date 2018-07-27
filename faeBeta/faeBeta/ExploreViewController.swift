@@ -844,7 +844,7 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
             
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: category)
-            searchAgent.whereKey("source", value: "class_one")
+            searchAgent.whereKey("source", value: "master_class")
             searchAgent.whereKey("type", value: "place")
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "500000")
