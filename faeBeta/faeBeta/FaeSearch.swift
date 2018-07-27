@@ -33,19 +33,22 @@ class FaeSearch {
     }
     
     var searchContent = [[String : Any]]()
-    func searchBulk(_ completion: @escaping (Int, Any?) -> Void) {
-        searchBulkToURL(.bulkSearch, parameter: searchContent) { (status: Int, message: Any?) in
+    @discardableResult
+    func searchBulk(_ completion: @escaping (Int, Any?) -> Void) -> DataRequest {
+        let request = searchBulkToURL(.bulkSearch, parameter: searchContent) { (status: Int, message: Any?) in
             self.searchContent = [[String : Any]]()
             completion(status, message)
         }
+        return request
     }
     
-    func searchBulkToURL(_ method: PostMethod, parameter: Array<Any>, completion: @escaping (Int, Any?) -> Void) {
+    @discardableResult
+    func searchBulkToURL(_ method: PostMethod, parameter: Array<Any>, completion: @escaping (Int, Any?) -> Void) -> DataRequest {
         let fullURL = Key.shared.baseURL + "/" + method.rawValue
         let headers = Key.shared.header(auth: true, type: .json)
         
         // Use structs for requests
-        alamoFireManager.request(fullURL, method: .post, parameters: parameter.asParameters(), encoding: ArrayEncoding(), headers: headers)
+        let request = alamoFireManager.request(fullURL, method: .post, parameters: parameter.asParameters(), encoding: ArrayEncoding(), headers: headers)
             .responseJSON { response in
                 guard response.response != nil else {
                     completion(-500, "Internet error")
@@ -63,6 +66,8 @@ class FaeSearch {
                     completion(response.response!.statusCode, "no Json body")
                 }
         }
+        
+        return request
     }
 }
 

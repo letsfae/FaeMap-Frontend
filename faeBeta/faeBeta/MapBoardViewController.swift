@@ -73,6 +73,7 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
     var tableMode: MapBoardTableMode = .places
     var placeTableMode: PlaceTableMode = .left
     private var indicatorView: UIActivityIndicatorView!
+    var lastContentOffset: CGFloat = 0
     
     var selectedLoc: CLLocationCoordinate2D? // user-chosen location
     
