@@ -847,13 +847,15 @@ extension FaeMapViewController {
 //        } else {
 //            // Fallback on earlier versions
 //        }
-//        
-        lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 160 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
-        lblZoomLevelInfo.backgroundColor = .white
-        view.addSubview(lblZoomLevelInfo)
-        lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 190 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
-        lblRadiusInfo.backgroundColor = .white
-        view.addSubview(lblRadiusInfo)
+//
+        if joshDebug {
+            lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 160 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
+            lblZoomLevelInfo.backgroundColor = .white
+            view.addSubview(lblZoomLevelInfo)
+            lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 190 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
+            lblRadiusInfo.backgroundColor = .white
+            view.addSubview(lblRadiusInfo)
+        }
         
         placeClusterManager = CCHMapClusterController(mapView: faeMapView)
         placeClusterManager.delegate = self
@@ -1504,13 +1506,17 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
         joshprint("[regionDidChangeAnimated]")
         isMapWillChange = false
         let level = getZoomLevel(longitudeCenter: mapView.region.center.longitude, longitudeDelta: mapView.region.span.longitudeDelta, width: mapView.bounds.size.width)
-        var width = "Zoom Level: \(Double(round(1000*level)/1000))".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
-        lblZoomLevelInfo.text = "Zoom Level: \(Double(round(1000*level)/1000))"
-        lblZoomLevelInfo.frame.size.width = width
-        let radius = cameraDistance(mapView: mapView)
-        width = "Radius: \(radius/2)".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
-        lblRadiusInfo.text = "Radius: \(radius/2)"
-        lblRadiusInfo.frame.size.width = width
+        
+        if joshDebug {
+            var width = "Zoom Level: \(Double(round(1000*level)/1000))".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
+            lblZoomLevelInfo.text = "Zoom Level: \(Double(round(1000*level)/1000))"
+            lblZoomLevelInfo.frame.size.width = width
+            let radius = cameraDistance(mapView: mapView)
+            width = "Radius: \(radius/2)".width(withConstrainedWidth: 20, font: FaeFont(fontType: .medium, size: 20))
+            lblRadiusInfo.text = "Radius: \(radius/2)"
+            lblRadiusInfo.frame.size.width = width
+        }
+        
         if level <= 5 {
             PLACE_FETCH_ENABLE = false
             let pinsToAdd = faePlacePins + pinsFromSearch + pinsFromCollection
@@ -2313,6 +2319,7 @@ extension FaeMapViewController: MapSearchDelegate {
     }
     
     func debugRadiusCircle(coordinate: CLLocationCoordinate2D?, radius: Int) {
+        guard joshDebug else { return }
         if radiusDebugCircle != nil {
             faeMapView.remove(radiusDebugCircle)
         }
