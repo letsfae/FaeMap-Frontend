@@ -294,7 +294,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             }
             if place.master_class != "" {
                 FaeSearch.shared.whereKey("content", value: place.master_class)
-                FaeSearch.shared.whereKey("source", value: "class_one")
+                FaeSearch.shared.whereKey("source", value: "master_class")
                 FaeSearch.shared.whereKey("type", value: "place")
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")
