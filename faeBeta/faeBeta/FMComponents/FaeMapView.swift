@@ -15,6 +15,7 @@ import UIKit
     @objc optional func allPlacesDeselect(_ full: Bool)
     @objc optional func allLocationsDeselect()
     
+    @objc optional func selfPinTap(view: MKAnnotationView)
     @objc optional func placePinTap(view: MKAnnotationView)
     @objc optional func userPinTap(view: MKAnnotationView)
     @objc optional func locPinTap(view: MKAnnotationView)
@@ -141,6 +142,9 @@ class FaeMapView: MKMapView {
                     anView.hideButtons()
                     anView.optionsOpened = false
                 }
+            } else
+            if let anView = v as? SelfAnnotationView {
+                mapAction?.selfPinTap?(view: anView)
             }
         } else {
             mapAction?.singleElsewhereTap?()

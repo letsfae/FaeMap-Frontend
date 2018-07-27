@@ -117,6 +117,15 @@ class FaeCoreData: NSObject {
         save("userGender", value: Key.shared.userGender)
     }
     
+    func loadGuestInfo() {
+        if let is_guest = readByKey("is_guest") as? Bool {
+            Key.shared.is_guest = is_guest
+        }
+        if let guest_token = readByKey("guest_token") as? String {
+            Key.shared.userTokenEncode_guest = guest_token
+        }
+    }
+    
     func readLogInfo() {
         _ = readUsername()
         Key.shared.headerUserAgent = UIDevice.current.modelName + " " + UIDevice.current.systemVersion
@@ -128,18 +137,41 @@ class FaeCoreData: NSObject {
             if login == 0 {
                 return
             } else {
-                Key.shared.userToken = readByKey("userToken") as! String
-                Key.shared.userTokenEncode = readByKey("userTokenEncode") as! String
-                Key.shared.session_id = readByKey("session_id") as! Int
-                Key.shared.user_id = readByKey("user_id") as! Int
+                if let user_token = readByKey("userToken") as? String {
+                    Key.shared.userToken = user_token
+                }
+                if let user_token_encode = readByKey("userTokenEncode") as? String {
+                    Key.shared.userTokenEncode = user_token_encode
+                }
+                if let session_id = readByKey("session_id") as? Int {
+                    Key.shared.session_id = session_id
+                }
+                if let user_id = readByKey("user_id") as? Int {
+                    Key.shared.user_id = user_id
+                }
+                
 //                Key.shared.is_Login = readByKey("is_Login") as! Bool
-                Key.shared.userEmail = readByKey("userEmail") as! String
-                Key.shared.nickname = readByKey("userNickname") as! String
-                Key.shared.userPassword = readByKey("userPassword") as! String
-                Key.shared.userFirstname = readByKey("userFirstname") as! String
-                Key.shared.userLastname = readByKey("userLastname") as! String
-                Key.shared.userBirthday = readByKey("userBirthday") as! String
-                Key.shared.userGender = readByKey("userGender") as! Int
+                if let user_email = readByKey("userEmail") as? String {
+                    Key.shared.userEmail = user_email
+                }
+                if let nick_name = readByKey("userNickname") as? String {
+                    Key.shared.nickname = nick_name
+                }
+                if let password = readByKey("userPassword") as? String {
+                    Key.shared.userPassword = password
+                }
+                if let first_name = readByKey("userFirstname") as? String {
+                    Key.shared.userFirstname = first_name
+                }
+                if let last_name = readByKey("userLastname") as? String {
+                    Key.shared.userLastname = last_name
+                }
+                if let birthday = readByKey("userBirthday") as? String {
+                    Key.shared.userBirthday = birthday
+                }
+                if let gender = readByKey("userGender") as? Int {
+                    Key.shared.userGender = gender
+                }
                 if readByKey("userMiniAvatar") != nil {
                     Key.shared.userMiniAvatar = readByKey("userMiniAvatar") as! Int
                 }

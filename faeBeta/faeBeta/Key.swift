@@ -58,7 +58,7 @@ class Key: NSObject { //  singleton class
     
     // MARK: - API Authorizations
     
-    // guest
+    // guest mode
     var userTokenEncode_guest = ""
     var is_guest: Bool = false
     

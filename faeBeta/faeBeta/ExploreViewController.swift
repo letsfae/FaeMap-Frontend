@@ -196,8 +196,12 @@ class ExploreViewController: UIViewController, UICollectionViewDelegate, UIColle
         imgAvatar.isUserInteractionEnabled = false
         imgAvatar.clipsToBounds = true
         uiviewAvatarWaveSub.addSubview(imgAvatar)
-        imgAvatar.userID = Key.shared.user_id
-        imgAvatar.loadAvatar(id: Key.shared.user_id)
+        if Key.shared.is_guest {
+            imgAvatar.image = #imageLiteral(resourceName: "default_gray_avatar")
+        } else {
+            imgAvatar.userID = Key.shared.user_id
+            imgAvatar.loadAvatar(id: Key.shared.user_id)
+        }
     }
     
     private func loadWaves() {

@@ -81,12 +81,21 @@ class GuestModeView: UIView {
     
     @objc private func actionGuestLogin(_ sender: UIButton) {
         print("guest log in")
+        resetGuestInfo()
         guestLogin?()
     }
     
     @objc private func actionGuestCreateAccount(_ sender: UIButton) {
         print("Create an account")
+        resetGuestInfo()
         guestRegister?()
+    }
+    
+    private func resetGuestInfo() {
+        Key.shared.is_guest = false
+        Key.shared.userTokenEncode_guest = ""
+        FaeCoreData.shared.save("is_guest", value: false)
+        FaeCoreData.shared.save("guest_token", value: "")
     }
     
     func show() {

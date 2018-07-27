@@ -149,6 +149,7 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
         uiviewLeftWindow.addSubview(lblNickName)
         if Key.shared.is_guest {
             lblNickName.text = "Guest"
+            imgAvatar.image = #imageLiteral(resourceName: "default_gray_avatar")
         }
         
         imgLeftSlideMiddle = UIImageView(frame: CGRect(x: 0, y: 152, width: 290, height: 108))
@@ -392,6 +393,7 @@ class SideMenuViewController: UIViewController, UITableViewDataSource, UITableVi
     }
     
     private func loadUserInfo() {
+        guard Key.shared.is_guest == false else { return }
         General.shared.avatarCached(userid: Key.shared.user_id, completion:  { [weak self] (avatarImage) in
             self?.imgAvatar.image = avatarImage
         })

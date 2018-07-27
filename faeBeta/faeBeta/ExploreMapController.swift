@@ -33,6 +33,7 @@ class ExploreMapController: BasicMapController, UICollectionViewDelegate, UIColl
         faeMapView.isShowFourIconsEnabled = false
         faeMapView.mapAction = self
         placeClusterManager.isFullMapRectEnabled = true
+        placeClusterManager.forPlacePin = false
         btnZoom.isHidden = true
         btnLocat.isHidden = true
         let edgeView = LeftMarginToEnableNavGestureView()

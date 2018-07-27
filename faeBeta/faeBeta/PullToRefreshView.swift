@@ -100,8 +100,6 @@ class PullToRefreshView: UIView {
         self.backgroundView.frame.size.height = self.frame.size.height
         self.gifUnicorn.frame.origin.y = -20 * screenHeightFactor + offset
         self.uiviewBkgdHolder.frame.origin.y = offset
-//        self.imgBackground_01.frame.origin.y = offset
-//        self.imgBackground_02.frame.origin.y = offset
     }
     
     init(options: PullToRefreshOption, frame: CGRect, refreshCompletion: (() -> Void)?, down: Bool = true) {

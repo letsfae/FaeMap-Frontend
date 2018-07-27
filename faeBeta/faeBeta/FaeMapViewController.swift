@@ -312,6 +312,9 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         initScreenPointCenters()
         
         let _ = Category.init()//Category.shared.category_to_icon
+        
+//        let testView = FaeActivityIndicator(message: "Loading...")
+//        view.addSubview(testView)
     }
     
     deinit {
@@ -390,6 +393,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         didSet {
             uiviewCollectionbarShadow.isHidden = modeCollection != .on
             uiviewSchbarShadow.isHidden = modeCollection == .on
+            if modeCollection == .on {
+                placeClusterManager.forPlacePin = false
+            } else {
+                placeClusterManager.forPlacePin = true
+            }
         }
     }
     
@@ -423,6 +431,11 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
             
             faeMapView.isDoubleTapOnMKAnnoViewEnabled = mapMode != .routing
             imgSelectLocIcon.isHidden = mapMode != .selecting
+            if mapMode == .routing {
+                placeClusterManager.forPlacePin = false
+            } else {
+                placeClusterManager.forPlacePin = true
+            }
         }
     }
     
@@ -1398,20 +1411,25 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             guard boolPreventUserPinOpen == false else { return }
             tapUserPin(didSelect: view)
         } else if view is SelfAnnotationView {
-            guard !Key.shared.is_guest else {
-                return
-            }
-            boolCanOpenPin = false
-            faeMapView.mapGesture(isOn: false)
-            uiviewNameCard.userId = Key.shared.user_id
-            uiviewNameCard.show(avatar: UIImage(named: "miniAvatar_\(Key.shared.userMiniAvatar)") ?? UIImage())  {
-                self.boolCanOpenPin = true
-            }
-            uiviewNameCard.boolSmallSize = false
-            uiviewNameCard.btnProfile.isHidden = true
-            guard let anView = view as? SelfAnnotationView else { return }
-            anView.mapAvatar = Key.shared.userMiniAvatar
+            tapSelfPin(view: view)
         }
+    }
+    
+    // Self Pin Control
+    private func tapSelfPin(view: MKAnnotationView) {
+        guard !Key.shared.is_guest else {
+            return
+        }
+        boolCanOpenPin = false
+        faeMapView.mapGesture(isOn: false)
+        uiviewNameCard.userId = Key.shared.user_id
+        uiviewNameCard.show(avatar: UIImage(named: "miniAvatar_\(Key.shared.userMiniAvatar)") ?? UIImage())  {
+            self.boolCanOpenPin = true
+        }
+        uiviewNameCard.boolSmallSize = false
+        uiviewNameCard.btnProfile.isHidden = true
+        guard let anView = view as? SelfAnnotationView else { return }
+        anView.mapAvatar = Key.shared.userMiniAvatar
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -3961,6 +3979,10 @@ extension FaeMapViewController: MapAction {
         } else {
             uiviewPinActionDisplay.changeStyle(action: PlacePinAction(rawValue: action)!, isPlace)
         }
+    }
+    
+    func selfPinTap(view: MKAnnotationView) {
+        tapSelfPin(view: view)
     }
     
     func placePinTap(view: MKAnnotationView) {

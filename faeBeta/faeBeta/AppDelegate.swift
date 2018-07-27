@@ -30,7 +30,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         configureRealm()
         setupNavigationController()
         GMSServices.provideAPIKey("AIzaSyBVHv0Lp-MfiigWhrcEgYv-aTsvrLQ3trE")
-        
         return true
     }
     
@@ -50,6 +49,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = navMain
         window?.makeKeyAndVisible()
+        
+        FaeCoreData.shared.loadGuestInfo()
+        guard !(Key.shared.is_guest && Key.shared.userTokenEncode_guest != "") else {
+            let vcRoot = InitialPageController()
+            Key.shared.navOpenMode = .mapFirst
+            self.navMain.setViewControllers([vcRoot], animated: false)
+            LocManager.shared.updateCurtLoc() // update user current location
+            self.configureNotifications()
+            self.testReachability()
+            return
+        }
         
         if Key.shared.isFirstUse() {
             let vcRoot = WelcomeViewController()
