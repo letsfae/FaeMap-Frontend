@@ -269,6 +269,7 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     // Debug Use
     private var lblZoomLevelInfo: FaeLabel!
     private var lblRadiusInfo: FaeLabel!
+    private var radiusDebugCircle: MKCircle!
     
     // Auxiliary
     private var activityIndicator: UIActivityIndicatorView!
@@ -832,10 +833,10 @@ extension FaeMapViewController {
 //            // Fallback on earlier versions
 //        }
 //        
-        lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 90 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
+        lblZoomLevelInfo = FaeLabel(CGRect(x: 3, y: 160 + device_offset_top, width: screenWidth, height: 20), .left, .medium, 20, .black)
         lblZoomLevelInfo.backgroundColor = .white
         view.addSubview(lblZoomLevelInfo)
-        lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 120 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
+        lblRadiusInfo = FaeLabel(CGRect(x: 3, y: 190 + device_offset_top, width: screenWidth / 2, height: 20), .left, .medium, 20, .black)
         lblRadiusInfo.backgroundColor = .white
         view.addSubview(lblRadiusInfo)
         
@@ -2181,6 +2182,8 @@ extension FaeMapViewController: MapSearchDelegate {
             if let rToSearch = self.tempSearchRadius {
                 radiusToSearch = rToSearch
             }
+            joshprint("[re-search radius]", radiusToSearch)
+            self.debugRadiusCircle(coordinate: locationToSearch, radius: radiusToSearch)
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: searchText)
             searchAgent.whereKey("source", value: Key.shared.searchSource_map)
@@ -2278,12 +2281,25 @@ extension FaeMapViewController: MapSearchDelegate {
                                            edgePadding: UIEdgeInsetsMake(240, 40, 100, 40))
             }
             removeUserPins()
+            debugRadiusCircle(coordinate: LocManager.shared.locToSearch_map, radius: Key.shared.radius_map)
             placeClusterManager.isClusteringDisabled = true
+            
         } else {
             searchState = .map
             tblPlaceResult.changeState(isLoading: false, isNoResult: true)
             showOrHideTableResultsExpandingIndicator()
             placeClusterManager.isClusteringDisabled = false
+        }
+    }
+    
+    func debugRadiusCircle(coordinate: CLLocationCoordinate2D?, radius: Int) {
+        if radiusDebugCircle != nil {
+            faeMapView.remove(radiusDebugCircle)
+        }
+        if let coor = coordinate {
+            let circle = MKCircle(center: coor, radius: Double(radius))
+            radiusDebugCircle = circle
+            faeMapView.add(circle)
         }
     }
     
@@ -3666,14 +3682,23 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = IVBezierPathRenderer(overlay: overlay)
-        renderer.strokeColor = UIColor._206184231()
-        renderer.lineWidth = 8
-        renderer.lineCap = .round
-        renderer.lineJoin = .round
-        renderer.borderColor = UIColor._182150210()
-        renderer.borderMultiplier = 1.5
-        return renderer
+        if overlay is MKCircle {
+            let circle = MKCircleRenderer(overlay: overlay)
+            circle.strokeColor = UIColor._2499090()
+            circle.fillColor = UIColor._2499090()
+            circle.alpha = 0.3
+            circle.lineWidth = 1
+            return circle
+        } else {
+            let renderer = IVBezierPathRenderer(overlay: overlay)
+            renderer.strokeColor = UIColor._206184231()
+            renderer.lineWidth = 8
+            renderer.lineCap = .round
+            renderer.lineJoin = .round
+            renderer.borderColor = UIColor._182150210()
+            renderer.borderMultiplier = 1.5
+            return renderer
+        }
     }
 }
 

@@ -9,6 +9,23 @@
 import UIKit
 
 extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if self.lastContentOffset > scrollView.contentOffset.y {
+            // move up
+            scrollView.backgroundColor = UIColor(r: 245, g: 255, b: 253, alpha: 100)
+        }
+        else if self.lastContentOffset < scrollView.contentOffset.y {
+            // move down
+            if scrollView.contentOffset.y > -77 {
+                scrollView.backgroundColor = .white
+            }
+        }
+        joshprint("offset:", scrollView.contentOffset.y)
+        // update the new position acquired
+        self.lastContentOffset = scrollView.contentOffset.y
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch tableView {
         case tblPeople:

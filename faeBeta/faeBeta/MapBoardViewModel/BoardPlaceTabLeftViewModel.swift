@@ -9,6 +9,7 @@
 import UIKit
 import SwiftyJSON
 import RealmSwift
+import Alamofire
 
 class BoardPlaceTabLeftViewModel {
     let realm = try! Realm()
@@ -41,6 +42,9 @@ class BoardPlaceTabLeftViewModel {
         return recommendCategories.count
     }
     
+    var recommend_request: DataRequest?
+    var other_request: DataRequest?
+    
     // MARK: - Methods
     private func categoryPlaces(at index: Int) -> [PlacePin]? {
         guard index < recommendCategories.count else { return nil }
@@ -67,7 +71,7 @@ class BoardPlaceTabLeftViewModel {
         for idx in 0..<count {
             let content = realmCategory[idx].name
             // check whether it belongs to class_one
-            let source = Category.shared.class1_to_2[content] == nil ? "categories" : "class_one"
+            let source = Category.shared.class1_to_2[content] == nil ? "categories" : "master_class"
             FaeSearch.shared.whereKey("content", value: content)
             FaeSearch.shared.whereKey("source", value: source)
             FaeSearch.shared.whereKey("type", value: "place")
@@ -79,8 +83,8 @@ class BoardPlaceTabLeftViewModel {
                                                           "longitude": longitude])
             FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
         }
-        
-        FaeSearch.shared.searchBulk { [weak self] (status: Int, message: Any?) in
+        recommend_request?.cancel()
+        recommend_request = FaeSearch.shared.searchBulk { [weak self] (status: Int, message: Any?) in
             if status / 100 != 2 || message == nil {
                 print("Board - Get Recommended Places Fail \(status) \(message!)")
                 completion()
@@ -116,7 +120,7 @@ class BoardPlaceTabLeftViewModel {
     private func searchByCategories(latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         for category in arrCategories {
             FaeSearch.shared.whereKey("content", value: category)
-            FaeSearch.shared.whereKey("source", value: "class_one")
+            FaeSearch.shared.whereKey("source", value: "master_class")
             FaeSearch.shared.whereKey("type", value: "place")
             FaeSearch.shared.whereKey("size", value: "15")
             FaeSearch.shared.whereKey("radius", value: "16000")
@@ -126,7 +130,8 @@ class BoardPlaceTabLeftViewModel {
                                                           "longitude": longitude])
             FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
         }
-        FaeSearch.shared.searchBulk{ [weak self] (status, message) in
+        other_request?.cancel()
+        other_request = FaeSearch.shared.searchBulk{ [weak self] (status, message) in
             guard let `self` = self else { return }
             guard status / 100 == 2 && message != nil else {
                 print("Board - Get Nearby Places Fail \(status) \(message!)")

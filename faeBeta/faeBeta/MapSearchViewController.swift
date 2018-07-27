@@ -190,10 +190,16 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
-        schPlaceBar.txtSchField.placeholder = previousVC != .chat ? "Search Fae Map" : "Search Place or Address"
+        switch previousVC {
+        case .map:
+            schPlaceBar.txtSchField.placeholder = "Search Fae Map"
+        case .board:
+            schPlaceBar.txtSchField.placeholder = "All Places"
+        case .chat:
+            schPlaceBar.txtSchField.placeholder = "Search Place or Address"
+        }
         if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
             schPlaceBar.txtSchField.text = strSearchedPlace
-            schPlaceBar.btnClear.isHidden = false
         }
         uiviewSearch.addSubview(schPlaceBar)
         
@@ -227,6 +233,9 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             if Key.shared.searchSource_chat.lowercased() == "categories" {
                 schPlaceBar.txtSchField.text = ""
             }
+        }
+        if let text = schPlaceBar.txtSchField.text {
+            schPlaceBar.btnClear.isHidden = text == ""
         }
         
         schLocationBar.txtSchField.returnKeyType = .next

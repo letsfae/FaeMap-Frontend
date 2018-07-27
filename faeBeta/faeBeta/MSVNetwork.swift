@@ -156,7 +156,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
-                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
+                    radius = Int(faeMapView.region.span.latitudeDelta * 222090 / 4)
                     joshprint("[searchArea] Current Map View")
                 default:
                     joshprint("[searchArea] other")
@@ -199,7 +199,7 @@ extension MapSearchViewController: MKLocalSearchCompleterDelegate {
                 case "Current Map View":
                     locationToSearch = faeMapView.centerCoordinate
                     // radius: degree 69 * 1609.34 * 2, 4 times bigger of current map
-                    radius = Int(faeMapView.region.span.latitudeDelta * 222090)
+                    radius = Int(faeMapView.region.span.latitudeDelta * 222090 / 4)
                     //joshprint("[searchArea] Current Map View")
                 default:
                     //joshprint("[searchArea] other")
