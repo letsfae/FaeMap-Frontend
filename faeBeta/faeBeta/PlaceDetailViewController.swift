@@ -232,6 +232,18 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         if isSimilar {
             arrSimilarPlaces.removeAll()
             placeIdSet.removeAll()
+            if place.class_5 != "" {
+                FaeSearch.shared.whereKey("content", value: place.class_5)
+                FaeSearch.shared.whereKey("source", value: "categories")
+                FaeSearch.shared.whereKey("type", value: "place")
+                FaeSearch.shared.whereKey("size", value: "20")
+                FaeSearch.shared.whereKey("radius", value: "20000")
+                FaeSearch.shared.whereKey("offset", value: "0")
+                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                              "longitude": long])
+                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+            }
             if place.class_4 != "" {
                 FaeSearch.shared.whereKey("content", value: place.class_4)
                 FaeSearch.shared.whereKey("source", value: "categories")
@@ -271,6 +283,18 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             if place.class_1 != "" {
                 FaeSearch.shared.whereKey("content", value: place.class_1)
                 FaeSearch.shared.whereKey("source", value: "categories")
+                FaeSearch.shared.whereKey("type", value: "place")
+                FaeSearch.shared.whereKey("size", value: "20")
+                FaeSearch.shared.whereKey("radius", value: "20000")
+                FaeSearch.shared.whereKey("offset", value: "0")
+                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
+                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
+                                                              "longitude": long])
+                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+            }
+            if place.master_class != "" {
+                FaeSearch.shared.whereKey("content", value: place.master_class)
+                FaeSearch.shared.whereKey("source", value: "class_one")
                 FaeSearch.shared.whereKey("type", value: "place")
                 FaeSearch.shared.whereKey("size", value: "20")
                 FaeSearch.shared.whereKey("radius", value: "20000")

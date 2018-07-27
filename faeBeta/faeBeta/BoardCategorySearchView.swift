@@ -109,8 +109,8 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
     
     private func setButtonsUI() {
         for i in 0..<12 {
-            let img_id = i < placeNames.count ? Category.shared.categories[placeNames[i]] ?? -1 : -1
-            if img_id == -1 {
+            let img_id = i < placeNames.count ? Category.shared.category_to_icon[placeNames[i]] : ""
+            if img_id == "" {
                 if i < 6 {
                     btnCats1[i].setImage(nil, for: .normal)
                     lblCats1[i].text = ""
@@ -120,10 +120,10 @@ class BoardCategorySearchView: UIView, UIScrollViewDelegate {
                 }
             } else {
                 if i < 6 {
-                    btnCats1[i].setImage(UIImage(named: "place_result_\(img_id)"), for: .normal)
+                    btnCats1[i].setImage(UIImage(named: "place_result_\(img_id!)"), for: .normal)
                     lblCats1[i].text = placeNames[i]
                 } else {
-                    btnCats2[i - 6].setImage(UIImage(named: "place_result_\(img_id)"), for: .normal)
+                    btnCats2[i - 6].setImage(UIImage(named: "place_result_\(img_id!)"), for: .normal)
                     lblCats2[i - 6].text = placeNames[i]
                 }
             }

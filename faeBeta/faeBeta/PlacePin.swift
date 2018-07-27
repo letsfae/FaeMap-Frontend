@@ -19,10 +19,12 @@ class PlacePin: NSObject, FaePin {
     var icon: UIImage?
     var imageURL = ""
     var imageURLs = [String]()
+    var master_class: String = ""
     var class_1: String = ""
     var class_2: String = ""
     var class_3: String = ""
     var class_4: String = ""
+    var class_5: String = ""
     var category: String = ""
     var category_icon_id: Int = -1
     var url = ""
@@ -71,12 +73,16 @@ class PlacePin: NSObject, FaePin {
         coordinate = CLLocationCoordinate2D(latitude: json["geolocation"]["latitude"].doubleValue, longitude: json["geolocation"]["longitude"].doubleValue)
         
         // process categories
+        master_class = json["categories"]["master_class"].stringValue
         class_1 = json["categories"]["class1"].stringValue
         class_2 = json["categories"]["class2"].stringValue
         class_3 = json["categories"]["class3"].stringValue
         class_4 = json["categories"]["class4"].stringValue
+        class_5 = json["categories"]["class5"].stringValue
         
-        if json["categories"]["class4"].stringValue != "" {
+        if json["categories"]["class5"].stringValue != "" {
+            category = json["categories"]["class5"].stringValue
+        } else if json["categories"]["class4"].stringValue != "" {
             category = json["categories"]["class4"].stringValue
         } else if json["categories"]["class3"].stringValue != "" {
             category = json["categories"]["class3"].stringValue
@@ -84,9 +90,13 @@ class PlacePin: NSObject, FaePin {
             category = json["categories"]["class2"].stringValue
         } else if json["categories"]["class1"].stringValue != "" {
             category = json["categories"]["class1"].stringValue
+        } else if json["categories"]["master_class"].stringValue != "" {
+            category = json["categories"]["master_class"].stringValue
         }
 
-        if let _4_icon_id = json["categories"]["class4_icon_id"].int {
+        if let _5_icon_id = json["categories"]["class5_icon_id"].int {
+            category_icon_id = _5_icon_id
+        } else if let _4_icon_id = json["categories"]["class4_icon_id"].int {
             category_icon_id = _4_icon_id
         } else if let _3_icon_id = json["categories"]["class3_icon_id"].int {
             category_icon_id = _3_icon_id

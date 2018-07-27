@@ -115,12 +115,12 @@ class CategoryListCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    public func setValueForCategory(_ cat: (key: String, value: Int)) {
+    public func setValueForCategory(_ cat: (key: String, value: String)) {
         imgPic.image = UIImage(named: "place_result_\(cat.value)")
         lblCatName.text = cat.key
     }
     
-    public func configureCell(_ cat: (key: String, value: Int), last: Bool) {
+    public func configureCell(_ cat: (key: String, value: String), last: Bool) {
         imgPic.image = UIImage(named: "place_result_\(cat.value)")
         lblCatName.text = cat.key
         bottomLine.isHidden = last
