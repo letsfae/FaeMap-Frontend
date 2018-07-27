@@ -11,7 +11,27 @@ import UIKit
 extension MapBoardViewController: UITableViewDataSource, UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        joshprint("offset:", scrollView.contentOffset.y)
+        let offset = PullToRefreshConst.height - scrollView.contentOffset.y
+        guard offset > 0 else { return }
+        if let refreshView = scrollView.viewWithTag(PullToRefreshConst.pullTag) as? PullToRefreshView {
+            refreshView.adjustUI(offset: offset)
+        }
+        /*
+        if self.lastContentOffset > scrollView.contentOffset.y {
+            // move up
+            scrollView.backgroundColor = UIColor(r: 245, g: 255, b: 253, alpha: 100)
+        }
+        else if self.lastContentOffset < scrollView.contentOffset.y {
+            // move down
+            if scrollView.contentOffset.y > -77 {
+                scrollView.backgroundColor = .white
+            }
+        }
         
+        // update the new position acquired
+        self.lastContentOffset = scrollView.contentOffset.y
+    */
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

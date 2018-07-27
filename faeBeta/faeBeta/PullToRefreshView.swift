@@ -30,6 +30,7 @@ class PullToRefreshView: UIView {
     fileprivate var refreshCompletion: (() -> Void)?
     fileprivate var pull: Bool = true
     fileprivate var gifUnicorn: GIFImageView
+    fileprivate var uiviewBkgdHolder: UIView!
     fileprivate var imgBackground_01: UIImageView!
     fileprivate var imgBackground_02: UIImageView!
     
@@ -93,12 +94,23 @@ class PullToRefreshView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func adjustUI(offset: CGFloat) {
+        self.frame.size.height = PullToRefreshConst.height + offset
+        self.frame.origin.y = -(PullToRefreshConst.height + offset)
+        self.backgroundView.frame.size.height = self.frame.size.height
+        self.gifUnicorn.frame.origin.y = -20 * screenHeightFactor + offset
+        self.uiviewBkgdHolder.frame.origin.y = offset
+//        self.imgBackground_01.frame.origin.y = offset
+//        self.imgBackground_02.frame.origin.y = offset
+    }
+    
     init(options: PullToRefreshOption, frame: CGRect, refreshCompletion: (() -> Void)?, down: Bool = true) {
         self.options = options
         self.refreshCompletion = refreshCompletion
         
         self.backgroundView = UIView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: frame.size.height))
-        self.backgroundView.backgroundColor = self.options.backgroundColor
+//        self.backgroundView.backgroundColor = self.options.backgroundColor
+        self.backgroundView.backgroundColor = UIColor(r: 245, g: 255, b: 253, alpha: 100)
         self.backgroundView.autoresizingMask = UIViewAutoresizing.flexibleWidth
         
         self.arrow = UIImageView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
@@ -141,20 +153,22 @@ class PullToRefreshView: UIView {
         if imgBackground_02 != nil {
             imgBackground_02.removeFromSuperview()
         }
+        uiviewBkgdHolder = UIView(frame: CGRect(x: 0, y: 0, w: 414, h: 85))
+        addSubview(uiviewBkgdHolder)
         
         imgBackground_01 = UIImageView(frame: CGRect(x: 0, y: 0, w: 414, h: 85))
         imgBackground_01.image = #imageLiteral(resourceName: "pullToRefreshBackground")
         imgBackground_01.contentMode = .scaleAspectFit
         imgBackground_01.clipsToBounds = true
         imgBackground_01.layer.zPosition = 0
-        self.addSubview(imgBackground_01)
+        uiviewBkgdHolder.addSubview(imgBackground_01)
         
         imgBackground_02 = UIImageView(frame: CGRect(x: 414, y: 0, w: 414, h: 85))
         imgBackground_02.image = #imageLiteral(resourceName: "pullToRefreshBackground")
         imgBackground_02.contentMode = .scaleAspectFit
         imgBackground_02.clipsToBounds = true
         imgBackground_02.layer.zPosition = 0
-        self.addSubview(imgBackground_02)
+        uiviewBkgdHolder.addSubview(imgBackground_02)
     }
     
     override func layoutSubviews() {
@@ -222,7 +236,7 @@ class PullToRefreshView: UIView {
             if !self.pull {
                 return
             }
-            if offsetY < -self.frame.size.height {
+            if offsetY < -PullToRefreshConst.height {
                 // pulling or refreshing
                 if scrollView.isDragging == false && self.state != .refreshing { // release the finger
                     self.state = .refreshing // startAnimating
@@ -243,7 +257,7 @@ class PullToRefreshView: UIView {
             if self.pull {
                 return
             }
-            if upHeight > self.frame.size.height {
+            if upHeight > PullToRefreshConst.height {
                 // pulling or refreshing
                 if scrollView.isDragging == false && self.state != .refreshing { // release the finger
                     self.state = .refreshing // startAnimating
@@ -270,9 +284,9 @@ class PullToRefreshView: UIView {
         
         var insets = scrollView.contentInset
         if self.pull {
-            insets.top += self.frame.size.height
+            insets.top += PullToRefreshConst.height
         } else {
-            insets.bottom += self.frame.size.height
+            insets.bottom += PullToRefreshConst.height
         }
         scrollView.bounces = false
         UIView.animate(withDuration: PullToRefreshConst.animationDuration, delay: 0, options: [],
