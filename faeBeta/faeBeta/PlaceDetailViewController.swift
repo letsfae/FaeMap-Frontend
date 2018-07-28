@@ -73,6 +73,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
             doneFetchPlaces()
         }
     }
+    var dataDict = [String: [PlacePin]]()
     
     // Guest Mode
     private var uiviewGuestMode: GuestModeView!
@@ -165,7 +166,6 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         // TODO Vicky - 在similar places加载出来前点击展开cell偶尔会崩溃 => 似乎解决了？
         getRelatedPlaces(lat, long, isSimilar: true) {
             vickyprint("Exist duplicate place: \(self.testDuplicates())")
-            
         }
         getRelatedPlaces(lat, long, isSimilar: false, {
             
@@ -173,14 +173,22 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     }
     
     private func doneFetchPlaces() {
-        self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
-        self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
+        var arrSimilar = [PlacePin]()
+        var arrNearby = [PlacePin]()
+        if let similars = dataDict["similar"] {
+            arrSimilar = similars
+        }
+        if let nearbys = dataDict["nearby"] {
+            arrNearby = nearbys
+        }
+        viewModelSimilar = BoardPlaceCategoryViewModel(title: arrTitle[0], places: arrSimilar)
+        viewModelNearby = BoardPlaceCategoryViewModel(title: arrTitle[1], places: arrNearby)
         //                self.tblPlaceDetail.reloadData()
         //                self.tblPlaceDetail.reloadSections(IndexSet(integer: self.intCellCount - 1), with: .none)
-        self.intSimilarNearbySection = (self.intSimilar == 0 && self.intNearby == 0 ? 0 : 1)
-        self.tblPlaceDetail.beginUpdates()
-        self.tblPlaceDetail.insertSections(IndexSet(integer: self.intCellCount), with: .none)
-        self.tblPlaceDetail.endUpdates()
+        intSimilarNearbySection = (intSimilar == 0 && intNearby == 0 ? 0 : 1)
+        tblPlaceDetail.beginUpdates()
+        tblPlaceDetail.insertSections(IndexSet(integer: intCellCount), with: .none)
+        tblPlaceDetail.endUpdates()
     }
     
     private func testDuplicates() -> Bool {
@@ -301,11 +309,11 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 let json = JSON(message!)
                 guard let placesJson = json.array else {
                     self.fetchCount += 1
+                    completion()
                     return
                 }
                 for similarPlaces in placesJson {
                     guard let similarJson = similarPlaces.array else {
-                        self.fetchCount += 1
                         continue
                     }
                     let places = similarJson.map( { PlacePin(json: $0) } )
@@ -317,6 +325,7 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                     }
                 }
                 self.arrSimilarPlaces = Array(self.arrSimilarPlaces.prefix(20))
+                self.dataDict["similar"] = self.arrSimilarPlaces
                 self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
                 self.fetchCount += 1
                 completion()
@@ -342,10 +351,12 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                 let json = JSON(message!)
                 guard let placeJson = json.array else {
                     self.fetchCount += 1
+                    completion()
                     return
                 }
                 self.arrNearbyPlaces = placeJson.map({ PlacePin(json: $0) })
                 self.arrNearbyPlaces = self.arrNearbyPlaces.filter({ $0.id != self.place.id })
+                self.dataDict["nearby"] = self.arrNearbyPlaces
                 self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
                 self.fetchCount += 1
                 completion()
