@@ -44,7 +44,8 @@ class MBComtsStoriesViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func pullDownToRefresh() {
-        tblCommentStory.addPullRefresh() { [unowned self] in
+        tblCommentStory.addPullRefresh() { [weak self] in
+            guard let `self` = self else { return }
             let timeNow = DispatchTime.now()
             self.getMBSocialInfo(socialType: self.type, time: timeNow, completion: { (timeDiff) in
                 let delay = DispatchTime.now() + abs(Double(NSEC_PER_SEC) - timeDiff) / Double(NSEC_PER_SEC)

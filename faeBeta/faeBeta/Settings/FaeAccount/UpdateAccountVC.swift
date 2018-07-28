@@ -259,7 +259,8 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
             lName = textLName.text
             keyValue["first_name"] = fName!
             keyValue["last_name"] = lName!
-            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self, weak delegate = self.delegate!] (status, message) in
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [weak self, weak delegate = self.delegate!] (status, message) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     print("Successfully update name")
                     Key.shared.userFirstname = self.fName!
@@ -278,7 +279,8 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
             dateFormatter.dateFormat = "yyyy-MM-dd"
             let dateString = dateFormatter.string(from: date!)
             keyValue["birthday"] = dateString
-            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self, weak delegate = self.delegate!] (status, message) in
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [weak self, weak delegate = self.delegate!] (status, message) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     print("Successfully update birthday")
                     Key.shared.userBirthday = dateString
@@ -291,7 +293,8 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
             })
         case .gender:
             keyValue["gender"] = gender!
-            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self, weak delegate = self.delegate!] (status, message) in
+            postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [weak self, weak delegate = self.delegate!] (status, message) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     print("Successfully update gender")
                     Key.shared.gender = self.gender!
@@ -304,7 +307,8 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
             })
         case .password:
             faeUser.whereKey("password", value: textPswd.text!)
-            faeUser.verifyPassword({ [unowned self] (status, message) in
+            faeUser.verifyPassword({ [weak self] (status, message) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     if self.pswdEnterMode == .password {
                         let vc = SignInSupportNewPassViewController()
@@ -328,7 +332,8 @@ class SetUpdateAccountViewController: UIViewController, FAENumberKeyboardDelegat
             })
         case .newEmail:
             faeUser.whereKey("email", value: textNewEmail.text!)
-            faeUser.checkEmailExistence { [unowned self] (status, message) in
+            faeUser.checkEmailExistence { [weak self] (status, message) in
+                guard let `self` = self else { return }
                 if status / 100 == 2 {
                     let json = JSON(message!)
                     if json == JSON.null {

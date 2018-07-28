@@ -146,7 +146,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc private func logOut(_ sender: UIButton) {
         let logOut = FaeUser()
-        logOut.logOut { [unowned self] (_, _) in
+        logOut.logOut { [weak self] (_, _) in
+            guard let `self` = self else { return }
             self.jumpToWelcomeView(animated: true)
             UIApplication.shared.applicationIconBadgeNumber = 0
         }

@@ -150,7 +150,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         // viewModelCategories - BoardPlaceTabLeftViewModel
         viewModelCategories = BoardPlaceTabLeftViewModel()
         viewModelCategories.location = locToSearch
-        viewModelCategories.categoriesDataLoaded = { [unowned self] (categories) in
+        viewModelCategories.categoriesDataLoaded = { [weak self] (categories) in
+            guard let `self` = self else { return }
             self.tblPlaceLeft.reloadData()
             self.tblPlaceLeft.stopPullRefreshEver()
         }
@@ -158,11 +159,13 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         // viewModelPlaces - BoardPlaceTabRightViewModel
         viewModelPlaces = BoardPlaceTabRightViewModel()
         viewModelPlaces.category = "All Places"
-        viewModelPlaces.placesDataLoaded = { [unowned self] (places) in
+        viewModelPlaces.placesDataLoaded = { [weak self] (places) in
+            guard let `self` = self else { return }
             self.tblPlaceRight.reloadData()
             self.tblPlaceRight.stopPullRefreshEver()
         }
-        viewModelPlaces.boolDataLoaded = { [unowned self] (loaded) in
+        viewModelPlaces.boolDataLoaded = { [weak self] (loaded) in
+            guard let `self` = self else { return }
             if loaded {
                 self.indicatorView.stopAnimating()
                 self.tblPlaceRight.isUserInteractionEnabled = true
@@ -171,7 +174,8 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
                 self.tblPlaceRight.isUserInteractionEnabled = false
             }
         }
-        viewModelPlaces.fetchMoreDataStatus = { [unowned self] (noMoreData, message) in
+        viewModelPlaces.fetchMoreDataStatus = { [weak self] (noMoreData, message) in
+            guard let `self` = self else { return }
             if noMoreData {
                 self.tblRightActivityIndicator.stopAnimating()
                 self.lblRightFetchMoreDataMessage.text = message
@@ -186,16 +190,19 @@ class MapBoardViewController: UIViewController, SideMenuDelegate, UIGestureRecog
         // viewModelPeople - BoardPeopleViewModel
         viewModelPeople = BoardPeopleViewModel()
         viewModelPeople.location = locToSearch
-        viewModelPeople.boolUserVisible = { [unowned self] (visible) in
+        viewModelPeople.boolUserVisible = { [weak self] (visible) in
+            guard let `self` = self else { return }
             self.tblPeople.reloadData()
             self.tblPeople.stopPullRefreshEver()
         }
         
-        viewModelPeople.peopleDataLoaded = { [unowned self] (people) in
+        viewModelPeople.peopleDataLoaded = { [weak self] (people) in
+            guard let `self` = self else { return }
             self.tblPeople.reloadData()
             self.tblPeople.stopPullRefreshEver()
         }
-        viewModelPeople.boolDataLoaded = { [unowned self] (loaded) in
+        viewModelPeople.boolDataLoaded = { [weak self] (loaded) in
+            guard let `self` = self else { return }
             if loaded {
                 self.uiviewAvatarWave.hideWaves()
                 self.tblPeople.isUserInteractionEnabled = true

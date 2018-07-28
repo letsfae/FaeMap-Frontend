@@ -43,7 +43,8 @@ extension MapBoardViewController: SelectLocationDelegate {
         if let text = locToSearchTextRaw {
             searchVC.strSearchedLocation = text
         }
-        searchVC.changeLocBarText = { [unowned self] (locText, shouldChangeStyle) in
+        searchVC.changeLocBarText = { [weak self] (locText, shouldChangeStyle) in
+            guard let `self` = self else { return }
             if shouldChangeStyle {
                 self.lblCurtLoc.attributedText = locText.faeSearchBarAttributedText()
                 self.imgCurtLoc.image = #imageLiteral(resourceName: "place_location")

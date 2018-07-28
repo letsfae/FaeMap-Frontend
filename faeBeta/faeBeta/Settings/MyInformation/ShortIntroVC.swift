@@ -144,7 +144,8 @@ class SetShortIntro: UIViewController, UITextViewDelegate {
     @objc private func actionSaveIntro(_ sender: UIButton) {
         let user = FaeUser()
         user.whereKey("short_intro", value: textView.text!)
-        user.updateNameCard { [unowned self, weak delegate = self.delegate!] (status, message) in
+        user.updateNameCard { [weak self, weak delegate = self.delegate!] (status, message) in
+            guard let `self` = self else { return }
             if status / 100 == 2 { // TODO: error code undecided
                 delegate?.protSaveShortIntro(txtIntro: self.textView.text)
                 if let nav = self.navigationController {

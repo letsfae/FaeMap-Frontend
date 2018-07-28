@@ -490,7 +490,8 @@ class CollectionsListDetailViewController: UIViewController, UITableViewDelegate
     }
     
     func getSavedItemsFromServer() {
-        FaeCollection.shared.getOneCollection(String(colId), completion: { [unowned self] (status, message) in
+        FaeCollection.shared.getOneCollection(String(colId), completion: { [weak self] (status, message) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 guard message != nil else { return }
                 let col = JSON(message!)

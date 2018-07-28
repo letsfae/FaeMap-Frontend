@@ -123,7 +123,8 @@ class SetDisplayName: UIViewController, UITextViewDelegate {
     @objc private func actionSaveName(_ sender: UIButton) {
         let user = FaeUser()
         user.whereKey("nick_name", value: textField.text!)
-        user.updateNameCard { [unowned self, weak delegate = self.delegate!] (status, message) in
+        user.updateNameCard { [weak self, weak delegate = self.delegate!] (status, message) in
+            guard let `self` = self else { return }
             if status / 100 == 2 { // TODO: error code undecided
                 delegate?.protSaveDisplayName(txtName: self.textField.text)
                 self.actionGoBack(sender)

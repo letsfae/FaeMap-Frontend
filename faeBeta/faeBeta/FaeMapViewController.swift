@@ -452,7 +452,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         guard !Key.shared.is_guest else { return }
         DispatchQueue.global(qos: .utility).async {
             let updateNickName = FaeUser()
-            updateNickName.getSelfNamecard { [unowned self] (status: Int, message: Any?) in
+            updateNickName.getSelfNamecard { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 guard status / 100 == 2 else {
                     DispatchQueue.main.async {
                         self.jumpToWelcomeView(animated: false)
@@ -555,7 +556,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         self.selfAnView?.changeAvatar()
         FaeCoreData.shared.save("userMiniAvatar", value: Key.shared.userMiniAvatar)
         updateMiniAvatar.whereKey("mini_avatar", value: "\(Key.shared.userMiniAvatar - 1)")
-        updateMiniAvatar.updateAccountBasicInfo({ [unowned self] (status: Int, _: Any?) in
+        updateMiniAvatar.updateAccountBasicInfo({ [weak self] (status: Int, _: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 print("Successfully update miniavatar")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrentMoodAvatar"), object: nil)
@@ -713,7 +715,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
     private func storeRealmCollectionFromServer() {
         let realm = try! Realm()
         var setDeletedCollection = Set(realm.filterMyCollections().map { $0.collection_id })
-        FaeCollection.shared.getCollections { [unowned self] (status: Int, message: Any?) in
+        FaeCollection.shared.getCollections { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 == 2 {
                 let json = JSON(message!)
                 guard let collections = json.array else {
@@ -782,7 +785,8 @@ class FaeMapViewController: UIViewController, UIGestureRecognizerDelegate {
         //faeChat.getMessageFromServer()
         //self.faeChat.getMessageFromServer()
         guard !Key.shared.is_guest else { return }
-        faePush.getSync { [unowned self] (status, message) in
+        faePush.getSync { [weak self] (status, message) in
+            guard let `self` = self else { return }
             if status / 2 == 100 {
                 let messageJSON = JSON(message!)
                 if let friend_request_count = messageJSON["friend_request"].int {
@@ -889,7 +893,8 @@ extension FaeMapViewController {
     @objc private func firstUpdateLocation() {
         let coordinateRegion = MKCoordinateRegionMakeWithDistance(LocManager.shared.curtLoc.coordinate, 1750, 1750)
         faeMapView.setRegion(coordinateRegion, animated: false)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [unowned self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            guard let `self` = self else { return }
             self.refreshMap(pins: false, users: true, places: true)
         }
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "firstUpdateLocation"), object: nil)
@@ -1101,7 +1106,8 @@ extension FaeMapViewController {
         searchVC.faeMapView = self.faeMapView
         searchVC.delegate = self
         searchVC.previousVC = .map
-        searchVC.gotoCity = { [unowned self] (cityData) in
+        searchVC.gotoCity = { [weak self] (cityData) in
+            guard let `self` = self else { return }
             let coordinateRegion = MKCoordinateRegionMakeWithDistance(cityData.coordinate, 12000, 12000)
             self.faeMapView.setRegion(coordinateRegion, animated: false)
         }
@@ -1560,7 +1566,8 @@ extension FaeMapViewController: MKMapViewDelegate, CCHMapClusterControllerDelega
             let mapCenterCoordinate = mapView.centerCoordinate
             let location = CLLocation(latitude: mapCenterCoordinate.latitude, longitude: mapCenterCoordinate.longitude)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                General.shared.getAddress(location: location) { [unowned self] (status, address) in
+                General.shared.getAddress(location: location) { [weak self] (status, address) in
+                    guard let `self` = self else { return }
                     guard status != 400 else {
                         DispatchQueue.main.async {
                             self.lblSearchContent.text = "Querying for location too fast!"
@@ -1803,7 +1810,8 @@ extension FaeMapViewController: MapFilterMenuDelegate {
         uiviewDropUpMenu = FMDropUpMenu()
         uiviewDropUpMenu.layer.zPosition = 601
         uiviewDropUpMenu.delegate = self
-        uiviewDropUpMenu.collectionBtnBlock = { [unowned self] in
+        uiviewDropUpMenu.collectionBtnBlock = { [weak self] in
+            guard let `self` = self else { return }
             self.loadGuestMode()
         }
         view.addSubview(uiviewDropUpMenu)
@@ -1958,7 +1966,8 @@ extension FaeMapViewController: MapFilterMenuDelegate {
             self.placesFromCollection.removeAll()
             self.locationsFromCollection.removeAll()
             for id in savedPinIds {
-                FaeMap.shared.getPin(type: type, pinId: String(id), completion: { [unowned self] (status, message) in
+                FaeMap.shared.getPin(type: type, pinId: String(id), completion: { [weak self] (status, message) in
+                    guard let `self` = self else { return }
                     guard status / 100 == 2 else {
                         self.isPinsFromCollectionLoading = false
                         self.isCollectionLoadingFailed = true
@@ -2191,7 +2200,8 @@ extension FaeMapViewController: MapSearchDelegate {
         //showOrHideRefreshIcon(show: false, animated: false)
         tblPlaceResult.changeState(isLoading: true, isNoResult: nil)
         let pinsToRemove = faePlacePins + pinsFromSearch + pinsFromCollection
-        removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: false) { [unowned self] in
+        removePlaceAnnotations(with: pinsToRemove, forced: true, instantly: false) { [weak self] in
+            guard let `self` = self else { return }
             self.btnRefreshIcon.isUserInteractionEnabled = true
             self.searchState = .multipleSearch
             // search and show results
@@ -2221,7 +2231,8 @@ extension FaeMapViewController: MapSearchDelegate {
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
                                                      "longitude": locationToSearch.longitude])
             self.searchRequest?.cancel()
-            self.searchRequest = searchAgent.search { [unowned self] (status: Int, message: Any?) in
+            self.searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
+                guard let `self` = self else { return }
                 joshprint("map searched places fetched")
                 guard status / 100 == 2 else {
                     if status == -999 { // cancelled
@@ -2397,7 +2408,8 @@ extension FaeMapViewController: PlaceViewDelegate, FMPlaceTableDelegate {
         tblPlaceResult.barDelegate = self
         tblPlaceResult.currentVC = .map
         view.addSubview(tblPlaceResult)
-        tblPlaceResult.reloadVisibleAnnotations = { [unowned self] in
+        tblPlaceResult.reloadVisibleAnnotations = { [weak self] in
+            guard let `self` = self else { return }
             self.reloadPlaceTableAnnotations()
         }
         
@@ -2525,7 +2537,8 @@ extension FaeMapViewController {
     private func updateUnreadChatIndicator() {
         let realm = try! Realm()
         let resultRealmRecents = realm.objects(RealmRecentMessage.self).filter("login_user_id == %@", String(Key.shared.user_id))
-        unreadNotiToken = resultRealmRecents.observe { [unowned self] (changes: RealmCollectionChange) in
+        unreadNotiToken = resultRealmRecents.observe { [weak self] (changes: RealmCollectionChange) in
+            guard let `self` = self else { return }
             switch changes {
             case .initial:
                 self.setupUnreadNum(resultRealmRecents)
@@ -2606,7 +2619,8 @@ extension FaeMapViewController {
         userAgent.whereKey("type", value: "user")
         userAgent.whereKey("max_count ", value: "100")
         userAgent.whereKey("user_updated_in", value: "180")
-        userAgent.getMapPins { [unowned self] (status: Int, message: Any?) in
+        userAgent.getMapPins { [weak self] (status: Int, message: Any?) in
+            guard let `self` = self else { return }
             if status / 100 != 2 || message == nil {
                 joshprint("DEBUG: getMapUserInfo status/100 != 2")
                 self.boolCanUpdateUsers = true
@@ -2626,7 +2640,8 @@ extension FaeMapViewController {
             self.userPinFetchQueue.cancelAllOperations()
             let fetcher = UserPinFetcher(cluster: self.userClusterManager, arrJSON: mapUserJsonArray, idSet: self.setUserPins, originals: self.faeUserPins)
             fetcher.completionBlock = {
-                DispatchQueue.main.async { [unowned self] in
+                DispatchQueue.main.async { [weak self] in
+                    guard let `self` = self else { return }
                     if fetcher.isCancelled {
                         return
                     }
@@ -2719,7 +2734,8 @@ extension FaeMapViewController {
     func doneFetchingAreaUserData() {
         var userPins = [FaePinAnnotation]()
         userPinAdderJob.cancel()
-        userPinAdderJob = DispatchWorkItem() { [unowned self] in
+        userPinAdderJob = DispatchWorkItem() { [weak self] in
+            guard let `self` = self else { return }
             for userJson in self.rawUserJSONs {
                 if userJson["user_id"].intValue == Key.shared.user_id {
                     continue
@@ -2769,7 +2785,8 @@ extension FaeMapViewController {
             request.cancel()
             userPinRequests[number] = nil
         }
-        userPinRequests[number] = userAgent.getMapPins { [unowned self] (status, message) in
+        userPinRequests[number] = userAgent.getMapPins { [weak self] (status, message) in
+            guard let `self` = self else { return }
             //joshprint("No.\(number) user pins fetched")
             guard status / 100 == 2 else {
                 self.userFetchesCount += 1
@@ -3047,7 +3064,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
                 selectedLocAnno?.hideButtons()
                 let vcShareCollection = NewChatShareController(friendListMode: .location)
                 let coordinate = selectedLocation?.coordinate
-                AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { [unowned self] (snapShotImage) in
+                AddPinToCollectionView().mapScreenShot(coordinate: coordinate!) { [weak self] (snapShotImage) in
+                    guard let `self` = self else { return }
                     vcShareCollection.locationDetail = "\(coordinate?.latitude ?? 0.0),\(coordinate?.longitude ?? 0.0),\(self.uiviewLocationBar.lblName.text ?? "Invalid Name"),\(self.uiviewLocationBar.lblAddr.text ?? "Invalid Address")"
                     vcShareCollection.locationSnapImage = snapShotImage
                     self.navigationController?.pushViewController(vcShareCollection, animated: true)
@@ -3146,7 +3164,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         guard let placePin = firstAnn.pinInfo as? PlacePin else { return }
         if anView.optionsOpened {
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { [unowned self] (ids) in
+            FaeMap.shared.getPinSavedInfo(id: placePin.id, type: "place") { [weak self] (ids) in
+                guard let `self` = self else { return }
                 let placeData = placePin
                 placeData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = placeData as AnyObject
@@ -3247,7 +3266,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
         self.placePinFetchQueue.cancelAllOperations()
         let fetcher = PlacePinFetcher(cluster: placeClusterManager, arrPlaceJSON: rawPlaceJSONs, idSet: setPlacePins)
         fetcher.completionBlock = {
-            DispatchQueue.main.async { [unowned self] in
+            DispatchQueue.main.async { [weak self] in
+                guard let `self` = self else { return }
                 self.stopIconSpin(delay: 0)
                 if fetcher.isCancelled {
                     //joshprint("[fetchPlacePins] operation cancelled")
@@ -3309,7 +3329,8 @@ extension FaeMapViewController: PlacePinAnnotationDelegate, AddPinToCollectionDe
             request.cancel()
             placePinRequests[number] = nil
         }
-        placePinRequests[number] = placeAgent.getMapPins { [unowned self] (status, message) in
+        placePinRequests[number] = placeAgent.getMapPins { [weak self] (status, message) in
+            guard let `self` = self else { return }
             //joshprint("No.\(number) place pins fetched")
             guard status / 100 == 2 else {
                 self.placeFetchesCount += 1
@@ -3669,12 +3690,14 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
     }
     
     private func doRouting(_ request: MKDirectionsRequest) {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [unowned self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let `self` = self else { return }
             guard !self.isRoutingCancelled else {
                 self.btnDistIndicator.activityIndicator.stopAnimating()
                 return
             }
-            MKDirections(request: request).calculate { [unowned self] response, error in
+            MKDirections(request: request).calculate { [weak self] response, error in
+                guard let `self` = self else { return }
                 self.btnDistIndicator.activityIndicator.stopAnimating()
                 guard !self.isRoutingCancelled else { return }
                 guard let unwrappedResponse = response else {
@@ -3700,7 +3723,8 @@ extension FaeMapViewController: FMRouteCalculateDelegate, SelectLocationDelegate
                     let rect = self.arrRoutes.reduce(first.boundingMapRect, {MKMapRectUnion($0, $1.boundingMapRect)})
                     self.faeMapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 150 + device_offset_top, left: 75, bottom: 90 + device_offset_bot, right: 75), animated: true)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: { [unowned self] in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: { [weak self] in
+                    guard let `self` = self else { return }
                     guard !self.isRoutingCancelled else { return }
                     self.faeMapView.addOverlays(self.arrRoutes, level: MKOverlayLevel.aboveRoads)
                 })
@@ -3835,7 +3859,8 @@ extension FaeMapViewController {
                 pinData.id = anView.locationId
             }
             uiviewSavedList.arrListSavedThisPin.removeAll()
-            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { [unowned self] (ids) in
+            FaeMap.shared.getPinSavedInfo(id: pinData.id, type: "location") { [weak self] (ids) in
+                guard let `self` = self else { return }
                 pinData.arrListSavedThisPin = ids
                 firstAnn.pinInfo = pinData as AnyObject
                 self.uiviewSavedList.arrListSavedThisPin = ids
@@ -3844,7 +3869,8 @@ extension FaeMapViewController {
         }
         if !anView.optionsReady {
             let cllocation = CLLocation(latitude: locationData.coordinate.latitude, longitude: locationData.coordinate.longitude)
-            uiviewLocationBar.updateLocationInfo(location: cllocation) { [unowned self] (address_1, address_2) in
+            uiviewLocationBar.updateLocationInfo(location: cllocation) { [weak self] (address_1, address_2) in
+                guard let `self` = self else { return }
                 self.selectedLocation?.address_1 = address_1
                 self.selectedLocation?.address_2 = address_2
                 self.uiviewChooseLocs.updateDestination(name: address_1)
@@ -4077,15 +4103,18 @@ extension FaeMapViewController {
         uiviewGuestMode = GuestModeView()
         view.addSubview(uiviewGuestMode)
         uiviewGuestMode.show()
-        uiviewGuestMode.dismissGuestMode = { [unowned self] in
+        uiviewGuestMode.dismissGuestMode = { [weak self] in
+            guard let `self` = self else { return }
             self.removeGuestMode()
         }
-        uiviewGuestMode.guestLogin = { [unowned self] in
+        uiviewGuestMode.guestLogin = { [weak self] in
+            guard let `self` = self else { return }
             Key.shared.navOpenMode = .welcomeFirst
             let viewCtrlers = [WelcomeViewController(), LogInViewController()]
             self.navigationController?.setViewControllers(viewCtrlers, animated: true)
         }
-        uiviewGuestMode.guestRegister = { [unowned self] in
+        uiviewGuestMode.guestRegister = { [weak self] in
+            guard let `self` = self else { return }
             Key.shared.navOpenMode = .welcomeFirst
             let viewCtrlers = [WelcomeViewController(), RegisterNameViewController()]
             self.navigationController?.setViewControllers(viewCtrlers, animated: true)

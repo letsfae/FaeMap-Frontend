@@ -298,7 +298,8 @@ class UpdateUsrnameEmailViewController: UIViewController, VerifyCodeDelegate {
         vc.strVerified = strEmail!
         indicatorView.startAnimating()
         faeUser.whereKey("email", value: strEmail!)
-        faeUser.updateEmail{ [unowned self] (statusCode, result) in
+        faeUser.updateEmail{ [weak self] (statusCode, result) in
+            guard let `self` = self else { return }
             if statusCode / 100 == 2 {
                 self.navigationController?.pushViewController(vc, animated: true)
             }

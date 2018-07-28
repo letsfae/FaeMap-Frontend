@@ -342,7 +342,8 @@ class SetPrivacyViewController: UIViewController, UITableViewDelegate, UITableVi
                 guard status / 100 == 2 else { return }
             }
         } else if section == 2 {
-            FaeContact().getBlockList({ [unowned self] (status, message) in
+            FaeContact().getBlockList({ [weak self] (status, message) in
+                guard let `self` = self else { return }
                 felixprint(status)
                 let json = JSON(message!)
                 if json.count != 0 {

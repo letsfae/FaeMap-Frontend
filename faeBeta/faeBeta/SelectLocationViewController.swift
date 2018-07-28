@@ -388,7 +388,8 @@ class SelectLocationViewController: UIViewController, MKMapViewDelegate, CCHMapC
             tblPlaceResult.currentVC = .chat
         }
         view.addSubview(tblPlaceResult)
-        tblPlaceResult.reloadVisibleAnnotations = { [unowned self] in
+        tblPlaceResult.reloadVisibleAnnotations = { [weak self] in
+            guard let `self` = self else { return }
             self.reloadPlaceTableAnnotations()
         }
         

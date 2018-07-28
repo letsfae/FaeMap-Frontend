@@ -73,7 +73,8 @@ class NewUsernameViewController: RegisterBaseViewController {
         showActivityIndicator()
         var keyValue = [String: String]()
         keyValue["user_name"] = username!
-        postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [unowned self] (status, message) in
+        postToURL("users/account", parameter: keyValue, authentication: Key.shared.headerAuthentication(), completion: { [weak self] (status, message) in
+            guard let `self` = self else { return }
             self.hideActivityIndicator()
             if status / 100 == 2 {
                 Key.shared.username = self.username!
