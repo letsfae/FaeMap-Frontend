@@ -8,7 +8,7 @@
 
 import Foundation
 
-var joshDebug: Bool = false
+var joshDebug: Bool = true
 var vickyDebug: Bool = false
 var felixDebug: Bool = false
 

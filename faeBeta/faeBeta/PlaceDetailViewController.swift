@@ -8,6 +8,7 @@
 
 import UIKit
 import SwiftyJSON
+import Alamofire
 
 enum EnterPlaceLocDetailMode {
     case collection
@@ -64,6 +65,14 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
     
     var boolShared: Bool = false
     public var enterMode: EnterPlaceLocDetailMode!
+    var search_request: DataRequest?
+    var nearby_request: DataRequest?
+    var fetchCount: Int = 0 {
+        didSet {
+            guard fetchCount == 2 else { return }
+            doneFetchPlaces()
+        }
+    }
     
     // Guest Mode
     private var uiviewGuestMode: GuestModeView!
@@ -156,17 +165,22 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         // TODO Vicky - 在similar places加载出来前点击展开cell偶尔会崩溃 => 似乎解决了？
         getRelatedPlaces(lat, long, isSimilar: true) {
             vickyprint("Exist duplicate place: \(self.testDuplicates())")
-            self.getRelatedPlaces(lat, long, isSimilar: false, {
-                self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
-                self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
-//                self.tblPlaceDetail.reloadData()
-//                self.tblPlaceDetail.reloadSections(IndexSet(integer: self.intCellCount - 1), with: .none)
-                self.intSimilarNearbySection = (self.intSimilar == 0 && self.intNearby == 0 ? 0 : 1)
-                self.tblPlaceDetail.beginUpdates()
-                self.tblPlaceDetail.insertSections(IndexSet(integer: self.intCellCount), with: .none)
-                self.tblPlaceDetail.endUpdates()
-            })
+            
         }
+        getRelatedPlaces(lat, long, isSimilar: false, {
+            
+        })
+    }
+    
+    private func doneFetchPlaces() {
+        self.viewModelSimilar = BoardPlaceCategoryViewModel(title: self.arrTitle[0], places: self.arrSimilarPlaces)
+        self.viewModelNearby = BoardPlaceCategoryViewModel(title: self.arrTitle[1], places: self.arrNearbyPlaces)
+        //                self.tblPlaceDetail.reloadData()
+        //                self.tblPlaceDetail.reloadSections(IndexSet(integer: self.intCellCount - 1), with: .none)
+        self.intSimilarNearbySection = (self.intSimilar == 0 && self.intNearby == 0 ? 0 : 1)
+        self.tblPlaceDetail.beginUpdates()
+        self.tblPlaceDetail.insertSections(IndexSet(integer: self.intCellCount), with: .none)
+        self.tblPlaceDetail.endUpdates()
     }
     
     private func testDuplicates() -> Bool {
@@ -232,100 +246,68 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         if isSimilar {
             arrSimilarPlaces.removeAll()
             placeIdSet.removeAll()
+            let searchAgent = FaeSearch()
+            searchAgent.whereKey("source", value: "categories")
+            searchAgent.whereKey("type", value: "place")
+            searchAgent.whereKey("size", value: "20")
+            searchAgent.whereKey("radius", value: "20000")
+            searchAgent.whereKey("offset", value: "0")
+            searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
+            searchAgent.whereKey("location", value: ["latitude": lat,
+                                                          "longitude": long])
             if place.class_5 != "" {
-                FaeSearch.shared.whereKey("content", value: place.class_5)
-                FaeSearch.shared.whereKey("source", value: "categories")
-                FaeSearch.shared.whereKey("type", value: "place")
-                FaeSearch.shared.whereKey("size", value: "20")
-                FaeSearch.shared.whereKey("radius", value: "20000")
-                FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                              "longitude": long])
-                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+                searchAgent.whereKey("content", value: place.class_5)
+                searchAgent.searchContent.append(searchAgent.keyValue)
             }
             if place.class_4 != "" {
-                FaeSearch.shared.whereKey("content", value: place.class_4)
-                FaeSearch.shared.whereKey("source", value: "categories")
-                FaeSearch.shared.whereKey("type", value: "place")
-                FaeSearch.shared.whereKey("size", value: "20")
-                FaeSearch.shared.whereKey("radius", value: "20000")
-                FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                              "longitude": long])
-                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+                searchAgent.whereKey("content", value: place.class_4)
+                searchAgent.searchContent.append(searchAgent.keyValue)
             }
             if place.class_3 != "" {
-                FaeSearch.shared.whereKey("content", value: place.class_3)
-                FaeSearch.shared.whereKey("source", value: "categories")
-                FaeSearch.shared.whereKey("type", value: "place")
-                FaeSearch.shared.whereKey("size", value: "20")
-                FaeSearch.shared.whereKey("radius", value: "20000")
-                FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                              "longitude": long])
-                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+                searchAgent.whereKey("content", value: place.class_3)
+                searchAgent.searchContent.append(searchAgent.keyValue)
             }
             if place.class_2 != "" {
-                FaeSearch.shared.whereKey("content", value: place.class_2)
-                FaeSearch.shared.whereKey("source", value: "categories")
-                FaeSearch.shared.whereKey("type", value: "place")
-                FaeSearch.shared.whereKey("size", value: "20")
-                FaeSearch.shared.whereKey("radius", value: "20000")
-                FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                              "longitude": long])
-                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+                searchAgent.whereKey("content", value: place.class_2)
+                searchAgent.searchContent.append(searchAgent.keyValue)
             }
             if place.class_1 != "" {
-                FaeSearch.shared.whereKey("content", value: place.class_1)
-                FaeSearch.shared.whereKey("source", value: "categories")
-                FaeSearch.shared.whereKey("type", value: "place")
-                FaeSearch.shared.whereKey("size", value: "20")
-                FaeSearch.shared.whereKey("radius", value: "20000")
-                FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                              "longitude": long])
-                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+                searchAgent.whereKey("content", value: place.class_1)
+                searchAgent.searchContent.append(searchAgent.keyValue)
             }
             if place.master_class != "" {
-                FaeSearch.shared.whereKey("content", value: place.master_class)
-                FaeSearch.shared.whereKey("source", value: "master_class")
-                FaeSearch.shared.whereKey("type", value: "place")
-                FaeSearch.shared.whereKey("size", value: "20")
-                FaeSearch.shared.whereKey("radius", value: "20000")
-                FaeSearch.shared.whereKey("offset", value: "0")
-                FaeSearch.shared.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-                FaeSearch.shared.whereKey("location", value: ["latitude": lat,
-                                                              "longitude": long])
-                FaeSearch.shared.searchContent.append(FaeSearch.shared.keyValue)
+                searchAgent.whereKey("content", value: place.master_class)
+                searchAgent.whereKey("source", value: "master_class")
+                searchAgent.searchContent.append(searchAgent.keyValue)
             }
             
-            if FaeSearch.shared.searchContent.isEmpty {
+            print(searchAgent.searchContent)
+            
+            if searchAgent.searchContent.isEmpty {
                 self.intSimilar = 0
                 completion()
                 return
             }
-            
-            FaeSearch.shared.searchBulk { [weak self] (status, message) in
+            search_request?.cancel()
+            search_request = searchAgent.searchBulk { [weak self] (status, message) in
                 guard let `self` = self else { return }
                 guard status / 100 == 2 && message != nil else {
                     print("Get Related Places Fail \(status) \(message!)")
                     self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
+                    self.fetchCount += 1
                     completion()
                     return
                 }
                 let json = JSON(message!)
-//                vickyprint(json)
-                guard let placesJson = json.array else { return }
-//                vickyprint("placesJson \(placesJson.count)")
+                guard let placesJson = json.array else {
+                    self.fetchCount += 1
+                    return
+                }
                 for similarPlaces in placesJson {
-                    guard let similarJson = similarPlaces.array else { return }
-//                    vickyprint("similarJson \(similarJson.count)")
+                    guard let similarJson = similarPlaces.array else {
+                        self.fetchCount += 1
+                        continue
+                    }
                     let places = similarJson.map( { PlacePin(json: $0) } )
                     for place in places {
                         if place.id != self.place.id && !self.placeIdSet.contains(place.id) {
@@ -334,32 +316,38 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
                         }
                     }
                 }
-                
-//                vickyprint("set \(self.placeIdSet.count)")
                 self.arrSimilarPlaces = Array(self.arrSimilarPlaces.prefix(20))
                 self.intSimilar = self.arrSimilarPlaces.count > 0 ? 1 : 0
+                self.fetchCount += 1
                 completion()
             }
         } else { // Near this Location
             arrNearbyPlaces.removeAll()
-            FaeMap.shared.whereKey("geo_latitude", value: lat)
-            FaeMap.shared.whereKey("geo_longitude", value: long)
-            FaeMap.shared.whereKey("radius", value: "5000")
-            FaeMap.shared.whereKey("type", value: "place")
-            FaeMap.shared.whereKey("max_count", value: "20")
-            FaeMap.shared.getMapPins { [weak self] (status: Int, message: Any?) in
+            let fetchAgent = FaeMap()
+            fetchAgent.whereKey("geo_latitude", value: lat)
+            fetchAgent.whereKey("geo_longitude", value: long)
+            fetchAgent.whereKey("radius", value: "5000")
+            fetchAgent.whereKey("type", value: "place")
+            fetchAgent.whereKey("max_count", value: "20")
+            nearby_request?.cancel()
+            nearby_request = fetchAgent.getMapPins { [weak self] (status: Int, message: Any?) in
                 guard let `self` = self else { return }
                 guard status / 100 == 2 && message != nil else {
                     //print("Get Related Places Fail \(status) \(message!)")
                     self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
+                    self.fetchCount += 1
                     completion()
                     return
                 }
                 let json = JSON(message!)
-                guard let placeJson = json.array else { return }
+                guard let placeJson = json.array else {
+                    self.fetchCount += 1
+                    return
+                }
                 self.arrNearbyPlaces = placeJson.map({ PlacePin(json: $0) })
                 self.arrNearbyPlaces = self.arrNearbyPlaces.filter({ $0.id != self.place.id })
                 self.intNearby = self.arrNearbyPlaces.count > 0 ? 1 : 0
+                self.fetchCount += 1
                 completion()
             }
         }
