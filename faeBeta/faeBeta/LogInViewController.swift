@@ -221,6 +221,12 @@ class LogInViewController: UIViewController {
                 }
             } else if status == 500 {
                 self.setLoginResult("Internal Service Error!")
+            } else if status == 403 {
+                handleErrorCode(.auth, "403", { [weak self] (prompt) in
+                    guard let `self` = self else { return }
+                    self.setLoginResult(prompt)
+                }, "login")
+                self.indicatorActivity.stopAnimating()
             } else { // TODO: error code done
                 print("[LOGIN STATUS]: \(status), [LOGIN ERROR MESSAGE]: \(message!)")
                 let loginJSONInfo = JSON(message!)

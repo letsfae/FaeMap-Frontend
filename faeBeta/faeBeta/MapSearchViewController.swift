@@ -178,7 +178,9 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
-        schPlaceBar.txtSchField.placeholder = previousVC != .chat ? "Search Fae Map" : "Search Place or Address"
+        let text = previousVC != .chat ? "Search Fae Map" : "Search Place or Address"
+        //schPlaceBar.txtSchField.placeholder = previousVC != .chat ? "Search Fae Map" : "Search Place or Address"
+        schPlaceBar.txtSchField.attributedPlaceholder = NSAttributedString(string: text, attributes: [NSAttributedStringKey.foregroundColor: UIColor._182182182()])
         if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
             schPlaceBar.txtSchField.text = strSearchedPlace
             schPlaceBar.btnClose.isHidden = false

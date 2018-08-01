@@ -19,7 +19,8 @@
 #import "JSQLocationMediaItemCustom.h"
 #import <JSQMessagesViewController/JSQMessagesMediaPlaceholderView.h>
 #import "JSQMessagesMediaViewBubbleImageMaskerCustom.h"
-
+#import "EmojiService.h"
+#import "faeBeta-Swift.h"
 
 @interface JSQLocationMediaItemCustom ()
 @property (nonatomic, strong) UIImage *snap;
@@ -173,8 +174,10 @@
     
     if (height != 0) {
         _textLabel = [[UILabel alloc] initWithFrame:CGRectMake(16, 96, 271, height)];
-        _textLabel.font = [UIFont fontWithName:@"Avenir Next" size : 17.5];
-        _textLabel.text = _text;
+        NSAttributedString *attributedText = [EmojiService translateString: _text textColor: [UIColor _107105105]];
+        _textLabel.attributedText = attributedText;
+        //_textLabel.font = [UIFont fontWithName:@"Avenir Next" size : 17.5];
+        //_textLabel.text = _text;
         _textLabel.textColor = [UIColor colorWithRed: 107 / 255.0 green: 105 / 255.0 blue: 105 / 255.0 alpha: 1.0];
         _textLabel.numberOfLines = 0;
         [locationView addSubview:_textLabel];

@@ -570,7 +570,8 @@ JSQMessagesKeyboardControllerDelegate>
     cell.delegate = collectionView;
 
     if (!isMediaMessage) {
-        NSAttributedString *attributedText = [EmojiService translateString: [messageItem text] isOutGoing: isOutgoingMessage];
+        UIColor *color = isOutgoingMessage ? [UIColor whiteColor] : [UIColor _2499090];
+        NSAttributedString *attributedText = [EmojiService translateString: [messageItem text] textColor: color];
         cell.textView.attributedText = attributedText;
 
         NSParameterAssert(cell.textView.text != nil);

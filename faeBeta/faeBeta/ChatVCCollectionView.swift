@@ -160,20 +160,24 @@ extension ChatViewController {
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
             }*/
-            var images = [SKPhoto]()
-            let realm = try! Realm()
-            let allMessage = realm.objects(RealmMessage.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@ AND type IN {'[Picture]', '[Gif]'}", "\(Key.shared.user_id)", intIsGroup, strChatId).sorted(byKeyPath: "index")
-            for msg in allMessage {
-                let photo = SKPhoto.photoWithRealmMessage(msg)
-                images.append(photo)
+            if let mediaItem = faeMessage.media as? JSQPhotoMediaItemCustom {
+                var images = [SKPhoto]()
+                let realm = try! Realm()
+                let allMessage = realm.objects(RealmMessage.self).filter("login_user_id == %@ AND is_group == %@ AND chat_id == %@ AND type IN {'[Picture]', '[Gif]'}", "\(Key.shared.user_id)", intIsGroup, strChatId).sorted(byKeyPath: "index")
+                for msg in allMessage {
+                    let photo = SKPhoto.photoWithRealmMessage(msg)
+                    images.append(photo)
+                }
+                let index = allMessage.index(where: { $0.index == realmMessage.index })
+                //let browser = SKPhotoBrowser(photos: images)
+                let cell = collectionView.cellForItem(at: indexPath)
+                let browser = SKPhotoBrowser(originImage: mediaItem.image, photos: images, animatedFromView: cell ?? collectionView)
+                browser.initializePageIndex(index ?? 0)
+                boolIsDisappearing = true
+                present(browser, animated: true, completion: {
+                    self.boolIsDisappearing = false
+                })
             }
-            let index = allMessage.index(where: { $0.index == realmMessage.index })
-            let browser = SKPhotoBrowser(photos: images)
-            browser.initializePageIndex(index ?? 0)
-            boolIsDisappearing = true
-            present(browser, animated: true, completion: {
-                self.boolIsDisappearing = false
-            })
         case "[Video]":
             if let mediaItem = faeMessage.media as? JSQVideoMediaItemCustom {
                 if let videoURL = mediaItem.fileURL {

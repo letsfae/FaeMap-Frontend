@@ -45,7 +45,7 @@ class Camera {
         }
         imagePicker.allowsEditing = canEdit
         imagePicker.showsCameraControls = true
-        imagePicker.videoMaximumDuration = 60
+        imagePicker.videoMaximumDuration = 10
         imagePicker.videoQuality = .typeIFrame960x540
         imagePicker.delegate = delegate
         //let rootViewController: UIViewController = UIApplication.shared.windows.last!.rootViewController!

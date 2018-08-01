@@ -25,6 +25,8 @@ func handleErrorCode(_ type: ErrorType, _ code: String, _ completion: ((String) 
             completion?("That’s not the Correct Password!\nPlease Check your Password!")
         case "401-2": // login - email not exits / not verified
             completion?("Oops… This Email has not\nbeen linked to an Account.")
+        case "403":
+            completion?("You have tried to login more then 3 times,\nplease change your password!")
         case "404-3": // (reset password - ) user not exits
             if subType == "login" {
                 completion?("Oops… Can’t find any Accounts\nwith this Username!")
