@@ -11,7 +11,7 @@
 
 @implementation EmojiService
 
-+ (NSAttributedString *)translateString: (NSString *)string isOutGoing:(BOOL)isOutGoing
++ (NSAttributedString *)translateString: (NSString *)string textColor:(UIColor *)textColor
 {
     NSArray *emojiNames =
     @[@"Happy", @"LOL", @"WarmSmile", @"Hehe", @"Smile", @"CrySmile", @"CoverSmile", @"Love", @"Huehue", @"Beauty", @"Wink", @"LoveLove", @"Slurp", @"Kiss", @"Bye", @"WarmBye", @"Heyy", @"Sly", @"Clapclap", @"Cash", @"Stare", @"Blush", @"WowStare", @"Awkward", @"Surprise", @"Scared", @"Opposite", @"Unhappy", @"Sigh", @"welp", @"Sad", @"mmm", @"Please", @"Crying", @"Tears", @"holdtears", @"Waterfall", @"Shush", @"Sick", @"Dizzy", @"DizzyCold", @"Cold", @"Gross", @"Puke", @"Sleepy", @"Yawn", @"Sleeping", @"Snore", @"Slap", @"Pound", @"Burnt", @"Ignore", @"Tantrum", @"Scold", @"Angry", @"Mad", @"Hmm", @"Processing", @"Hesitate", @"Dontknow", @"Wat", @"Thinking", @"Whistle", @"Shhh", @"Hmph", @"Hmph2", @"Speechless", @"Uhh", @"Boo", @"Embarass", @"Awkward2", @"Shy", @"Pick Nose", @"Smirk", @"Soldier", @"TooCool", @"Warrior", @"CreepSun", @"CreepMoon", @"HappyDevil", @"UnhappyDevil", @"Doge", @"Piggy" ,@"Alpaca", @"PoopFace", @"Skull", @"Sunglass", @"SmilingSun", @"Night", @"Poop"];
@@ -20,7 +20,7 @@
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:@""];
     NSDictionary *textAttributes = @{@"NSFontAttributeName": [UIFont fontWithName:@"AvenirNext-Regular"
                                                                              size:17.5f],
-                                     @"NSForegroundColorAttributeName": isOutGoing ? [UIColor whiteColor] : [UIColor _2499090]
+                                     @"NSForegroundColorAttributeName": textColor
                                      };
     int first = 0;
     for (int i = 0; i < [string length] ; i++) {

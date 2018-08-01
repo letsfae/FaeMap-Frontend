@@ -6,7 +6,7 @@
 //  Copyright © 2016 fae. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 /**
  A class to provide some basic function
@@ -21,7 +21,7 @@
  @param isOutGoing if the message string is outgoing. This will influence the text color
  @return an attributed string with emoji attachments inside
  */
-+ (NSAttributedString *)translateString: (NSString *)string isOutGoing:(BOOL)isOutGoing;
++ (NSAttributedString *)translateString: (NSString *)string textColor:(UIColor *)textColor;
 
 /**
  A method to translate a string with emoji symbol inside to another string that has the same length. This method is used to generate a replacement string to calculate the size of the message bubble

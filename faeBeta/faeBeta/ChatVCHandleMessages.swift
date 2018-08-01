@@ -84,7 +84,7 @@ extension ChatViewController {
                         try! realm.commitWrite()
                     }
                 }
-                if modifications.count > 0 {
+                /*if modifications.count > 0 {
                     for item in modifications {
                         let message = self.resultRealmMessages[item]
                         let faeMessage = self.arrFaeMessages.filter({ $0.messageId == message.primary_key })
@@ -94,7 +94,7 @@ extension ChatViewController {
                             self.collectionView.reloadItems(at: [IndexPath(item: index, section: 0)])
                         }
                     }
-                }
+                }*/
             case .error:
                 felixprint("error")
             }
