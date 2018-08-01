@@ -165,7 +165,7 @@ extension ContactsViewController: FaeSearchBarTestDelegate {
         schbarContacts.txtSchField.resignFirstResponder()
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest) {
         schbarContacts.txtSchField.resignFirstResponder()
     }
     

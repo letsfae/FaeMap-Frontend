@@ -165,16 +165,46 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         }
         var searchContent = ""
         var searchSource = ""
-        var radius = 0
+        var searchRadius = 0
         switch currentVC {
         case .map:
-            searchContent = Key.shared.searchContent_map
-            searchSource = Key.shared.searchSource_map
-            radius = Key.shared.radius_map
+            if let content = Key.shared.searchContent_map {
+                searchContent = content
+            }
+            if let source = Key.shared.searchSource_map {
+                searchSource = source
+            }
+            if let rad = Key.shared.radius_map {
+                searchRadius = rad
+            }
         case .chat:
-            searchContent = Key.shared.searchContent_chat
-            searchSource = Key.shared.searchSource_chat
-            radius = Key.shared.radius_chat
+            if let content = Key.shared.searchContent_chat {
+                searchContent = content
+            }
+            if let source = Key.shared.searchSource_chat {
+                searchSource = source
+            }
+            if let rad = Key.shared.radius_chat {
+                searchRadius = rad
+            }
+        }
+        guard searchContent != "" else {
+            if joshDebug {
+                fatalError("found searchContent value nil")
+            }
+            return
+        }
+        guard searchSource != "" else {
+            if joshDebug {
+                fatalError("found searchSource value nil")
+            }
+            return
+        }
+        guard searchRadius != 0 else {
+            if joshDebug {
+                fatalError("found value 0")
+            }
+            return
         }
         guard self.dataOffset % 20 == 0 else { return }
         let searchAgent = FaeSearch()
@@ -182,7 +212,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
         searchAgent.whereKey("source", value: searchSource)
         searchAgent.whereKey("type", value: "place")
         searchAgent.whereKey("size", value: "20")
-        searchAgent.whereKey("radius", value: "\(radius)")
+        searchAgent.whereKey("radius", value: "\(searchRadius)")
         searchAgent.whereKey("offset", value: "\(dataOffset)")
         searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,
@@ -191,7 +221,7 @@ class FMPlacesTable: UIView, UITableViewDelegate, UITableViewDataSource {
             joshprint("[fetchMorePlaces] places fetched")
             joshprint("Content:", searchContent)
             joshprint("Source:", searchSource)
-            joshprint("Radius:", radius)
+            joshprint("Radius:", searchRadius)
             joshprint("offset:", self?.dataOffset as Any)
             guard let `self` = self else { return }
             guard status / 100 == 2 else {

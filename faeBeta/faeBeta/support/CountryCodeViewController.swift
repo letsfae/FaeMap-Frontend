@@ -131,7 +131,7 @@ class CountryCodeViewController: UIViewController, FaeSearchBarTestDelegate, UIT
         schbarCountryCode.txtSchField.resignFirstResponder()
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest) {
         schbarCountryCode.txtSchField.text = ""
         tblCountryCode.reloadData()
     }

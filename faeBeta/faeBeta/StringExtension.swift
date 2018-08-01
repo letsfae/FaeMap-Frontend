@@ -28,7 +28,17 @@ extension String {
         let attr_1 = [NSAttributedStringKey.font: UIFont(name: "AvenirNext-Medium", size: 16)!, NSAttributedStringKey.foregroundColor: UIColor._138138138()]
         
         let components = self.split(separator: ",")
-        if components.count == 3 {
+        
+        if components.count == 4 {
+            let sub_city = String(components[0])
+            //let city = String(components[1])
+            let state = String(components[2])
+            let country = String(components[3])
+            let primaryText = NSAttributedString(string: sub_city + " ", attributes: attr_0)
+            let secondaryText = NSAttributedString(string: state + ", " + country, attributes: attr_1)
+            fullText.append(primaryText)
+            fullText.append(secondaryText)
+        } else if components.count == 3 {
             let city = String(components[0])
             let state = String(components[1])
             let country = String(components[2])

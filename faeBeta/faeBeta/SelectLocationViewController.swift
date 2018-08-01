@@ -1362,16 +1362,39 @@ extension SelectLocationViewController: MapSearchDelegate {
             self.searchState = .multipleSearch
             self.PLACE_INSTANT_SHOWUP = true
             // search and show results
+            
             var locationToSearch = self.faeMapView.centerCoordinate
+            var sourceToSearch = ""
+            var radiusToSearch = 0
+            
             if let locToSearch = LocManager.shared.locToSearch_chat {
                 locationToSearch = locToSearch
             }
+            if let source = Key.shared.searchSource_chat {
+                sourceToSearch = source
+            }
+            if let radius = Key.shared.radius_chat {
+                radiusToSearch = radius
+            }
+            
+            guard sourceToSearch != "" else {
+                if joshDebug {
+                    fatalError("found source nil")
+                }
+                return
+            }
+            guard radiusToSearch != 0 else {
+                if joshDebug{
+                    fatalError("found radius 0")
+                }
+                return
+            }
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: searchText)
-            searchAgent.whereKey("source", value: "\(Key.shared.searchSource_chat)")
+            searchAgent.whereKey("source", value: sourceToSearch)
             searchAgent.whereKey("type", value: "place")
             searchAgent.whereKey("size", value: "20")
-            searchAgent.whereKey("radius", value: "\(Key.shared.radius_chat)")
+            searchAgent.whereKey("radius", value: "\(radiusToSearch)")
             searchAgent.whereKey("offset", value: "0")
             searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
             searchAgent.whereKey("location", value: ["latitude": locationToSearch.latitude,

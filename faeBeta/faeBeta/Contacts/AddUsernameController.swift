@@ -203,7 +203,7 @@ extension AddUsernameController: FaeSearchBarTestDelegate {
         }
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest) {
         filter(searchText: "")
     }
     

@@ -85,6 +85,13 @@ class PullToRefreshView: UIView {
         }
     }
     
+    func stopState() {
+        UIView.animate(withDuration: 1.5, animations: {
+            self.gifUnicorn.frame.origin.x = screenWidth
+        }, completion: nil)
+        stopAnimating()
+    }
+    
     // MARK: UIView
     convenience override init(frame: CGRect) {
         self.init(options: PullToRefreshOption(), frame: frame, refreshCompletion: nil)

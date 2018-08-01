@@ -91,10 +91,20 @@ class BoardPlaceTabRightViewModel {
         loaded = false
         Key.shared.radius_board = 100000
         dataOffset = 0
+        var radiusToSearch = 0
+        if let radius = Key.shared.radius_board {
+            radiusToSearch = radius
+        }
+        guard radiusToSearch != 0 else {
+            if joshDebug {
+                fatalError("found radius 0")
+            }
+            return
+        }
         let placesAgent = FaeMap()
         placesAgent.whereKey("geo_latitude", value: "\(latitude)")
         placesAgent.whereKey("geo_longitude", value: "\(longitude)")
-        placesAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        placesAgent.whereKey("radius", value: "\(radiusToSearch)")
         placesAgent.whereKey("type", value: "place")
         placesAgent.whereKey("max_count", value: "30")
         placesAgent.getMapPins { [weak self] (status: Int, message: Any?) in
@@ -134,16 +144,25 @@ class BoardPlaceTabRightViewModel {
         Key.shared.searchSource_board = source
         Key.shared.radius_board = 100000
         dataOffset = 0
+        let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+        let radiusToSearch = Key.shared.radius_board ?? 0
+        guard radiusToSearch != 0 else {
+            if joshDebug {
+                fatalError("found raidus 0")
+            }
+            self.loaded = true
+            return
+        }
         let searchAgent = FaeSearch()
         searchAgent.whereKey("content", value: content)
         searchAgent.whereKey("source", value: source)
         searchAgent.whereKey("type", value: "place")
         searchAgent.whereKey("size", value: "30")
-        searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        searchAgent.whereKey("radius", value: "\(radiusToSearch)")
         searchAgent.whereKey("offset", value: "0")
         searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
-        searchAgent.whereKey("location", value: ["latitude": latitude,
-                                                 "longitude": longitude])
+        searchAgent.whereKey("location", value: ["latitude": locToSearch.latitude,
+                                                 "longitude": locToSearch.longitude])
         searchRequest?.cancel()
         searchRequest = searchAgent.search { [weak self] (status: Int, message: Any?) in
             guard let `self` = self else { return }
@@ -176,11 +195,19 @@ class BoardPlaceTabRightViewModel {
         }
         fetchMoreDataStatus?(false, "")
         Key.shared.radius_board = 100000
+        let radiusToSearch = Key.shared.radius_board ?? 0
+        guard radiusToSearch != 0 else {
+            if joshDebug {
+                fatalError("found raidus 0")
+            }
+            self.loaded = true
+            return
+        }
         let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
         let placesAgent = FaeMap()
         placesAgent.whereKey("geo_latitude", value: "\(locToSearch.latitude)")
         placesAgent.whereKey("geo_longitude", value: "\(locToSearch.longitude)")
-        placesAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        placesAgent.whereKey("radius", value: "\(radiusToSearch)")
         placesAgent.whereKey("type", value: "place")
         placesAgent.whereKey("max_count", value: "30")
         placesAgent.whereKey("offset", value: "\(dataOffset)")
@@ -222,14 +249,34 @@ class BoardPlaceTabRightViewModel {
             return
         }
         fetchMoreDataStatus?(false, "")
-        Key.shared.radius_board = 100000
         let locToSearch = LocManager.shared.locToSearch_board ?? LocManager.shared.curtLoc.coordinate
+        let radiusToSearch = Key.shared.radius_board ?? 0
+        let sourceToSearch = Key.shared.searchSource_board ?? ""
+        let contentToSearch = Key.shared.searchContent_board ?? ""
+        guard radiusToSearch != 0 else {
+            if joshDebug {
+                fatalError("found raidus 0")
+            }
+            return
+        }
+        guard sourceToSearch != "" else {
+            if joshDebug {
+                fatalError("found source nil")
+            }
+            return
+        }
+        guard contentToSearch != "" else {
+            if joshDebug {
+                fatalError("found content nil")
+            }
+            return
+        }
         let searchAgent = FaeSearch()
-        searchAgent.whereKey("content", value: Key.shared.searchContent_board)
-        searchAgent.whereKey("source", value: Key.shared.searchSource_board)
+        searchAgent.whereKey("content", value: contentToSearch)
+        searchAgent.whereKey("source", value: sourceToSearch)
         searchAgent.whereKey("type", value: "place")
         searchAgent.whereKey("size", value: "30")
-        searchAgent.whereKey("radius", value: "\(Key.shared.radius_board)")
+        searchAgent.whereKey("radius", value: "\(radiusToSearch)")
         searchAgent.whereKey("offset", value: "\(dataOffset)")
         searchAgent.whereKey("sort", value: [["_score": "desc"], ["geo_location": "asc"]])
         searchAgent.whereKey("location", value: ["latitude": locToSearch.latitude,

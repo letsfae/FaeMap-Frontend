@@ -116,6 +116,7 @@ class Key: NSObject { //  singleton class
     var selectedSearchedCity_map: String?
     var selectedSearchedCity_board: String?
     var selectedSearchedCity_chat: String?
+    var isChosenOnMap: Bool = false
     
     // MARK: - Temporary Variables
     var initialCtrler: InitialPageController?
@@ -126,17 +127,17 @@ class Key: NSObject { //  singleton class
     var lastChosenLoc: CLLocationCoordinate2D?
     
     // MARK: - Map Search
-    var radius_map: Int = 0
-    var searchContent_map: String = ""
-    var searchSource_map: String = ""
+    var radius_map: Int?
+    var searchContent_map: String?
+    var searchSource_map: String?
     
-    var radius_chat: Int = 0
-    var searchContent_chat: String = ""
-    var searchSource_chat: String = ""
+    var radius_chat: Int?
+    var searchContent_chat: String?
+    var searchSource_chat: String?
     
-    var radius_board: Int = 0
-    var searchContent_board: String = ""
-    var searchSource_board: String = ""
+    var radius_board: Int?
+    var searchContent_board: String?
+    var searchSource_board: String?
     
     func getUserInfo() {
         getGenderAge()

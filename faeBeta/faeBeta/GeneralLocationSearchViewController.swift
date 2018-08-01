@@ -184,7 +184,7 @@ class GeneralLocationSearchViewController: UIViewController, FaeSearchBarTestDel
         searchBar.txtSchField.resignFirstResponder()
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest) {
         searchBar.txtSchField.becomeFirstResponder()
     }
     // End of FaeSearchBarTestDelegate

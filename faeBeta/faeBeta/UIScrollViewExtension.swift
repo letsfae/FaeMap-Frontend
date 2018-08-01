@@ -39,7 +39,8 @@ extension UIScrollView {
         if ever {
             refreshView?.state = .finish
         } else {
-            refreshView?.state = .stop
+            //refreshView?.state = .stop
+            refreshView?.stopState()
         }
     }
     

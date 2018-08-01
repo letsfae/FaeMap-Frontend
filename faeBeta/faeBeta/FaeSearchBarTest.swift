@@ -12,7 +12,7 @@ import UIKit
     func searchBarTextDidBeginEditing(_ searchBar: FaeSearchBarTest)
     func searchBar(_ searchBar: FaeSearchBarTest, textDidChange searchText: String)
     func searchBarSearchButtonClicked(_ searchBar: FaeSearchBarTest)
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest)
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest)
     @objc optional func backspacePressed(_ searchBar: FaeSearchBarTest, isBackspace: Bool)
 }
 
@@ -21,6 +21,23 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
     var imgSearch: UIImageView!
     var btnClear: UIButton!
     var txtSchField: UITextField!
+    var text: String? {
+        didSet {
+            guard let content = text else { return }
+            guard txtSchField != nil else { return }
+            txtSchField.attributedText = nil
+            reloadTextFieldAttributes()
+            txtSchField.text = content
+        }
+    }
+    var attributedText: NSAttributedString? {
+        didSet {
+            guard let content = attributedText else { return }
+            guard txtSchField != nil else { return }
+            txtSchField.text = nil
+            txtSchField.attributedText = content
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -76,7 +93,7 @@ class FaeSearchBarTest: UIView, UITextFieldDelegate {
         txtSchField.text = ""
         btnClear.isHidden = true
         delegate?.searchBar(self, textDidChange: "")
-        delegate?.searchBarCancelButtonClicked(self)
+        delegate?.searchBarClearButtonClicked(self)
     }
     
     @objc func actionTextFieldDidChange(_ textField: UITextField) {
