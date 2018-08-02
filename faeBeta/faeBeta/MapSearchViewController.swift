@@ -74,7 +74,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var searchedAddresses = [MKLocalSearchCompletion]() // Apple Place Data
     var addressCompleter = MKLocalSearchCompleter()     // Apple Place Data Getter
     var geobytesCityData = [String]()                   // Geobytes City Data
-    var cityToSearch: String = ""
     var changeLocBarText: ((String, Bool) -> ())?
     
     // iOS Geocoder
@@ -100,14 +99,24 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     var fetchedCityDetail: CityData?
     var gotoCity: ((CityData) -> ())?
     
+    // Temporary Search Handling Variables
+    var temp_search_coordinate: CLLocationCoordinate2D?
+    var temp_search_radius: Int?
+    var temp_search_city_string: String?
+    var temp_board_chosen_on_map: Bool = false
+    var temp_last_search_source: String?
+    var temp_search_content: String?
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor._241241241()
         if previousVC == .board {
             fixedLocOptions.removeLast()
+            fixedLocOptions.append("Choose on Map")
         }
         loadSearchBar()
+        configureSearchBarContents()
         loadPlaceBtns()
         loadTable()
         loadNoResultsView()
@@ -138,9 +147,6 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
     
     // MARK: - Load UI's
     private func preloadSearchLocation() {
-        if cityToSearch != "" {
-            lookUpForCoordinate(cityName: cityToSearch)
-        }
         guard previousVC == .board else { return }
         guard strSearchedLocation != "" else { return }
         joshprint("[preloadSearchLocation]", strSearchedLocation)
@@ -148,6 +154,63 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
             schLocationBar.txtSchField.attributedText = attrText
         } else {
             fatalError("Processing Location Name Fail, Need To Check Function")
+        }
+    }
+    
+    private func configureSearchBarContents() {
+        switch previousVC {
+        case .map:
+            schPlaceBar.txtSchField.placeholder = "Search Fae Map"
+        case .board:
+            schPlaceBar.txtSchField.placeholder = "All Places"
+        case .chat:
+            schPlaceBar.txtSchField.placeholder = "Search Place or Address"
+        }
+        if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
+            schPlaceBar.txtSchField.text = strSearchedPlace
+        }
+        
+        schLocationBar.txtSchField.text = "Current Location"
+        switch previousVC {
+        case .map:
+            temp_search_city_string = Key.shared.selectedSearchedCity_map
+            temp_last_search_source = Key.shared.searchSource_map
+            temp_search_content = Key.shared.searchContent_map
+            temp_search_radius = Key.shared.radius_map
+            temp_search_coordinate = LocManager.shared.locToSearch_map
+        case .board:
+            temp_search_city_string = Key.shared.selectedSearchedCity_board
+            temp_last_search_source = Key.shared.searchSource_board
+            temp_search_content = Key.shared.searchContent_board
+            temp_search_radius = Key.shared.radius_board
+            temp_search_coordinate = LocManager.shared.locToSearch_board
+        case .chat:
+            temp_search_city_string = Key.shared.selectedSearchedCity_chat
+            temp_last_search_source = Key.shared.searchSource_chat
+            temp_search_content = Key.shared.searchContent_chat
+            temp_search_radius = Key.shared.radius_chat
+            temp_search_coordinate = LocManager.shared.locToSearch_chat
+        }
+        if let text = schPlaceBar.txtSchField.text {
+            schPlaceBar.btnClear.isHidden = text == ""
+        }
+        if let city = temp_search_city_string {
+            if city != "Current Location" && city != "Current Map View" {
+                isCityDataChosen = true
+                isCityDetailFetched = true
+                let coordiate = temp_search_coordinate ?? LocManager.shared.curtLoc.coordinate
+                fetchedCityDetail = CityData(coordinate: coordiate, name: city, attributedName: city.faeSearchBarAttributedText())
+                schLocationBar.attributedText = city.faeSearchBarAttributedText()
+            } else {
+                schLocationBar.text = city
+            }
+        }
+        
+        if let source = temp_last_search_source {
+            if source.lowercased() == "categories" {
+                schPlaceBar.txtSchField.text = ""
+                schPlaceBar.btnClear.isHidden = true
+            }
         }
     }
     
@@ -190,54 +253,11 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         
         schPlaceBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 0, width: screenWidth - 38, height: 48))
         schPlaceBar.delegate = self
-        switch previousVC {
-        case .map:
-            schPlaceBar.txtSchField.placeholder = "Search Fae Map"
-        case .board:
-            schPlaceBar.txtSchField.placeholder = "All Places"
-        case .chat:
-            schPlaceBar.txtSchField.placeholder = "Search Place or Address"
-        }
-        if strSearchedPlace != "Search Fae Map" && strSearchedPlace != "Search Place or Address" && strSearchedPlace != "All Places" {
-            schPlaceBar.txtSchField.text = strSearchedPlace
-        }
         uiviewSearch.addSubview(schPlaceBar)
         
         schLocationBar = FaeSearchBarTest(frame: CGRect(x: 38, y: 48, width: screenWidth - 38, height: 48))
         schLocationBar.delegate = self
         schLocationBar.imgSearch.image = #imageLiteral(resourceName: "mapSearchCurrentLocation")
-
-        schLocationBar.txtSchField.text = "Current Location"
-        switch previousVC {
-        case .map:
-            if let selectedCity = Key.shared.selectedSearchedCity_map {
-                schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
-                cityToSearch = selectedCity
-            }
-            if Key.shared.searchSource_map.lowercased() == "categories" {
-                schPlaceBar.txtSchField.text = ""
-            }
-        case .board:
-            if let selectedCity = Key.shared.selectedSearchedCity_board {
-                schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
-                cityToSearch = selectedCity
-            }
-            if Key.shared.searchSource_board.lowercased() == "categories" {
-                schPlaceBar.txtSchField.text = ""
-            }
-        case .chat:
-            if let selectedCity = Key.shared.selectedSearchedCity_chat {
-                schLocationBar.txtSchField.attributedText = selectedCity.faeSearchBarAttributedText()
-                cityToSearch = selectedCity
-            }
-            if Key.shared.searchSource_chat.lowercased() == "categories" {
-                schPlaceBar.txtSchField.text = ""
-            }
-        }
-        if let text = schPlaceBar.txtSchField.text {
-            schPlaceBar.btnClear.isHidden = text == ""
-        }
-        
         schLocationBar.txtSchField.returnKeyType = .next
         uiviewSearch.addSubview(schLocationBar)
         
@@ -375,9 +395,10 @@ class MapSearchViewController: UIViewController, FaeSearchBarTestDelegate {
         if !Key.shared.is_guest {
             Category.shared.visitCategory(category: content)
         }
-        
-        sendBackLocationText()
+        temp_search_content = content
+        temp_last_search_source = "categories"
         if previousVC == .board {
+            updateLastSearch()
             delegate?.jumpToCategory?(category: content)
             navigationController?.popViewController(animated: false)
         } else {

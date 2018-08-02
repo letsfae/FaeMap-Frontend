@@ -60,6 +60,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 // category
                 let selectedCat = filteredCategory[indexPath.row].key
                 if previousVC == .board {
+                    updateLastSearch()
                     delegate?.jumpToCategory?(category: selectedCat)
                     navigationController?.popViewController(animated: false)
                 } else {
@@ -75,6 +76,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                 // place
                 let selectedPlace = searchedPlaces[indexPath.row]
                 if previousVC == .chat {
+                    updateLastSearch()
                     delegate?.selectPlace?(place: selectedPlace)
                     navigationController?.popViewController(animated: false)
                 } else {
@@ -96,6 +98,7 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
                     guard let placeMarks = results else { return }
                     guard let first = placeMarks.first else { return }
                     guard let loc = first.location else { return }
+                    self.updateLastSearch()
                     self.delegate?.selectLocation?(location: loc)
                     self.navigationController?.popViewController(animated: false)
                 }
@@ -104,50 +107,44 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
             if tableView == tblLocationRes {
                 // search location
                 schLocationBar.txtSchField.attributedText = geobytesCityData[indexPath.row].faeSearchBarAttributedText()
-                switch previousVC {
-                case .map:
-                    Key.shared.selectedSearchedCity_map = geobytesCityData[indexPath.row]
-                case .board:
-                    Key.shared.selectedSearchedCity_board = geobytesCityData[indexPath.row]
-                case .chat:
-                    Key.shared.selectedSearchedCity_chat = geobytesCityData[indexPath.row]
-                }
-                schLocationBar.txtSchField.resignFirstResponder()
-                schPlaceBar.txtSchField.becomeFirstResponder()
+                temp_search_city_string = geobytesCityData[indexPath.row]
                 schLocationBar.btnClear.isHidden = true
-                isCityDataChosen = true
                 lookUpForCoordinate(cityName: geobytesCityData[indexPath.row])
             } else {
-                // fixed cell - "Use my Current Location", "Use Current Map View"
+                let row = indexPath.row
+                // fixed cell - "Use my Current Location", "Use Current Map View" or "Choose on Map"
                 schLocationBar.txtSchField.attributedText = nil
-                let locText = indexPath.row == 0 ? "Current Location" : "Current Map View"
-                schLocationBar.txtSchField.text = locText
-                switch previousVC {
-                case .map:
-                    Key.shared.selectedSearchedCity_map = locText
-                case .board:
-                    Key.shared.selectedSearchedCity_board = locText
-                    changeLocBarText?(locText, false)
-                case .chat:
-                    Key.shared.selectedSearchedCity_chat = locText
-                }
-                strPreviousFixedOptionSelection = locText
-                schLocationBar.txtSchField.resignFirstResponder()
-                schPlaceBar.txtSchField.becomeFirstResponder()
-                schLocationBar.btnClear.isHidden = true
-                if indexPath.row == 0 {
-                    let curLoc = LocManager.shared.curtLoc.coordinate
-                    updateSavedLocationToSearchInEachViewController(coordinate: curLoc)
-                    faeRegion = calculateRegion(miles: 100, coordinate: curLoc)
+                schLocationBar.reloadTextFieldAttributes()
+                if row == 1 && previousVC == .board { // choose on map
+                    let vc = SelectLocationViewController()
+                    vc.previousVC = .board
+                    vc.delegate = self
+                    vc.mode = .part
+                    navigationController?.pushViewController(vc, animated: false)
                 } else {
-                    updateSavedLocationToSearchInEachViewController(coordinate: faeMapView.centerCoordinate)
-                    faeRegion = calculateRegion(miles: 100, coordinate: faeMapView.centerCoordinate)
+                    let locText = row == 0 ? "Current Location" : "Current Map View"
+                    schLocationBar.txtSchField.text = locText
+                    temp_search_city_string = locText
+                    strPreviousFixedOptionSelection = locText
+                    schLocationBar.txtSchField.resignFirstResponder()
+                    schPlaceBar.txtSchField.becomeFirstResponder()
+                    schLocationBar.btnClear.isHidden = true
+                    if row == 0 {
+                        temp_board_chosen_on_map = false
+                        let curLoc = LocManager.shared.curtLoc.coordinate
+                        temp_search_coordinate = curLoc
+                        faeRegion = calculateRegion(miles: 100, coordinate: curLoc)
+                    } else {
+                        temp_search_coordinate = faeMapView.centerCoordinate
+                        faeRegion = calculateRegion(miles: 100, coordinate: faeMapView.centerCoordinate)
+                    }
+                    reloadAddressCompleterRegion()
+                    guard let searchText = schPlaceBar.txtSchField.text else { return }
+                    guard searchText != "" else { return }
+                    guard searchText != "Search Fae Map" else { return }
+                    guard searchText != "Search Place or Address" else { return }
+                    self.getPlaceInfo(content: searchText, source: "name")
                 }
-                reloadAddressCompleterRegion()
-                guard let searchText = schPlaceBar.txtSchField.text else { return }
-                guard searchText != "Search Fae Map" else { return }
-                guard searchText != "Search Place or Address" else { return }
-                self.getPlaceInfo(content: searchText, source: "name")
             }
         }
     }
@@ -215,7 +212,39 @@ extension MapSearchViewController: UITableViewDelegate, UITableViewDataSource, U
 
 extension MapSearchViewController {
  
-    func updateSavedLocationToSearchInEachViewController(coordinate: CLLocationCoordinate2D) {
+    func updateLastSearch() {
+        updateLastSearchedLocation(coordinate: temp_search_coordinate)
+        updateLastSearchedCity(city: temp_search_city_string)
+        updateLastSearchedRadius(radius: temp_search_radius)
+        updateLastSearchedSource(source: temp_last_search_source)
+        updateLastSearchedContent(content: temp_search_content)
+        Key.shared.isChosenOnMap = temp_board_chosen_on_map
+        sendBackLocationText()
+    }
+    
+    func updateLastSearchedContent(content: String?) {
+        switch previousVC {
+        case .map:
+            Key.shared.searchContent_map = content
+        case .board:
+            Key.shared.searchContent_board = content
+        case .chat:
+            Key.shared.searchContent_chat = content
+        }
+    }
+    
+    func updateLastSearchedSource(source: String?) {
+        switch previousVC {
+        case .map:
+            Key.shared.searchSource_map = source
+        case .board:
+            Key.shared.searchSource_board = source
+        case .chat:
+            Key.shared.searchSource_chat = source
+        }
+    }
+    
+    func updateLastSearchedLocation(coordinate: CLLocationCoordinate2D?) {
         switch previousVC {
         case .map:
             LocManager.shared.locToSearch_map = coordinate
@@ -226,4 +255,54 @@ extension MapSearchViewController {
         }
     }
     
+    func updateLastSearchedRadius(radius: Int?) {
+        switch previousVC {
+        case .map:
+            Key.shared.radius_map = radius
+        case .board:
+            Key.shared.radius_board = radius
+        case .chat:
+            Key.shared.radius_chat = radius
+        }
+    }
+    
+    func updateLastSearchedCity(city: String?) {
+        switch previousVC {
+        case .map:
+            Key.shared.selectedSearchedCity_map = city
+        case .board:
+            Key.shared.selectedSearchedCity_board = city
+        case .chat:
+            Key.shared.selectedSearchedCity_chat = city
+        }
+    }
+    
+    func sendBackLocationText() {
+        guard previousVC == .board else { return }
+        if let city = temp_search_city_string {
+            changeLocBarText?(city, city != "Current Location")
+        } else {
+            changeLocBarText?("Current Location", false)
+        }
+    }
+}
+
+extension MapSearchViewController: SelectLocationDelegate {
+    // MARK: - SelectLocationDelegate
+    func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
+        temp_search_coordinate = location.coordinate
+        isCityDataChosen = true
+        isCityDetailFetched = true
+        let toArray = searchText.components(separatedBy: "@")
+        let backToString = toArray.joined(separator: ",")
+        temp_search_city_string = backToString
+        temp_board_chosen_on_map = true
+        fetchedCityDetail = CityData(coordinate: location.coordinate, name: searchText, attributedName: nil)
+        if let attrText = processLocationName(separator: "@", text: searchText, size: 16) {
+            schLocationBar.txtSchField.attributedText = attrText
+        } else {
+            fatalError("Processing Location Name Fail, Need To Check Function")
+        }
+        schPlaceBar.txtSchField.becomeFirstResponder()
+    }
 }

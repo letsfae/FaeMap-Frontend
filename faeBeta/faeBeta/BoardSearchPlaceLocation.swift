@@ -26,7 +26,6 @@ extension MapBoardViewController: SelectLocationDelegate {
             let vc = SelectLocationViewController()
             vc.delegate = self
             vc.mode = .part
-            vc.boolFromExplore = true
             navigationController?.pushViewController(vc, animated: false)
         }
     }
@@ -43,9 +42,9 @@ extension MapBoardViewController: SelectLocationDelegate {
         if let text = locToSearchTextRaw {
             searchVC.strSearchedLocation = text
         }
-        searchVC.changeLocBarText = { [weak self] (locText, shouldChangeStyle) in
+        searchVC.changeLocBarText = { [weak self] (locText, isAttributed) in
             guard let `self` = self else { return }
-            if shouldChangeStyle {
+            if isAttributed {
                 self.lblCurtLoc.attributedText = locText.faeSearchBarAttributedText()
                 self.imgCurtLoc.image = #imageLiteral(resourceName: "place_location")
             } else {
@@ -53,6 +52,9 @@ extension MapBoardViewController: SelectLocationDelegate {
                 self.lblCurtLoc.text = locText
                 self.imgCurtLoc.image = #imageLiteral(resourceName: "mb_iconBeforeCurtLoc")
             }
+        }
+        searchVC.gotoCity = { [weak self] (cityDetail) in
+            self?.viewModelPlaces.location = cityDetail.coordinate
         }
         //searchVC.searchedPlaces = viewModelPlaces.places
         navigationController?.pushViewController(searchVC, animated: false)
@@ -107,6 +109,9 @@ extension MapBoardViewController: SelectLocationDelegate {
     // MARK: - SelectLocationDelegate
     func jumpToLocationSearchResult(icon: UIImage, searchText: String, location: CLLocation) {
         LocManager.shared.locToSearch_board = location.coordinate
+        let toArray = searchText.components(separatedBy: "@")
+        let backToString = toArray.joined(separator: ",")
+        Key.shared.selectedSearchedCity_board = backToString
         locToSearchTextRaw = searchText
         joshprint("[jumpToLocationSearchResult]", searchText)
         if let attrText = processLocationName(separator: "@", text: searchText, size: 16) {

@@ -100,7 +100,7 @@ extension MapSearchViewController {
         activityStatus(isOn: false)
     }
     
-    func filterPlaceCat(searchText: String, scope: String = "All") {
+    func filterPlaceCategory(searchText: String, scope: String = "All") {
         var filtered = Category.shared.category_to_icon.filter({ ($0.key).lowercased().hasPrefix(searchText.lowercased()) })
         
         if filtered.count == 0 {
@@ -118,11 +118,14 @@ extension MapSearchViewController {
         cancelAllRequests()
         switch searchBar {
         case schPlaceBar:
+            schBarType = .place
             if schLocationBar.txtSchField.text == "" {
-                if schLocationBar.txtSchField.placeholder != "Current Location" || schLocationBar.txtSchField.placeholder != "Current Map View" {
-                    schLocationBar.txtSchField.text = strPreviousFixedOptionSelection
-                } else {
-                    schLocationBar.txtSchField.text = schLocationBar.txtSchField.placeholder
+                if let placeholder = schLocationBar.txtSchField.placeholder {
+                    if placeholder == "Current Location" || placeholder == "Current Map View" {
+                        schLocationBar.txtSchField.text = placeholder
+                    } else {
+                        schLocationBar.txtSchField.text = strPreviousFixedOptionSelection
+                    }
                 }
             }
             if schLocationBar.txtSchField.text == "Current Location" || schLocationBar.txtSchField.text == "Current Map View" {
@@ -132,17 +135,16 @@ extension MapSearchViewController {
                 schLocationBar.btnClear.isUserInteractionEnabled = !schLocationBar.btnClear.isSelected
                 schLocationBar.btnClear.isHidden = isCityDataChosen
             }
-            schBarType = .place
-            if searchBar.txtSchField.text == "" {
-                if let text = searchBar.txtSchField.text {
+            if schPlaceBar.txtSchField.text == "" {
+                if let text = schPlaceBar.txtSchField.text {
                     showOrHideViews(searchText: text)
                 } else {
                     showOrHideViews(searchText: "")
                 }
             } else {
                 schPlaceBar.btnClear.isHidden = false
-                if let text = searchBar.txtSchField.text {
-                    filterPlaceCat(searchText: text.lowercased())
+                if let text = schPlaceBar.txtSchField.text {
+                    filterPlaceCategory(searchText: text.lowercased())
                     showOrHideViews(searchText: text.lowercased())
                     activityStatus(isOn: true)
                     placeThrottler.throttle {
@@ -155,15 +157,14 @@ extension MapSearchViewController {
                         }
                     }
                 } else {
-                    filterPlaceCat(searchText: "")
+                    filterPlaceCategory(searchText: "")
                     getPlaceInfo(content: "")
                 }
             }
         case schLocationBar:
-            schPlaceBar.btnClear.isHidden = true
             schBarType = .location
+            schPlaceBar.btnClear.isHidden = true
             if schLocationBar.txtSchField.text == "Current Location" || schLocationBar.txtSchField.text == "Current Map View" {
-                //searchBar.txtSchField.placeholder = searchBar.txtSchField.text
                 schLocationBar.txtSchField.placeholder = "Enter a Location"
                 schLocationBar.txtSchField.text = ""
                 schLocationBar.btnClear.isHidden = true
@@ -175,7 +176,11 @@ extension MapSearchViewController {
                     schLocationBar.btnClear.isUserInteractionEnabled = true
                 }
             }
-            showOrHideViews(searchText: searchBar.txtSchField.text!)
+            if let text = schLocationBar.txtSchField.text {
+                showOrHideViews(searchText: text)
+            } else {
+                showOrHideViews(searchText: "")
+            }
         default:
             break
         }
@@ -197,10 +202,11 @@ extension MapSearchViewController {
                 flagAddrFetched = false
             } else {
                 activityStatus(isOn: true)
+                cancelAllRequests()
                 placeThrottler.throttle {
                     DispatchQueue.main.async { [weak self] in
                         guard let `self` = self else { return }
-                        self.filterPlaceCat(searchText: searchText)
+                        self.filterPlaceCategory(searchText: searchText)
                         self.getPlaceInfo(content: searchText.lowercased())
                         self.getAddresses(content: searchText)
                     }
@@ -231,45 +237,56 @@ extension MapSearchViewController {
         }
         switch searchBar {
         case schPlaceBar:
-            joshprint("[schPlaceBar] clicked")
             schPlaceBar.txtSchField.resignFirstResponder()
             if schPlaceBar.txtSchField.text == "" {
+                if let text = schLocationBar.txtSchField.text {
+                    if text == "Current Location" {
+                        temp_search_coordinate = LocManager.shared.curtLoc.coordinate
+                        temp_search_city_string = "Current Location"
+                        updateLastSearch()
+                        navigationController?.popViewController(animated: false)
+                        return
+                    } else if text == "Current Map View" {
+                        temp_search_coordinate = LocManager.shared.curtLoc.coordinate
+                        temp_search_city_string = "Current Map View"
+                        updateLastSearch()
+                        navigationController?.popViewController(animated: false)
+                        return
+                    }
+                }
                 if isCityDetailFetched {
                     if let cityData = fetchedCityDetail {
                         gotoCity?(cityData)
+                        updateLastSearch()
                         navigationController?.popViewController(animated: false)
+                        return
                     } else {
-                        showAlert(title: "We are fetching the city data for you...", message: "please wait", viewCtrler: self)
+                        showAlert(title: "We are fetching the city data for you...", message: "please wait", viewCtrler: self) { [weak self] (action) in
+                            self?.schPlaceBar.txtSchField.becomeFirstResponder()
+                        }
                     }
                 } else {
-                    showAlert(title: "We are fetching the city data for you...", message: "please wait", viewCtrler: self)
+                    showAlert(title: "We are fetching the city data for you...", message: "please wait", viewCtrler: self) { [weak self] (action) in
+                        self?.schPlaceBar.txtSchField.becomeFirstResponder()
+                    }
                 }
             } else {
-                sendBackLocationText()
+                updateLastSearch()
                 if flagPlaceFetched {
                     delegate?.jumpToPlaces?(searchText: schPlaceBar.txtSchField.text!, places: searchedPlaces)
                 } else {
                     delegate?.continueSearching?(searchText: schPlaceBar.txtSchField.text!, zoomToFit: true)
                 }
                 navigationController?.popViewController(animated: false)
+                return
             }
         case schLocationBar:
-            joshprint("[schLocationBar] clicked")
             if geobytesCityData.count > 0 {
                 schLocationBar.txtSchField.attributedText = geobytesCityData[0].faeSearchBarAttributedText()
-                switch previousVC {
-                case .map:
-                    Key.shared.selectedSearchedCity_map = geobytesCityData[0]
-                case .board:
-                    Key.shared.selectedSearchedCity_board = geobytesCityData[0]
-                case .chat:
-                    Key.shared.selectedSearchedCity_chat = geobytesCityData[0]
-                }
-                isCityDataChosen = true
+                temp_search_city_string = geobytesCityData[0]
                 lookUpForCoordinate(cityName: geobytesCityData[0])
                 geobytesCityData.removeAll()
                 showOrHideViews(searchText: "")
-                schPlaceBar.txtSchField.becomeFirstResponder()
             }
         default:
             break
@@ -277,17 +294,16 @@ extension MapSearchViewController {
     }
     
     // FaeSearchBarTestDelegate
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest) {
         if searchBar == schLocationBar {
+            isCityDataChosen = false
             isCityDetailFetched = false
-            switch previousVC {
-            case .map:
-                Key.shared.selectedSearchedCity_map = nil
-            case .board:
-                Key.shared.selectedSearchedCity_board = nil
-            case .chat:
-                Key.shared.selectedSearchedCity_chat = nil
-            }
+            temp_search_city_string = "Current Location"
+            temp_search_coordinate = LocManager.shared.curtLoc.coordinate
+            schLocationBar.txtSchField.placeholder = "Enter a Location"
+            schLocationBar.txtSchField.text = ""
+            schLocationBar.reloadTextFieldAttributes()
+            schLocationBar.btnClear.isHidden = true
         }
         searchBar.txtSchField.becomeFirstResponder()
     }
@@ -296,7 +312,10 @@ extension MapSearchViewController {
     func backspacePressed(_ searchBar: FaeSearchBarTest, isBackspace: Bool) {
         if searchBar == schLocationBar {
             if isBackspace && isCityDetailFetched {
+                isCityDataChosen = false
                 isCityDetailFetched = false
+                temp_search_city_string = "Current Location"
+                temp_search_coordinate = LocManager.shared.curtLoc.coordinate
                 schLocationBar.txtSchField.placeholder = "Enter a Location"
                 schLocationBar.txtSchField.text = ""
                 schLocationBar.reloadTextFieldAttributes()

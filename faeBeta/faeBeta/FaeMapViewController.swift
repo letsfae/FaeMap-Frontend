@@ -2206,23 +2206,42 @@ extension FaeMapViewController: MapSearchDelegate {
             self.searchState = .multipleSearch
             // search and show results
             var locationToSearch = self.faeMapView.centerCoordinate
-            var radiusToSearch = Key.shared.radius_map
+            var radiusToSearch = 0
+            var sourceToSearch = ""
             if let locToSearch = LocManager.shared.locToSearch_map {
                 locationToSearch = locToSearch
+            }
+            if let radius = Key.shared.radius_map {
+                radiusToSearch = radius
+            }
+            if let source = Key.shared.searchSource_map {
+                sourceToSearch = source
             }
             if let locToSearch = self.tempSearchCoordinate {
                 locationToSearch = locToSearch
             } else {
-                print("[continueSearching] temp coordinate is nil")
+                joshprint("[continueSearching] temp coordinate is nil")
             }
             if let rToSearch = self.tempSearchRadius {
                 radiusToSearch = rToSearch
+            }
+            guard radiusToSearch != 0 else {
+                if joshDebug {
+                    fatalError("found radius value 0")
+                }
+                return
+            }
+            guard sourceToSearch != "" else {
+                if joshDebug {
+                    fatalError("found source value nil")
+                }
+                return
             }
             joshprint("[re-search radius]", radiusToSearch)
             self.debugRadiusCircle(coordinate: locationToSearch, radius: radiusToSearch)
             let searchAgent = FaeSearch()
             searchAgent.whereKey("content", value: searchText)
-            searchAgent.whereKey("source", value: Key.shared.searchSource_map)
+            searchAgent.whereKey("source", value: sourceToSearch)
             searchAgent.whereKey("type", value: "place")
             searchAgent.whereKey("size", value: "20")
             searchAgent.whereKey("radius", value: "\(radiusToSearch)")
@@ -2329,13 +2348,13 @@ extension FaeMapViewController: MapSearchDelegate {
         }
     }
     
-    func debugRadiusCircle(coordinate: CLLocationCoordinate2D?, radius: Int) {
+    func debugRadiusCircle(coordinate: CLLocationCoordinate2D?, radius: Int?) {
         guard joshDebug else { return }
         if radiusDebugCircle != nil {
             faeMapView.remove(radiusDebugCircle)
         }
-        if let coor = coordinate {
-            let circle = MKCircle(center: coor, radius: Double(radius))
+        if let coor = coordinate, let rad = radius {
+            let circle = MKCircle(center: coor, radius: Double(rad))
             radiusDebugCircle = circle
             faeMapView.add(circle)
         }

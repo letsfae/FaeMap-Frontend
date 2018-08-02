@@ -189,6 +189,9 @@ class PlaceDetailViewController: UIViewController, SeeAllPlacesDelegate, AddPinT
         tblPlaceDetail.beginUpdates()
         tblPlaceDetail.insertSections(IndexSet(integer: intCellCount), with: .none)
         tblPlaceDetail.endUpdates()
+        uiviewPlaceImages.removeFromSuperview()
+        uiviewHeader.addSubview(uiviewPlaceImages)
+        uiviewPlaceImages.loadPageCtrl()
     }
     
     private func testDuplicates() -> Bool {

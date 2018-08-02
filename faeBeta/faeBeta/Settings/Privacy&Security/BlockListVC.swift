@@ -101,7 +101,7 @@ class SetBlockListViewController: UIViewController, UITableViewDataSource, UITab
         schbarBlocked.txtSchField.resignFirstResponder()
     }
     
-    func searchBarCancelButtonClicked(_ searchBar: FaeSearchBarTest) {
+    func searchBarClearButtonClicked(_ searchBar: FaeSearchBarTest) {
         schbarBlocked.txtSchField.resignFirstResponder()
     }
     
